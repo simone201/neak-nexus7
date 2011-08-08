@@ -69,6 +69,7 @@ obj-y				+= cpu_pm.o
 obj-y				+= tegra_hotplug.o
 obj-y				+= tegra_rq_stats.o
 AFLAGS_iwmmxt.o			:= -Wa,-mcpu=iwmmxt
+obj-$(CONFIG_ARM_CPU_TOPOLOGY)  += topology.o
 
 ifneq ($(CONFIG_ARCH_EBSA110),y)
   obj-y		+= io.o

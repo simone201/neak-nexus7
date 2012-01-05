@@ -1,76 +1,66 @@
 /*
  *	vmlinux.lds.S -- master linker script for m68knommu arch
  *
- *	(C) Copyright 2002-2006, Greg Ungerer <gerg@snapgear.com>
+ *	(C) Copyright 2002-2012, Greg Ungerer <gerg@snapgear.com>
  *
  *	This linker script is equipped to build either ROM loaded or RAM
  *	run kernels.
  */
 
-#include <asm-generic/vmlinux.lds.h>
+#if defined(CONFIG_RAMKERNEL)
+#define	KTEXT_ADDR	CONFIG_KERNELBASE
+#endif
+#if defined(CONFIG_ROMKERNEL)
+#define	KTEXT_ADDR	CONFIG_ROMSTART
+#define	KDATA_ADDR	CONFIG_KERNELBASE
+#define	LOAD_OFFSET	KDATA_ADDR + (ADDR(.text) + SIZEOF(.text))
+#endif
+
 #include <asm/page.h>
 #include <asm/thread_info.h>
-
-#if defined(CONFIG_RAMKERNEL)
-#define	RAM_START	CONFIG_KERNELBASE
-#define	RAM_LENGTH	(CONFIG_RAMBASE + CONFIG_RAMSIZE - CONFIG_KERNELBASE)
-#define	TEXT		ram
-#define	DATA		ram
-#define	INIT		ram
-#define	BSSS		ram
-#endif
-#if defined(CONFIG_ROMKERNEL) || defined(CONFIG_HIMEMKERNEL)
-#define	RAM_START	CONFIG_RAMBASE
-#define	RAM_LENGTH	CONFIG_RAMSIZE
-#define	ROMVEC_START	CONFIG_ROMVEC
-#define	ROMVEC_LENGTH	CONFIG_ROMVECSIZE
-#define	ROM_START	CONFIG_ROMSTART
-#define	ROM_LENGTH	CONFIG_ROMSIZE
-#define	TEXT		rom
-#define	DATA		ram
-#define	INIT		ram
-#define	BSSS		ram
-#endif
-
-#ifndef DATA_ADDR
-#define	DATA_ADDR
-#endif
-
+#include <asm-generic/vmlinux.lds.h>
 
 OUTPUT_ARCH(m68k)
 ENTRY(_start)
-
-MEMORY {
-	ram	: ORIGIN = RAM_START, LENGTH = RAM_LENGTH
-#ifdef ROM_START
-	romvec	: ORIGIN = ROMVEC_START, LENGTH = ROMVEC_LENGTH
-	rom	: ORIGIN = ROM_START, LENGTH = ROM_LENGTH
-#endif
-}
 
 jiffies = jiffies_64 + 4;
 
 SECTIONS {
 
-#ifdef ROMVEC_START
-	. = ROMVEC_START ;
+#ifdef CONFIG_ROMVEC
+	. = CONFIG_ROMVEC;
 	.romvec : {
-		__rom_start = . ;
+		__rom_start = .;
 		_romvec = .;
+		*(.romvec)
 		*(.data..initvect)
-	} > romvec
+	}
 #endif
 
+	. = KTEXT_ADDR;
+
+	_text = .;
+	_stext = .;
 	.text : {
-		_text = .;
-		_stext = . ;
 		HEAD_TEXT
 		TEXT_TEXT
 		SCHED_TEXT
 		LOCK_TEXT
-		*(.text..lock)
 		*(.fixup)
+		. = ALIGN(16);
+	}
+	_etext = .;
 
+#ifdef KDATA_ADDR
+	. = KDATA_ADDR;
+#endif
+
+	_sdata = .;
+	RO_DATA_SECTION(PAGE_SIZE)
+	RW_DATA_SECTION(16, PAGE_SIZE, THREAD_SIZE)
+	_edata = .;
+
+<<<<<<< HEAD
 		. = ALIGN(16);          /* Exception table              */
 		__start___ex_table = .;
 		*(__ex_table)
@@ -162,35 +152,36 @@ SECTIONS {
 		INIT_TASK_DATA(THREAD_SIZE)
 		_edata = . ;
 	} > DATA
+=======
+	EXCEPTION_TABLE(16)
+	NOTES
+>>>>>>> f362f08... m68knommu: clean up linker script
 
+	. = ALIGN(PAGE_SIZE);
+	__init_begin = .;
+	INIT_TEXT_SECTION(PAGE_SIZE)
+	INIT_DATA_SECTION(16)
+	PERCPU_SECTION(16)
 	.m68k_fixup : {
 		__start_fixup = .;
 		*(.m68k_fixup)
 		__stop_fixup = .;
-	} > DATA
-	NOTES > DATA
-
-	.init.text : {
-		. = ALIGN(PAGE_SIZE);
-		__init_begin = .;
-	} > INIT
-	INIT_TEXT_SECTION(PAGE_SIZE) > INIT
-	INIT_DATA_SECTION(16) > INIT
+	}
 	.init.data : {
 		. = ALIGN(PAGE_SIZE);
 		__init_end = .;
-	} > INIT
+	}
 
-	.bss : {
-		. = ALIGN(4);
-		_sbss = . ;
-		*(.bss)
-		*(COMMON)
-		. = ALIGN(4) ;
-		_ebss = . ;
-	 	_end = . ;
-	} > BSSS
+	_sbss = .;
+	BSS_SECTION(0, 0, 0)
+	_ebss = .;
 
+	_end = .;
+
+	STABS_DEBUG
+	.comment 0 : { *(.comment) }
+
+	/* Sections to be discarded */
 	DISCARDS
 }
 

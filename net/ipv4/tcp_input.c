@@ -2865,10 +2865,17 @@ static int tcp_try_undo_loss(struct sock *sk)
 static inline void tcp_complete_cwr(struct sock *sk)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
-	/* Do not moderate cwnd if it's already undone in cwr or recovery */
-	if (tp->undo_marker && tp->snd_cwnd > tp->snd_ssthresh) {
-		tp->snd_cwnd = tp->snd_ssthresh;
-		tp->snd_cwnd_stamp = tcp_time_stamp;
+
+	/* Do not moderate cwnd if it's already undone in cwr or recovery. */
+	if (tp->undo_marker) {
+		if (inet_csk(sk)->icsk_ca_state == TCP_CA_CWR) {
+			tp->snd_cwnd = min(tp->snd_cwnd, tp->snd_ssthresh);
+			tp->snd_cwnd_stamp = tcp_time_stamp;
+		} else if (tp->snd_ssthresh < TCP_INFINITE_SSTHRESH) {
+			/* PRR algorithm. */
+			tp->snd_cwnd = tp->snd_ssthresh;
+			tp->snd_cwnd_stamp = tcp_time_stamp;
+		}
 	}
 	tcp_ca_event(sk, CA_EVENT_COMPLETE_CWR);
 }

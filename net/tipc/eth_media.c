@@ -53,6 +53,7 @@ struct eth_bearer {
 	struct tipc_bearer *bearer;
 	struct net_device *dev;
 	struct packet_type tipc_packet_type;
+	struct work_struct setup;
 };
 
 static struct eth_bearer eth_bearers[MAX_ETH_BEARERS];
@@ -121,6 +122,17 @@ static int recv_msg(struct sk_buff *buf, struct net_device *dev,
 }
 
 /**
+ * setup_bearer - setup association between Ethernet bearer and interface
+ */
+static void setup_bearer(struct work_struct *work)
+{
+	struct eth_bearer *eb_ptr =
+		container_of(work, struct eth_bearer, setup);
+
+	dev_add_pack(&eb_ptr->tipc_packet_type);
+}
+
+/**
  * enable_bearer - attach TIPC bearer to an Ethernet interface
  */
 
@@ -153,6 +165,7 @@ static int enable_bearer(struct tipc_bearer *tb_ptr)
 	if (!dev)
 		return -ENODEV;
 
+<<<<<<< HEAD
 	/* Find Ethernet bearer for device (or create one) */
 
 	while ((eb_ptr != stop) && eb_ptr->dev && (eb_ptr->dev != dev))
@@ -169,6 +182,18 @@ static int enable_bearer(struct tipc_bearer *tb_ptr)
 		dev_hold(dev);
 		dev_add_pack(&eb_ptr->tipc_packet_type);
 	}
+=======
+	/* Create Ethernet bearer for device */
+
+	eb_ptr->dev = dev;
+	eb_ptr->tipc_packet_type.type = htons(ETH_P_TIPC);
+	eb_ptr->tipc_packet_type.dev = dev;
+	eb_ptr->tipc_packet_type.func = recv_msg;
+	eb_ptr->tipc_packet_type.af_packet_priv = eb_ptr;
+	INIT_LIST_HEAD(&(eb_ptr->tipc_packet_type.list));
+	INIT_WORK(&eb_ptr->setup, setup_bearer);
+	schedule_work(&eb_ptr->setup);
+>>>>>>> e7b1664... tipc: fix lockdep warning during bearer initialization
 
 	/* Associate TIPC bearer with Ethernet bearer */
 

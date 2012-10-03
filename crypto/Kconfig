@@ -431,6 +431,12 @@ config CRYPTO_SHA512
 	  This code also includes SHA-384, a 384 bit hash with 192 bits
 	  of security against collision attacks.
 
+config CRYPTO_SHA3
+	tristate "SHA3 digest algorithm"
+	select CRYPTO_HASH
+	help
+	  SHA-3 secure hash standard.
+
 config CRYPTO_TGR192
 	tristate "Tiger digest algorithms"
 	select CRYPTO_HASH

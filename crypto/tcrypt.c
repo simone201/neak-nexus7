@@ -64,7 +64,7 @@ static char *check[] = {
 	"cast6", "arc4", "michael_mic", "deflate", "crc32c", "tea", "xtea",
 	"khazad", "wp512", "wp384", "wp256", "tnepres", "xeta",  "fcrypt",
 	"camellia", "seed", "salsa20", "rmd128", "rmd160", "rmd256", "rmd320",
-	"lzo", "cts", "zlib", NULL
+	"lzo", "cts", "zlib", "sha3", NULL
 };
 
 static int test_cipher_jiffies(struct blkcipher_desc *desc, int enc,
@@ -1166,7 +1166,7 @@ static int do_test(int m)
 		break;
 
 	case 46:
-		ret += tcrypt_test("ofb(aes)");
+		ret += tcrypt_test("sha3");
 		break;
 
 	case 100:
@@ -1437,6 +1437,10 @@ static int do_test(int m)
 		test_hash_speed("ghash-generic", sec, hash_speed_template_16);
 		if (mode > 300 && mode < 400) break;
 
+	case 319:
+		test_hash_speed("sha3", sec, generic_hash_speed_template);
+		if (mode > 300 && mode < 400) break;
+
 	case 399:
 		break;
 
@@ -1509,6 +1513,10 @@ static int do_test(int m)
 
 	case 417:
 		test_ahash_speed("rmd320", sec, generic_hash_speed_template);
+		if (mode > 400 && mode < 500) break;
+
+	case 418:
+		test_ahash_speed("sha3", sec, generic_hash_speed_template);
 		if (mode > 400 && mode < 500) break;
 
 	case 499:

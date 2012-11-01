@@ -259,7 +259,10 @@ static int hidraw_open(struct inode *inode, struct file *file)
 
 	mutex_lock(&minors_lock);
 	if (!hidraw_table[minor]) {
+<<<<<<< HEAD
 		kfree(list);
+=======
+>>>>>>> c3ffb34... HID: hidraw: put old deallocation mechanism in place
 		err = -ENODEV;
 		goto out_unlock;
 	}
@@ -295,6 +298,10 @@ static int hidraw_release(struct inode * inode, struct file * file)
 	struct hidraw *dev;
 	struct hidraw_list *list = file->private_data;
 	int ret;
+<<<<<<< HEAD
+=======
+	int i;
+>>>>>>> c3ffb34... HID: hidraw: put old deallocation mechanism in place
 
 	mutex_lock(&minors_lock);
 	if (!hidraw_table[minor]) {
@@ -312,6 +319,12 @@ static int hidraw_release(struct inode * inode, struct file * file)
 			kfree(list->hidraw);
 		}
 	}
+<<<<<<< HEAD
+=======
+
+	for (i = 0; i < HIDRAW_BUFFER_SIZE; ++i)
+		kfree(list->buffer[i].value);
+>>>>>>> c3ffb34... HID: hidraw: put old deallocation mechanism in place
 	kfree(list);
 	ret = 0;
 unlock:
@@ -510,13 +523,21 @@ void hidraw_disconnect(struct hid_device *hid)
 {
 	struct hidraw *hidraw = hid->hidraw;
 
+<<<<<<< HEAD
+=======
+	mutex_lock(&minors_lock);
+>>>>>>> c3ffb34... HID: hidraw: put old deallocation mechanism in place
 	hidraw->exist = 0;
 
 	device_destroy(hidraw_class, MKDEV(hidraw_major, hidraw->minor));
 
+<<<<<<< HEAD
 	mutex_lock(&minors_lock);
 	hidraw_table[hidraw->minor] = NULL;
 	mutex_unlock(&minors_lock);
+=======
+	hidraw_table[hidraw->minor] = NULL;
+>>>>>>> c3ffb34... HID: hidraw: put old deallocation mechanism in place
 
 	if (hidraw->open) {
 		hid_hw_close(hid);
@@ -524,6 +545,10 @@ void hidraw_disconnect(struct hid_device *hid)
 	} else {
 		kfree(hidraw);
 	}
+<<<<<<< HEAD
+=======
+	mutex_unlock(&minors_lock);
+>>>>>>> c3ffb34... HID: hidraw: put old deallocation mechanism in place
 }
 EXPORT_SYMBOL_GPL(hidraw_disconnect);
 

@@ -164,8 +164,8 @@ struct xen_blkif {
 
 	wait_queue_head_t	waiting_to_free;
 
-	grant_handle_t		shmem_handle;
-	grant_ref_t		shmem_ref;
+	/* Thread shutdown wait queue. */
+	wait_queue_head_t	shutdown_wq;
 };
 
 

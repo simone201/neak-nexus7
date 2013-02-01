@@ -544,8 +544,6 @@ config TEGRA_PREINIT_CLOCKS
 	help
 	  Preinitialize Tegra clocks to known states before actual full-
 	  scale clock initialization starts.
-<<<<<<< HEAD
-=======
 
 config GROUPER_HARDBOOT_RECOVERY
 	bool "Reboot to recovery partition when using Kexec-hardboot"
@@ -562,5 +560,4 @@ config USBHOST
 	help
 	  A simple sysfs interface to allow switching between OTG and FI mode.
 
->>>>>>> a298280... usbhost kconfig
 endif

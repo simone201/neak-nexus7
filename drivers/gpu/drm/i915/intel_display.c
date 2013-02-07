@@ -6863,8 +6863,6 @@ static int intel_gen4_queue_flip(struct drm_device *dev,
 	OUT_RING(pf | pipesrc);
 
 	intel_mark_page_flip_active(intel_crtc);
-
-	intel_mark_page_flip_active(intel_crtc);
 	ADVANCE_LP_RING();
 out:
 	return ret;
@@ -6896,6 +6894,8 @@ static int intel_gen6_queue_flip(struct drm_device *dev,
 	pf = I915_READ(PF_CTL(intel_crtc->pipe)) & PF_ENABLE;
 	pipesrc = I915_READ(PIPESRC(intel_crtc->pipe)) & 0x0fff0fff;
 	OUT_RING(pf | pipesrc);
+
+	intel_mark_page_flip_active(intel_crtc);
 	ADVANCE_LP_RING();
 out:
 	return ret;

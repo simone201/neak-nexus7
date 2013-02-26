@@ -98,6 +98,10 @@ static ushort max_sectors = 0xFFFF;
 module_param(max_sectors, ushort, 0);
 MODULE_PARM_DESC(max_sectors, "max sectors, range 64 to 8192  default=8192");
 
+static int missing_delay[2] = {-1, -1};
+module_param_array(missing_delay, int, NULL, 0);
+MODULE_PARM_DESC(missing_delay, " device missing delay , io missing delay");
+
 /* scsi-mid layer global parmeter is max_report_luns, which is 511 */
 #define MPT2SAS_MAX_LUN (16895)
 static int max_lun = MPT2SAS_MAX_LUN;
@@ -6921,10 +6925,15 @@ _firmware_event_work(struct work_struct *work)
 			spin_unlock_irqrestore(&ioc->ioc_reset_in_progress_lock,
 			    flags);
 		_scsih_remove_unresponding_sas_devices(ioc);
-		_scsih_hide_unhide_sas_devices(ioc);
-		return;
-	}
 
+		_scsih_scan_for_devices_after_reset(ioc);
+		break;
+	case MPT2SAS_PORT_ENABLE_COMPLETE:
+		ioc->start_scan = 0;
+
+		if (missing_delay[0] != -1 && missing_delay[1] != -1)
+			mpt2sas_base_update_missing_delay(ioc, missing_delay[0],
+				missing_delay[1]);
 	switch (fw_event->event) {
 	case MPT2SAS_TURN_ON_FAULT_LED:
 		_scsih_turn_on_fault_led(ioc, fw_event->device_handle);

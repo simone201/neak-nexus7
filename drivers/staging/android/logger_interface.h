@@ -13,3 +13,4 @@
  */
 
 extern int logger_mode;
+

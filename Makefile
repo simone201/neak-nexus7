@@ -1,8 +1,8 @@
 VERSION = 3
-PATCHLEVEL = 1
-SUBLEVEL = 10
+PATCHLEVEL = 2
+SUBLEVEL = 44
 EXTRAVERSION =
-NAME = "Divemaster Edition"
+NAME = oxydo
 
 # *DOCUMENTATION*
 # To see a list of typical targets execute "make help"

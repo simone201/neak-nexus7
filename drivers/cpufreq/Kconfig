@@ -58,6 +58,13 @@ config CPU_FREQ_DEFAULT_GOV_PERFORMANCE
 	  the frequency statically to the highest frequency supported by
 	  the CPU.
 
+config CPU_FREQ_DEFAULT_GOV_GAMING
+	bool "gaming"
+	select CPU_FREQ_GOV_GAMING
+	help
+	  Makes Gaming the default governor. It's ported from LG Optimus
+	  4X HD by me (sgt. meow)
+
 config CPU_FREQ_DEFAULT_GOV_POWERSAVE
 	bool "powersave"
 	depends on EXPERT
@@ -119,6 +126,17 @@ config CPU_FREQ_GOV_PERFORMANCE
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called cpufreq_performance.
+
+	  If in doubt, say Y.
+
+config CPU_FREQ_GOV_GAMING
+	tristate "'gaming' governor"
+	help
+	  This is the gaming governor ported over from LG Optimus
+	  4X HD. Not gonna bloat this bit with extra dev bits.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called cpufreq_powersave.
 
 	  If in doubt, say Y.
 

@@ -136,7 +136,7 @@ config CPU_FREQ_GOV_GAMING
 	  4X HD. Not gonna bloat this bit with extra dev bits.
 
 	  To compile this driver as a module, choose M here: the
-	  module will be called cpufreq_powersave.
+	  module will be called cpufreq_gaming.
 
 	  If in doubt, say Y.
 

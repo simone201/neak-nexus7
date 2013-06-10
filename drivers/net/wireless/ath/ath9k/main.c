@@ -1699,6 +1699,9 @@ static int ath9k_config(struct ieee80211_hw *hw, u32 changed)
 		spin_lock_irqsave(&common->cc_lock, flags);
 		ath_update_survey_stats(sc);
 		spin_unlock_irqrestore(&common->cc_lock, flags);
+		ath9k_cmn_update_ichannel(&sc->sc_ah->channels[pos],
+					  curchan, conf->channel_type);
+
 
 		/*
 		 * If the operating channel changes, change the survey in-use flags

@@ -583,8 +583,11 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *lo,
 		nbd_cmd(&sreq) = NBD_CMD_DISC;
 		if (!lo->sock)
 			return -EINVAL;
+
+		lo->disconnect = 1;
+
 		nbd_send_req(lo, &sreq);
-                return 0;
+		return 0;
 	}
  
 	case NBD_CLEAR_SOCK: {
@@ -612,6 +615,7 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *lo,
 				lo->sock = SOCKET_I(inode);
 				if (max_part > 0)
 					bdev->bd_invalidated = 1;
+				lo->disconnect = 0; /* we're connected now */
 				return 0;
 			} else {
 				fput(file);
@@ -683,6 +687,8 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *lo,
 		set_capacity(lo->disk, 0);
 		if (max_part > 0)
 			ioctl_by_bdev(bdev, BLKRRPART, 0);
+		if (lo->disconnect) /* user requested, ignore socket errors */
+			return 0;
 		return lo->harderror;
 	}
 

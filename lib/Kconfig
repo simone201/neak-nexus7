@@ -279,4 +279,11 @@ config CORDIC
 config LLIST
 	bool
 
+config FRANDOM_DEV
+	tristate "Fast pseudo-random generator."
+	help
+	  Frandom generates random numbers for the Linux kernel almost 50x
+	  faster than urandom using far less of the entropy pool than 
+	  urandom.
+
 endmenu

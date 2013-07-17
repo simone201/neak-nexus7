@@ -142,7 +142,11 @@ static struct usb_device_id blacklist_table[] = {
 =======
 	{ USB_DEVICE(0x04c5, 0x1330), .driver_info = BTUSB_ATH3012 },
 	{ USB_DEVICE(0x13d3, 0x3402), .driver_info = BTUSB_ATH3012 },
+<<<<<<< HEAD
 >>>>>>> ba1251e... Bluetooth: ath3k: Add support for ID 0x13d3/0x3402
+=======
+	{ USB_DEVICE(0x0cf3, 0x3121), .driver_info = BTUSB_ATH3012 },
+>>>>>>> 39a53ec... Bluetooth: Add support for Atheros [0cf3:3121]
 
 	/* Atheros AR5BBU12 with sflash firmware */
 	{ USB_DEVICE(0x0489, 0xe02c), .driver_info = BTUSB_IGNORE },

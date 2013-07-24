@@ -1675,6 +1675,21 @@ static const struct alg_test_desc alg_test_descs[] = {
 			}
 		}
 	}, {
+		.alg = "cbc(serpent)",
+		.test = alg_test_skcipher,
+		.suite = {
+			.cipher = {
+				.enc = {
+					.vecs = serpent_cbc_enc_tv_template,
+					.count = SERPENT_CBC_ENC_TEST_VECTORS
+				},
+				.dec = {
+					.vecs = serpent_cbc_dec_tv_template,
+					.count = SERPENT_CBC_DEC_TEST_VECTORS
+				}
+			}
+		}
+	}, {
 		.alg = "cbc(twofish)",
 		.test = alg_test_skcipher,
 		.suite = {
@@ -1762,6 +1777,51 @@ static const struct alg_test_desc alg_test_descs[] = {
 				.dec = {
 					.vecs = aes_ctr_dec_tv_template,
 					.count = AES_CTR_DEC_TEST_VECTORS
+				}
+			}
+		}
+	}, {
+		.alg = "ctr(blowfish)",
+		.test = alg_test_skcipher,
+		.suite = {
+			.cipher = {
+				.enc = {
+					.vecs = bf_ctr_enc_tv_template,
+					.count = BF_CTR_ENC_TEST_VECTORS
+				},
+				.dec = {
+					.vecs = bf_ctr_dec_tv_template,
+					.count = BF_CTR_DEC_TEST_VECTORS
+				}
+			}
+		}
+	}, {
+		.alg = "ctr(serpent)",
+		.test = alg_test_skcipher,
+		.suite = {
+			.cipher = {
+				.enc = {
+					.vecs = serpent_ctr_enc_tv_template,
+					.count = SERPENT_CTR_ENC_TEST_VECTORS
+				},
+				.dec = {
+					.vecs = serpent_ctr_dec_tv_template,
+					.count = SERPENT_CTR_DEC_TEST_VECTORS
+				}
+			}
+		}
+	}, {
+		.alg = "ctr(twofish)",
+		.test = alg_test_skcipher,
+		.suite = {
+			.cipher = {
+				.enc = {
+					.vecs = tf_ctr_enc_tv_template,
+					.count = TF_CTR_ENC_TEST_VECTORS
+				},
+				.dec = {
+					.vecs = tf_ctr_dec_tv_template,
+					.count = TF_CTR_DEC_TEST_VECTORS
 				}
 			}
 		}
@@ -2092,6 +2152,15 @@ static const struct alg_test_desc alg_test_descs[] = {
 			.hash = {
 				.vecs = ghash_tv_template,
 				.count = GHASH_TEST_VECTORS
+			}
+		}
+	}, {
+		.alg = "hmac(crc32)",
+		.test = alg_test_hash,
+		.suite = {
+			.hash = {
+				.vecs = bfin_crc_tv_template,
+				.count = BFIN_CRC_TEST_VECTORS
 			}
 		}
 	}, {

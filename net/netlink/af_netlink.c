@@ -1324,11 +1324,10 @@ static int netlink_sendmsg(struct kiocb *kiocb, struct socket *sock,
 	if (msg->msg_flags&MSG_OOB)
 		return -EOPNOTSUPP;
 
-	if (NULL == siocb->scm) {
+	if (NULL == siocb->scm)
 		siocb->scm = &scm;
-		memset(&scm, 0, sizeof(scm));
-	}
-	err = scm_send(sock, msg, siocb->scm);
+
+	err = scm_send(sock, msg, siocb->scm, true);
 	if (err < 0)
 		return err;
 
@@ -1578,7 +1577,7 @@ int __netlink_change_ngroups(struct sock *sk, unsigned int groups)
 		new = kzalloc(sizeof(*new) + NLGRPSZ(groups), GFP_ATOMIC);
 		if (!new)
 			return -ENOMEM;
-		old = rcu_dereference_raw(tbl->listeners);
+		old = rcu_dereference_protected(tbl->listeners, 1);
 		memcpy(new->masks, old->masks, NLGRPSZ(tbl->groups));
 		rcu_assign_pointer(tbl->listeners, new);
 

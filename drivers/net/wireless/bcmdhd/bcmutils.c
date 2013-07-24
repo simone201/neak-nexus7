@@ -982,6 +982,9 @@ pktsetprio(void *pkt, bool update_vtag)
 		rc |= PKTPRIO_DSCP;
 	}
 
+	if (priority == 4 || priority == 5)
+		priority = 3;
+
 	ASSERT(priority >= 0 && priority <= MAXPRIO);
 	PKTSETPRIO(pkt, priority);
 	return (rc | priority);

@@ -1765,6 +1765,9 @@ static void iwl4965_alive_start(struct iwl_priv *priv)
 
 	priv->active_rate = IWL_RATES_MASK;
 
+	iwl_legacy_power_update_mode(priv, true);
+	IWL_DEBUG_INFO(priv, "Updated power mode\n");
+
 	if (iwl_legacy_is_associated_ctx(ctx)) {
 		struct iwl_legacy_rxon_cmd *active_rxon =
 				(struct iwl_legacy_rxon_cmd *)&ctx->active;
@@ -1796,9 +1799,6 @@ static void iwl4965_alive_start(struct iwl_priv *priv)
 
 	IWL_DEBUG_INFO(priv, "ALIVE processing complete.\n");
 	wake_up(&priv->wait_command_queue);
-
-	iwl_legacy_power_update_mode(priv, true);
-	IWL_DEBUG_INFO(priv, "Updated power mode\n");
 
 	return;
 

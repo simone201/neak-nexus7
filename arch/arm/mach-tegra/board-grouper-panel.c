@@ -40,9 +40,9 @@
 #include "gpio-names.h"
 #include <mach/board-grouper-misc.h>
 
-static unsigned int min_backlight = 10
+static unsigned int min_backlight = 10;
 module_param(min_backlight, uint, 0644);
-static unsigned int max_backlight = 255
+static unsigned int max_backlight = 255;
 module_param(min_backlight, uint, 0644);
 
 /* grouper default display board pins */

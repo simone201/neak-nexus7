@@ -43,7 +43,7 @@
 static unsigned int min_backlight = 10;
 module_param(min_backlight, uint, 0644);
 static unsigned int max_backlight = 255;
-module_param(min_backlight, uint, 0644);
+module_param(max_backlight, uint, 0644);
 
 /* grouper default display board pins */
 #define grouper_lvds_avdd_en		TEGRA_GPIO_PH6

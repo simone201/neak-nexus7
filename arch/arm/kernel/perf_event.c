@@ -157,8 +157,13 @@ armpmu_map_cache_event(u64 config)
 static int
 armpmu_map_event(u64 config)
 {
-	int mapping = (*armpmu->event_map)[config];
-	return mapping == HW_OP_UNSUPPORTED ? -EOPNOTSUPP : mapping;
+	int mapping;
+
+	if (config >= PERF_COUNT_HW_MAX)
+		return -ENOENT;
+
+	mapping = (*event_map)[config];
+	return mapping == HW_OP_UNSUPPORTED ? -ENOENT : mapping;
 }
 
 static int

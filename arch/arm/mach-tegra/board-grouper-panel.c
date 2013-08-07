@@ -27,6 +27,7 @@
 #include <linux/pwm_backlight.h>
 #include <asm/atomic.h>
 #include <linux/nvhost.h>
+#include <linux/module.h>
 #include <mach/nvmap.h>
 #include <mach/irqs.h>
 #include <mach/iomap.h>
@@ -38,6 +39,11 @@
 #include "devices.h"
 #include "gpio-names.h"
 #include <mach/board-grouper-misc.h>
+
+static unsigned int min_backlight = 10;
+module_param(min_backlight, uint, 0644);
+static unsigned int max_backlight = 255;
+module_param(max_backlight, uint, 0644);
 
 /* grouper default display board pins */
 #define grouper_lvds_avdd_en		TEGRA_GPIO_PH6
@@ -151,11 +157,30 @@ static int grouper_backlight_notify(struct device *unused, int brightness)
 	brightness = (brightness * cur_sd_brightness) / 255;
 
 	/* Apply any backlight response curve */
-	if (brightness > 255)
+	if (min_backlight < 10)
+		min_backlight = 10;
+	if (max_backlight > 255)
+		max_backlight = 255;
+	if (brightness > 255) {
 		pr_info("Error: Brightness > 255!\n");
-	else
+	} else {
+	#ifdef CONFIG_BLC
+		if ((min_backlight == 0) || (max_backlight == 0)) {
+	#endif
 		brightness = bl_output[brightness];
-
+	#ifdef CONFIG_BLC
+		} else {
+		if ((brightness > 0) && (brightness < min_backlight) {
+			brightness = min_backlight;
+		} else if (brightness > max_backlight) {
+				brightness = max_backlight
+		} else {
+			brightness = bl_output[brightness]
+			}
+		}
+	}
+	#endif
+}
 	return brightness;
 }
 

@@ -352,6 +352,13 @@ validate_event(struct cpu_hw_events *cpuc,
 	       struct perf_event *event)
 {
 	struct hw_perf_event fake_event = event->hw;
+	struct pmu *leader_pmu = event->group_leader->pmu;
+
+	if (is_software_event(event))
+		return 1;
+
+	if (event->pmu != leader_pmu || event->state < PERF_EVENT_STATE_OFF)
+		return 1;
 
 	if (event->pmu != &pmu || event->state <= PERF_EVENT_STATE_OFF)
 		return 1;

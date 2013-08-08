@@ -44,8 +44,6 @@ static unsigned int min_bl = 10;
 module_param(min_bl, uint, 0644);
 static unsigned max_bl = 160;
 module_param(max_bl, uint, 0644);
-int min_bl_val = min_bl;
-int max_bl_val = max_bl;
 
 /* grouper default display board pins */
 #define grouper_lvds_avdd_en		TEGRA_GPIO_PH6
@@ -155,18 +153,20 @@ static int grouper_backlight_notify(struct device *unused, int brightness)
 	/* Set the backlight GPIO pin mode to 'backlight_enable' */
 	//gpio_set_value(grouper_bl_enb, !!brightness);
 
-	/* SD brightness is a percentage, 8-bit value. */
+	/* SD brightness is a percentage, 8-bit value. Define min/max_bl_val */
 	brightness = (brightness * cur_sd_brightness) / 255;
+	int min_bl_val = min_bl;
+	int max_bl_val = max_bl;
 
 	/* Apply any backlight response curve */
 	if (brightness > 255) {
 		pr_info("Error: Brightness > 255!\n");
 	} else if ((brightness > 0) && (brightness < min_bl_val)) {	
-			brightness = min_bl_val;
+			brightness = min_bl;
 	} else if (brightness > max_bl_val) {
-			brightness = max_bl_val;
+			brightness = max_bl;
 	} else {
-		brightness = bl_ouput[brightness];
+		brightness = bl_output[brightness];
 	}
 
 return brightness;
@@ -423,7 +423,7 @@ static struct tegra_dc_sd_settings grouper_sd_settings = {
 	.bin_width = -1,
 	.aggressiveness = 1,
 	.phase_in_adjustments = true,
-	.panel_min_brightness = 13,
+	.panel_min_brightness = 10,
 	.use_vid_luma = false,
 	/* Default video coefficients */
 	.coeff = {5, 9, 2},

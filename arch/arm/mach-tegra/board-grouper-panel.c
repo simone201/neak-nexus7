@@ -40,7 +40,7 @@
 #include "gpio-names.h"
 #include <mach/board-grouper-misc.h>
 
-static unsigned int min_bl = 10;
+static unsigned int min_bl = 11;
 module_param(min_bl, uint, 0644);
 static unsigned max_bl = 160;
 module_param(max_bl, uint, 0644);

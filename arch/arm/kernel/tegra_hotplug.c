@@ -23,11 +23,11 @@
 #define DEFAULT_THIRD_LEVEL 50
 
 #ifdef CONFIG_CUSTOM_BLVL
-static unsigned int batt_lvl_min;
+static unsigned int batt_lvl_min = 30;
 module_param(batt_lvl_min, uint, 0644);
-static unsigned int batt_lvl_med;
+static unsigned int batt_lvl_med = 60;
 module_param(batt_lvl_med, uint, 0644);
-static unsigned int batt_lvl_max;
+static unsigned int batt_lvl_max = 80;
 module_param(batt_lvl_max, uint, 0644);
 #endif 
 

@@ -209,6 +209,33 @@ static unsigned long __init xen_get_max_pages(void)
 	return min(max_pages, MAX_DOMAIN_PAGES);
 }
 
+<<<<<<< HEAD
+=======
+static void xen_align_and_add_e820_region(u64 start, u64 size, int type)
+{
+	u64 end = start + size;
+
+	/* Align RAM regions to page boundaries. */
+	if (type == E820_RAM) {
+		start = PAGE_ALIGN(start);
+		end &= ~((u64)PAGE_SIZE - 1);
+	}
+
+	e820_add_region(start, end - start, type);
+}
+
+void xen_ignore_unusable(struct e820entry *list, size_t map_size)
+{
+	struct e820entry *entry;
+	unsigned int i;
+
+	for (i = 0, entry = list; i < map_size; i++, entry++) {
+		if (entry->type == E820_UNUSABLE)
+			entry->type = E820_RAM;
+	}
+}
+
+>>>>>>> 89ca702... x86/xen: do not identity map UNUSABLE regions in the machine E820
 /**
  * machine_specific_memory_setup - Hook for machine specific memory setup.
  **/
@@ -249,6 +276,7 @@ char * __init xen_memory_setup(void)
 	}
 	BUG_ON(rc);
 
+<<<<<<< HEAD
 	memcpy(map_raw, map, sizeof(map));
 	e820.nr_map = 0;
 	xen_extra_mem_start = mem_end;
@@ -277,6 +305,64 @@ char * __init xen_memory_setup(void)
 			if (delta &&
 				(xen_initial_domain() && end < 0x100000000ULL))
 				e820_add_region(end, delta, E820_UNUSABLE);
+=======
+	/*
+	 * Xen won't allow a 1:1 mapping to be created to UNUSABLE
+	 * regions, so if we're using the machine memory map leave the
+	 * region as RAM as it is in the pseudo-physical map.
+	 *
+	 * UNUSABLE regions in domUs are not handled and will need
+	 * a patch in the future.
+	 */
+	if (xen_initial_domain())
+		xen_ignore_unusable(map, memmap.nr_entries);
+
+	/* Make sure the Xen-supplied memory map is well-ordered. */
+	sanitize_e820_map(map, memmap.nr_entries, &memmap.nr_entries);
+
+	max_pages = xen_get_max_pages();
+	if (max_pages > max_pfn)
+		extra_pages += max_pages - max_pfn;
+
+	/*
+	 * Set P2M for all non-RAM pages and E820 gaps to be identity
+	 * type PFNs.  Any RAM pages that would be made inaccesible by
+	 * this are first released.
+	 */
+	xen_released_pages = xen_set_identity_and_release(
+		map, memmap.nr_entries, max_pfn);
+	extra_pages += xen_released_pages;
+
+	/*
+	 * Clamp the amount of extra memory to a EXTRA_MEM_RATIO
+	 * factor the base size.  On non-highmem systems, the base
+	 * size is the full initial memory allocation; on highmem it
+	 * is limited to the max size of lowmem, so that it doesn't
+	 * get completely filled.
+	 *
+	 * In principle there could be a problem in lowmem systems if
+	 * the initial memory is also very large with respect to
+	 * lowmem, but we won't try to deal with that here.
+	 */
+	extra_pages = min(EXTRA_MEM_RATIO * min(max_pfn, PFN_DOWN(MAXMEM)),
+			  extra_pages);
+
+	i = 0;
+	while (i < memmap.nr_entries) {
+		u64 addr = map[i].addr;
+		u64 size = map[i].size;
+		u32 type = map[i].type;
+
+		if (type == E820_RAM) {
+			if (addr < mem_end) {
+				size = min(size, mem_end - addr);
+			} else if (extra_pages) {
+				size = min(size, (u64)extra_pages * PAGE_SIZE);
+				extra_pages -= size / PAGE_SIZE;
+				xen_add_extra_mem(addr, size);
+			} else
+				type = E820_UNUSABLE;
+>>>>>>> 89ca702... x86/xen: do not identity map UNUSABLE regions in the machine E820
 		}
 
 		if (map[i].size > 0 && end > xen_extra_mem_start)

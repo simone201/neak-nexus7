@@ -706,8 +706,8 @@ static ssize_t store_gpuc_UV_mV_table(struct cpufreq_policy *policy, char *buf, 
 			buf += (strlen(size_cur)+1);
 		}
 	}
-	/* update dvfs table here */
-	clk_gpuc->dvfs->millivolts = gpuc_mv_table;
+	// /* update dvfs table here */
+	// clk_gpuc->dvfs->millivolts = gpuc_mv_table;
 
 	return count;
 }

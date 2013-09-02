@@ -97,6 +97,22 @@ static struct usb_device_id btusb_table[] = {
 	/* Canyon CN-BTU1 with HID interfaces */
 	{ USB_DEVICE(0x0c10, 0x0000) },
 
+<<<<<<< HEAD
+=======
+	/* Broadcom BCM20702A0 */
+	{ USB_DEVICE(0x0b05, 0x17b5) },
+	{ USB_DEVICE(0x0b05, 0x17cb) },
+	{ USB_DEVICE(0x04ca, 0x2003) },
+	{ USB_DEVICE(0x0489, 0xe042) },
+	{ USB_DEVICE(0x413c, 0x8197) },
+
+	/* Foxconn - Hon Hai */
+	{ USB_VENDOR_AND_INTERFACE_INFO(0x0489, 0xff, 0x01, 0x01) },
+
+	/*Broadcom devices with vendor specific id */
+	{ USB_VENDOR_AND_INTERFACE_INFO(0x0a5c, 0xff, 0x01, 0x01) },
+
+>>>>>>> f1f1e27... Bluetooth: Add support for BCM20702A0 [0b05, 17cb]
 	{ }	/* Terminating entry */
 };
 

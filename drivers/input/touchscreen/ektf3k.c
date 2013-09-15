@@ -236,7 +236,7 @@ unsigned int dt2w_y[2] = {0, 0};
 unsigned int dt2w_2_x[2] = {0, 0};
 unsigned int dt2w_2_y[2] = {0, 0};
 //int is_suspended = 0;
-#define S2W_TIMEOUT 30
+#define S2W_TIMEOUT 50
 #define DT2W_TIMEOUT_MAX 50
 #define DT2W_TIMEOUT_MIN 4
 #define DT2W_DELTA 150

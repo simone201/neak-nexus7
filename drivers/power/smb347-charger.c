@@ -391,25 +391,9 @@ static int smb347_pin_control(bool state)
 	struct i2c_client *client = charger->client;
 	u8 ret = 0;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	printk("smb347_charger_enable %d\n",state);
-	if (state) {
-=======
-<<<<<<< HEAD
 	mutex_lock(&charger->pinctrl_lock);
 
 	if (state) {
-=======
-	printk("smb347_charger_enable %d\n",enable);
-	if (enable) {
->>>>>>> e35cc4de... usb-hostmode-charging
->>>>>>> parent of 2611e7a... Fix cherry-pick errors
-=======
-	mutex_lock(&charger->pinctrl_lock);
-
-	if (state) {
->>>>>>> parent of 179ef96... usb-hostmode-charging
 		/*Pin Controls -active low */
 		ret = smb347_update_reg(client, smb347_PIN_CTRL, PIN_ACT_LOW);
 		if (ret < 0) {
@@ -1348,4 +1332,5 @@ module_exit(smb347_exit);
 MODULE_AUTHOR("Syed Rafiuddin <srafiuddin@nvidia.com>");
 MODULE_DESCRIPTION("smb347 Battery-Charger");
 MODULE_LICENSE("GPL");
+
 

@@ -609,6 +609,28 @@ static void set_timer_rand_state(unsigned int irq,
 }
 #endif
 
+<<<<<<< HEAD
+=======
+/*
+ * Add device- or boot-specific data to the input and nonblocking
+ * pools to help initialize them to unique values.
+ *
+ * None of this adds any entropy, it is meant to avoid the
+ * problem of the nonblocking pool having similar initial state
+ * across largely identical devices.
+ */
+void add_device_randomness(const void *buf, unsigned int size)
+{
+	unsigned long time = random_get_entropy() ^ jiffies;
+
+	mix_pool_bytes(&input_pool, buf, size, NULL);
+	mix_pool_bytes(&input_pool, &time, sizeof(time), NULL);
+	mix_pool_bytes(&nonblocking_pool, buf, size, NULL);
+	mix_pool_bytes(&nonblocking_pool, &time, sizeof(time), NULL);
+}
+EXPORT_SYMBOL(add_device_randomness);
+
+>>>>>>> ee698d6... random: allow architectures to optionally define random_get_entropy()
 static struct timer_rand_state input_timer_state;
 
 /*
@@ -637,7 +659,7 @@ static void add_timer_randomness(struct timer_rand_state *state, unsigned num)
 		goto out;
 
 	sample.jiffies = jiffies;
-	sample.cycles = get_cycles();
+	sample.cycles = random_get_entropy();
 	sample.num = num;
 	mix_pool_bytes(&input_pool, &sample, sizeof(sample));
 
@@ -698,7 +720,23 @@ EXPORT_SYMBOL_GPL(add_input_randomness);
 
 void add_interrupt_randomness(int irq)
 {
+<<<<<<< HEAD
 	struct timer_rand_state *state;
+=======
+	struct entropy_store	*r;
+	struct fast_pool	*fast_pool = &__get_cpu_var(irq_randomness);
+	struct pt_regs		*regs = get_irq_regs();
+	unsigned long		now = jiffies;
+	__u32			input[4], cycles = random_get_entropy();
+
+	input[0] = cycles ^ jiffies;
+	input[1] = irq;
+	if (regs) {
+		__u64 ip = instruction_pointer(regs);
+		input[2] = ip;
+		input[3] = ip >> 32;
+	}
+>>>>>>> ee698d6... random: allow architectures to optionally define random_get_entropy()
 
 	state = get_timer_rand_state(irq);
 
@@ -1320,7 +1358,12 @@ unsigned int get_random_int(void)
 	__u32 *hash = get_cpu_var(get_random_int_hash);
 	unsigned int ret;
 
-	hash[0] += current->pid + jiffies + get_cycles();
+	if (arch_get_random_int(&ret))
+		return ret;
+
+	hash = get_cpu_var(get_random_int_hash);
+
+	hash[0] += current->pid + jiffies + random_get_entropy();
 	md5_transform(hash, random_int_secret);
 	ret = hash[0];
 	put_cpu_var(get_random_int_hash);

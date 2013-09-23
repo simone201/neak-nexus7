@@ -817,10 +817,20 @@ int radeon_device_init(struct radeon_device *rdev,
 			return r;
 	}
 	if (radeon_testing) {
-		radeon_test_moves(rdev);
+		if (rdev->accel_working)
+			radeon_test_moves(rdev);
+		else
+			DRM_INFO("radeon: acceleration disabled, skipping move tests\n");
 	}
 	if (radeon_benchmarking) {
+<<<<<<< HEAD
 		radeon_benchmark(rdev);
+=======
+		if (rdev->accel_working)
+			radeon_benchmark(rdev, radeon_benchmarking);
+		else
+			DRM_INFO("radeon: acceleration disabled, skipping benchmarks\n");
+>>>>>>> e69de31... drm/radeon: disable tests/benchmarks if accel is disabled
 	}
 	return 0;
 }

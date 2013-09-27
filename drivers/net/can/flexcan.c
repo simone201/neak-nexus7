@@ -642,7 +642,6 @@ static int flexcan_chip_start(struct net_device *dev)
 {
 	struct flexcan_priv *priv = netdev_priv(dev);
 	struct flexcan_regs __iomem *regs = priv->base;
-	unsigned int i;
 	int err;
 	u32 reg_mcr, reg_ctrl;
 
@@ -708,6 +707,7 @@ static int flexcan_chip_start(struct net_device *dev)
 	dev_dbg(dev->dev.parent, "%s: writing ctrl=0x%08x", __func__, reg_ctrl);
 	writel(reg_ctrl, &regs->ctrl);
 
+<<<<<<< HEAD
 	for (i = 0; i < ARRAY_SIZE(regs->cantxfg); i++) {
 		writel(0, &regs->cantxfg[i].can_ctrl);
 		writel(0, &regs->cantxfg[i].can_id);
@@ -718,6 +718,8 @@ static int flexcan_chip_start(struct net_device *dev)
 		writel(FLEXCAN_MB_CNT_CODE(0x4), &regs->cantxfg[i].can_ctrl);
 	}
 
+=======
+>>>>>>> 4ec4a1d... can: flexcan: fix flexcan_chip_start() on imx6
 	/* acceptance mask/acceptance code (accept everything) */
 	writel(0x0, &regs->rxgmask);
 	writel(0x0, &regs->rx14mask);

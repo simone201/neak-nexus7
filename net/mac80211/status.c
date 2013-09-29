@@ -133,6 +133,17 @@ static void ieee80211_frame_acked(struct sta_info *sta, struct sk_buff *skb)
 	struct ieee80211_local *local = sta->local;
 	struct ieee80211_sub_if_data *sdata = sta->sdata;
 
+	if (local->hw.flags & IEEE80211_HW_REPORTS_TX_ACK_STATUS)
+		sta->last_rx = jiffies;
+
+	if (ieee80211_is_data_qos(mgmt->frame_control)) {
+		struct ieee80211_hdr *hdr = (void *) skb->data;
+		u8 *qc = ieee80211_get_qos_ctl(hdr);
+		u16 tid = qc[0] & 0xf;
+
+		ieee80211_check_pending_bar(sta, hdr->addr1, tid);
+	}
+
 	if (ieee80211_is_action(mgmt->frame_control) &&
 	    sdata->vif.type == NL80211_IFTYPE_STATION &&
 	    mgmt->u.action.category == WLAN_CATEGORY_HT &&

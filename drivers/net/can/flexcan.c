@@ -61,7 +61,7 @@
 #define FLEXCAN_MCR_BCC			BIT(16)
 #define FLEXCAN_MCR_LPRIO_EN		BIT(13)
 #define FLEXCAN_MCR_AEN			BIT(12)
-#define FLEXCAN_MCR_MAXMB(x)		((x) & 0xf)
+#define FLEXCAN_MCR_MAXMB(x)		((x) & 0x1f)
 #define FLEXCAN_MCR_IDAM_A		(0 << 8)
 #define FLEXCAN_MCR_IDAM_B		(1 << 8)
 #define FLEXCAN_MCR_IDAM_C		(2 << 8)
@@ -674,10 +674,16 @@ static int flexcan_chip_start(struct net_device *dev)
 	 * choose format C
 	 *
 	 */
+<<<<<<< HEAD
 	reg_mcr = readl(&regs->mcr);
+=======
+	reg_mcr = flexcan_read(&regs->mcr);
+	reg_mcr &= ~FLEXCAN_MCR_MAXMB(0xff);
+>>>>>>> 9203ceb... can: flexcan: flexcan_chip_start: fix regression, mark one MB for TX and abort pending TX
 	reg_mcr |= FLEXCAN_MCR_FRZ | FLEXCAN_MCR_FEN | FLEXCAN_MCR_HALT |
 		FLEXCAN_MCR_SUPV | FLEXCAN_MCR_WRN_EN |
-		FLEXCAN_MCR_IDAM_C;
+		FLEXCAN_MCR_IDAM_C |
+		FLEXCAN_MCR_MAXMB(FLEXCAN_TX_BUF_ID);
 	dev_dbg(dev->dev.parent, "%s: writing mcr=0x%08x", __func__, reg_mcr);
 	writel(reg_mcr, &regs->mcr);
 
@@ -714,12 +720,19 @@ static int flexcan_chip_start(struct net_device *dev)
 		writel(0, &regs->cantxfg[i].data[0]);
 		writel(0, &regs->cantxfg[i].data[1]);
 
+<<<<<<< HEAD
 		/* put MB into rx queue */
 		writel(FLEXCAN_MB_CNT_CODE(0x4), &regs->cantxfg[i].can_ctrl);
 	}
 
 =======
 >>>>>>> 4ec4a1d... can: flexcan: fix flexcan_chip_start() on imx6
+=======
+	/* Abort any pending TX, mark Mailbox as INACTIVE */
+	flexcan_write(FLEXCAN_MB_CNT_CODE(0x4),
+		      &regs->cantxfg[FLEXCAN_TX_BUF_ID].can_ctrl);
+
+>>>>>>> 9203ceb... can: flexcan: flexcan_chip_start: fix regression, mark one MB for TX and abort pending TX
 	/* acceptance mask/acceptance code (accept everything) */
 	writel(0x0, &regs->rxgmask);
 	writel(0x0, &regs->rx14mask);

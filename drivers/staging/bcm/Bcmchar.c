@@ -2031,6 +2031,7 @@ static long bcm_char_ioctl(struct file *filp, UINT cmd, ULONG arg)
 					break;
 				}
 
+<<<<<<< HEAD
 				Status = copy_from_user(&RxCntrlMsgBitMask, IoBuffer.InputBuffer, IoBuffer.InputLength);
 				if(Status)
 				{
@@ -2056,6 +2057,14 @@ static long bcm_char_ioctl(struct file *filp, UINT cmd, ULONG arg)
 
 				if (copy_from_user(&IoBuffer, argp, sizeof(IOCTL_BUFFER)))
 					return -EFAULT;
+=======
+		memset(&DevInfo, 0, sizeof(DevInfo));
+		DevInfo.MaxRDMBufferSize = BUFFER_4K;
+		DevInfo.u32DSDStartOffset = EEPROM_CALPARAM_START;
+		DevInfo.u32RxAlignmentCorrection = 0;
+		DevInfo.u32NVMType = Adapter->eNVMType;
+		DevInfo.u32InterfaceType = BCM_USB;
+>>>>>>> 43455e8... Staging: bcm: info leak in ioctl
 
 				if(IoBuffer.OutputLength < sizeof(DevInfo))
 					return -EINVAL;

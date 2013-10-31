@@ -247,8 +247,11 @@ static struct wake_lock s2w_wakelock;
 
 int wake_timeout = 60;
 
-static unsigned int xvrl_val = 1848;
-module_param(xvrl_val, uint, 0644);
+static unsigned int s2s_y_val_sleep_proper = 1848;
+module_param(s2s_y_val_sleep_proper, uint, 0644);
+
+static unsigned int s2s_y_val_sleep_updwn = 100;
+module_param(s2s_y_val_sleep_updwn, uint, 0644);
 
 void sweep2wake_setdev(struct input_dev * input_device) {
 	sweep2wake_pwrdev = input_device;
@@ -373,9 +376,10 @@ void sweep2wake_func(int x, int y, unsigned long time, int i)
 	}
 	
 	if (scr_suspended == false && s2w_switch > 0) {
-		int xvrl_actval = xvrl_val;
+		int s2s_y_actval_sleep_proper = s2s_y_val_sleep_proper;
+		int s2s_y_actval_sleep_updwn = s2s_y_val_sleep_updwn;	
 		//right->left portrait mode normal
-		if (y > s2w_end_v && x > xvrl_actval) {
+		if (y > s2w_end_v && x > s2s_y_actval_sleep_proper) {
 			tripoff_vl = 1;
 			triptime_vl = time;
 		} else if (tripoff_vl == 1 && y < 854  && time - triptime_vl < 20) {
@@ -387,17 +391,17 @@ void sweep2wake_func(int x, int y, unsigned long time, int i)
 			sweep2wake_pwrtrigger();
 		} 
 		//left->right portrait mode upside down
-		//if (y < 100 && x > 100) {
-		//	tripoff_vr = 1;
-		//	triptime_vr = time;
-		//} else if (tripoff_vr == 1 && y > 427  && time - triptime_vr < 20) {
-		//	tripoff_vr = 2;
-		//} else if (tripoff_vr == 2 && y > 854 && time - triptime_vr < 40) {
-		//	tripoff_vr = 3;
-		//} else if (tripoff_vr == 3 && y > (s2w_end_v) && (time - triptime_vr < S2W_TIMEOUT)) {
-		//	printk(KERN_INFO "[s2w]: OFF");
-		//	sweep2wake_pwrtrigger();
-		//} 		
+		if (y < 100 && x < s2s_y_actval_sleep_updwn) {
+			tripoff_vr = 1;
+			triptime_vr = time;
+		} else if (tripoff_vr == 1 && y > 427  && time - triptime_vr < 20) {
+			tripoff_vr = 2;
+		} else if (tripoff_vr == 2 && y > 854 && time - triptime_vr < 40) {
+			tripoff_vr = 3;
+		} else if (tripoff_vr == 3 && y > (s2w_end_v) && (time - triptime_vr < S2W_TIMEOUT)) {
+			printk(KERN_INFO "[s2w]: OFF");
+			sweep2wake_pwrtrigger();
+		} 		
 		//top->bottom
 		if (x < s2w_begin_h && y > 1244) {
 			tripoff_hd = 1;

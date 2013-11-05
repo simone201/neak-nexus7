@@ -118,7 +118,7 @@ static void (*pm_idle_old)(void);
 static atomic_t active_count = ATOMIC_INIT(0);
 
 struct smartass_info_s {
-	struct cpufreq_policy *cur_policy;
+	struct cpufreq_policy *policy;
 	struct cpufreq_frequency_table *freq_table;
 	struct timer_list timer;
 	u64 time_in_idle;
@@ -188,7 +188,7 @@ inline static void smartass_update_min_max_allcpus(void) {
 	for_each_online_cpu(i) {
 		struct smartass_info_s *this_smartass = &per_cpu(smartass_info, i);
 		if (this_smartass->enable)
-			smartass_update_min_max(this_smartass,this_smartass->cur_policy,suspended);
+			smartass_update_min_max(this_smartass,this_smartass->policy,suspended);
 	}
 }
 
@@ -280,7 +280,7 @@ static void cpufreq_smartass_timer(unsigned long cpu)
 	u64 now_idle;
 	int queued_work = 0;
 	struct smartass_info_s *this_smartass = &per_cpu(smartass_info, cpu);
-	struct cpufreq_policy *policy = this_smartass->cur_policy;
+	struct cpufreq_policy *policy = this_smartass->policy;
 
 	now_idle = get_cpu_idle_time_us(cpu, &update_time);
 	old_freq = policy->cur;
@@ -354,7 +354,7 @@ static void cpufreq_smartass_timer(unsigned long cpu)
 static void cpufreq_idle(void)
 {
 	struct smartass_info_s *this_smartass = &per_cpu(smartass_info, smp_processor_id());
-	struct cpufreq_policy *policy = this_smartass->cur_policy;
+	struct cpufreq_policy *policy = this_smartass->policy;
 
 	if (!this_smartass->enable) {
 		pm_idle_old();
@@ -389,7 +389,7 @@ static void cpufreq_smartass_freq_change_time_work(struct work_struct *work)
 		this_smartass->ramp_dir = 0;
 
 		old_freq = this_smartass->old_freq;
-		policy = this_smartass->cur_policy;
+		policy = this_smartass->policy;
 
 		if (old_freq != policy->cur) {
 			// frequency was changed by someone else?
@@ -455,12 +455,14 @@ static void cpufreq_smartass_freq_change_time_work(struct work_struct *work)
 	}
 }
 
-static ssize_t show_debug_mask(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_debug_mask(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%lu\n", debug_mask);
 }
 
-static ssize_t store_debug_mask(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_debug_mask(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -470,12 +472,14 @@ static ssize_t store_debug_mask(struct cpufreq_policy *policy, const char *buf, 
 	return res;
 }
 
-static ssize_t show_up_rate_us(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_up_rate_us(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%lu\n", up_rate_us);
 }
 
-static ssize_t store_up_rate_us(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_up_rate_us(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -485,12 +489,14 @@ static ssize_t store_up_rate_us(struct cpufreq_policy *policy, const char *buf, 
 	return res;
 }
 
-static ssize_t show_down_rate_us(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_down_rate_us(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%lu\n", down_rate_us);
 }
 
-static ssize_t store_down_rate_us(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_down_rate_us(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -500,12 +506,14 @@ static ssize_t store_down_rate_us(struct cpufreq_policy *policy, const char *buf
 	return res;
 }
 
-static ssize_t show_sleep_ideal_freq(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_sleep_ideal_freq(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%u\n", sleep_ideal_freq);
 }
 
-static ssize_t store_sleep_ideal_freq(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_sleep_ideal_freq(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -518,12 +526,14 @@ static ssize_t store_sleep_ideal_freq(struct cpufreq_policy *policy, const char 
 	return res;
 }
 
-static ssize_t show_sleep_wakeup_freq(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_sleep_wakeup_freq(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%u\n", sleep_wakeup_freq);
 }
 
-static ssize_t store_sleep_wakeup_freq(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_sleep_wakeup_freq(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -533,12 +543,14 @@ static ssize_t store_sleep_wakeup_freq(struct cpufreq_policy *policy, const char
 	return res;
 }
 
-static ssize_t show_awake_ideal_freq(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_awake_ideal_freq(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%u\n", awake_ideal_freq);
 }
 
-static ssize_t store_awake_ideal_freq(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_awake_ideal_freq(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -551,12 +563,14 @@ static ssize_t store_awake_ideal_freq(struct cpufreq_policy *policy, const char 
 	return res;
 }
 
-static ssize_t show_sample_rate_jiffies(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_sample_rate_jiffies(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%u\n", sample_rate_jiffies);
 }
 
-static ssize_t store_sample_rate_jiffies(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_sample_rate_jiffies(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -566,12 +580,14 @@ static ssize_t store_sample_rate_jiffies(struct cpufreq_policy *policy, const ch
 	return res;
 }
 
-static ssize_t show_ramp_up_step(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_ramp_up_step(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%u\n", ramp_up_step);
 }
 
-static ssize_t store_ramp_up_step(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_ramp_up_step(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -581,12 +597,14 @@ static ssize_t store_ramp_up_step(struct cpufreq_policy *policy, const char *buf
 	return res;
 }
 
-static ssize_t show_ramp_down_step(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_ramp_down_step(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%u\n", ramp_down_step);
 }
 
-static ssize_t store_ramp_down_step(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_ramp_down_step(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -596,12 +614,14 @@ static ssize_t store_ramp_down_step(struct cpufreq_policy *policy, const char *b
 	return res;
 }
 
-static ssize_t show_max_cpu_load(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_max_cpu_load(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%lu\n", max_cpu_load);
 }
 
-static ssize_t store_max_cpu_load(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_max_cpu_load(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -611,12 +631,14 @@ static ssize_t store_max_cpu_load(struct cpufreq_policy *policy, const char *buf
 	return res;
 }
 
-static ssize_t show_min_cpu_load(struct cpufreq_policy *policy, char *buf)
+static ssize_t show_min_cpu_load(struct kobject *kobj,
+				     struct attribute *attr, char *buf)
 {
 	return sprintf(buf, "%lu\n", min_cpu_load);
 }
 
-static ssize_t store_min_cpu_load(struct cpufreq_policy *policy, const char *buf, size_t count)
+static ssize_t store_min_cpu_load(struct kobject *kobj,
+			struct attribute *attr, const char *buf, size_t count)
 {
 	ssize_t res;
 	unsigned long input;
@@ -626,7 +648,41 @@ static ssize_t store_min_cpu_load(struct cpufreq_policy *policy, const char *buf
 	return res;
 }
 
-#define define_global_rw_attr(_name)		\
+static struct global_attr debug_mask_attr = __ATTR(debug_mask, 0644,
+		show_debug_mask, store_debug_mask);
+
+static struct global_attr up_rate_us_attr = __ATTR(up_rate_us, 0644,
+		show_up_rate_us, store_up_rate_us);
+
+static struct global_attr down_rate_us_attr = __ATTR(down_rate_us, 0644,
+		show_down_rate_us, store_down_rate_us);
+
+static struct global_attr sleep_ideal_freq_attr = __ATTR(sleep_ideal_freq, 0644,
+		show_sleep_ideal_freq, store_sleep_ideal_freq);
+
+static struct global_attr sleep_wakeup_freq_attr = __ATTR(sleep_wakeup_freq, 0644,
+		show_sleep_wakeup_freq, store_sleep_wakeup_freq);
+
+static struct global_attr awake_ideal_freq_attr = __ATTR(awake_ideal_freq, 0644,
+		show_awake_ideal_freq, store_awake_ideal_freq);
+
+static struct global_attr sample_rate_jiffies_attr = __ATTR(sample_rate_jiffies, 0644,
+		show_sample_rate_jiffies, store_sample_rate_jiffies);
+
+static struct global_attr ramp_up_step_attr = __ATTR(ramp_up_step, 0644,
+		show_ramp_up_step, store_ramp_up_step);
+
+static struct global_attr ramp_down_step_attr = __ATTR(ramp_down_step, 0644,
+		show_ramp_down_step, store_ramp_down_step);
+
+static struct global_attr max_cpu_load_attr = __ATTR(max_cpu_load, 0644,
+		show_max_cpu_load, store_max_cpu_load);
+
+static struct global_attr min_cpu_load_attr = __ATTR(min_cpu_load, 0644,
+		show_min_cpu_load, store_min_cpu_load);
+
+
+/*#define define_global_rw_attr(_name)		\
 static struct freq_attr _name##_attr =	\
 	__ATTR(_name, 0644, show_##_name, store_##_name)
 
@@ -640,7 +696,7 @@ define_global_rw_attr(sample_rate_jiffies);
 define_global_rw_attr(ramp_up_step);
 define_global_rw_attr(ramp_down_step);
 define_global_rw_attr(max_cpu_load);
-define_global_rw_attr(min_cpu_load);
+define_global_rw_attr(min_cpu_load);*/
 
 static struct attribute * smartass_attributes[] = {
 	&debug_mask_attr.attr,
@@ -674,7 +730,7 @@ static int cpufreq_governor_smartass(struct cpufreq_policy *new_policy,
 		if ((!cpu_online(cpu)) || (!new_policy->cur))
 			return -EINVAL;
 
-		this_smartass->cur_policy = new_policy;
+		this_smartass->policy = new_policy;
 
 		this_smartass->enable = 1;
 
@@ -698,7 +754,7 @@ static int cpufreq_governor_smartass(struct cpufreq_policy *new_policy,
 			pm_idle = cpufreq_idle;
 		}
 
-		if (this_smartass->cur_policy->cur < new_policy->max && !timer_pending(&this_smartass->timer))
+		if (this_smartass->policy->cur < new_policy->max && !timer_pending(&this_smartass->timer))
 			reset_timer(cpu,this_smartass);
 
 		break;
@@ -706,18 +762,18 @@ static int cpufreq_governor_smartass(struct cpufreq_policy *new_policy,
 	case CPUFREQ_GOV_LIMITS:
 		smartass_update_min_max(this_smartass,new_policy,suspended);
 
-		if (this_smartass->cur_policy->cur > new_policy->max) {
+		if (this_smartass->policy->cur > new_policy->max) {
 			dprintk(SMARTASS_DEBUG_JUMPS,"SmartassI: jumping to new max freq: %d\n",new_policy->max);
-			__cpufreq_driver_target(this_smartass->cur_policy,
+			__cpufreq_driver_target(this_smartass->policy,
 						new_policy->max, CPUFREQ_RELATION_H);
 		}
-		else if (this_smartass->cur_policy->cur < new_policy->min) {
+		else if (this_smartass->policy->cur < new_policy->min) {
 			dprintk(SMARTASS_DEBUG_JUMPS,"SmartassI: jumping to new min freq: %d\n",new_policy->min);
-			__cpufreq_driver_target(this_smartass->cur_policy,
+			__cpufreq_driver_target(this_smartass->policy,
 						new_policy->min, CPUFREQ_RELATION_L);
 		}
 
-		if (this_smartass->cur_policy->cur < new_policy->max && !timer_pending(&this_smartass->timer))
+		if (this_smartass->policy->cur < new_policy->max && !timer_pending(&this_smartass->timer))
 			reset_timer(cpu,this_smartass);
 
 		break;
@@ -743,7 +799,7 @@ static int cpufreq_governor_smartass(struct cpufreq_policy *new_policy,
 static void smartass_suspend(int cpu, int suspend)
 {
 	struct smartass_info_s *this_smartass = &per_cpu(smartass_info, smp_processor_id());
-	struct cpufreq_policy *policy = this_smartass->cur_policy;
+	struct cpufreq_policy *policy = this_smartass->policy;
 	unsigned int new_freq;
 
 	if (!this_smartass->enable)
@@ -821,7 +877,7 @@ static int __init cpufreq_smartass_init(void)
 	for_each_possible_cpu(i) {
 		this_smartass = &per_cpu(smartass_info, i);
 		this_smartass->enable = 0;
-		this_smartass->cur_policy = 0;
+		this_smartass->policy = 0;
 		this_smartass->ramp_dir = 0;
 		this_smartass->time_in_idle = 0;
 		this_smartass->idle_exit_time = 0;

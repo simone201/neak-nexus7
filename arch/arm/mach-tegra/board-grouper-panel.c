@@ -40,6 +40,8 @@
 #include "gpio-names.h"
 #include <mach/board-grouper-misc.h>
 
+static bool otf_scaling = 0;
+module_param(otf_scaling, bool, 0644);
 static unsigned int min_bl = 11;
 module_param(min_bl, uint, 0644);
 static unsigned max_bl = 160;
@@ -166,7 +168,12 @@ static int grouper_backlight_notify(struct device *unused, int brightness)
 	} else if (brightness > max_bl_val) {
 			brightness = max_bl;
 	} else {
+		if (otf_scaling == 1) {
+			brightness = min_bl_val + 
+			DIV_ROUND_CLOSEST(((max_bl_val - min_bl_val) * max((brightness - 10),0)),245);
+		} else {
 		brightness = bl_output[brightness];
+		}
 	}
 
 return brightness;
@@ -805,3 +812,4 @@ int __init grouper_panel_init(void)
 #endif
 	return err;
 }
+

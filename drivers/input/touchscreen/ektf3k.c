@@ -247,11 +247,11 @@ static struct wake_lock s2w_wakelock;
 
 int wake_timeout = 60;
 
-static unsigned int s2s_y_val_sleep_proper = 1848;
-module_param(s2s_y_val_sleep_proper, uint, 0644);
+int s2s_y_val_sleep_proper = 1848;
+/*module_param(s2s_y_val_sleep_proper, uint, 0644);*/
 
-static unsigned int s2s_y_val_sleep_updwn = 100;
-module_param(s2s_y_val_sleep_updwn, uint, 0644);
+int s2s_y_val_sleep_updwn = 100;
+/*module_param(s2s_y_val_sleep_updwn, uint, 0644);*/
 
 void sweep2wake_setdev(struct input_dev * input_device) {
 	sweep2wake_pwrdev = input_device;
@@ -776,6 +776,52 @@ static ssize_t elan_ktf3k_wake_timeout_dump(struct device *dev, struct device_at
 static DEVICE_ATTR(wake_timeout, (S_IWUSR|S_IRUGO),
 	elan_ktf3k_wake_timeout_show, elan_ktf3k_wake_timeout_dump); 
 
+static ssize_t elan_ktf3k_s2s_y_val_sleep_proper_show(struct device *dev, struct device_attribute *attr, char *buf)
+{
+	size_t count = 0;
+	count += sprintf(buf, "%d\n",s2s_y_val_sleep_proper);
+	return count;
+}
+
+static ssize_t elan_ktf3k_s2s_y_val_sleep_proper_dump(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
+{
+	unsigned int input;
+	int ret;
+	ret = sscanf(buf, "%u", &input);
+	if (ret != 1)
+		return -EINVAL;
+
+	s2s_y_val_sleep_proper = input;
+
+	return count;
+}
+
+static DEVICE_ATTR(s2s_y_val_sleep_proper, (S_IWUSR|S_IRUGO),
+	elan_ktf3k_s2s_y_val_sleep_proper_show, elan_ktf3k_s2s_y_val_sleep_proper_dump); 
+
+static ssize_t elan_ktf3k_s2s_y_val_sleep_updwn_show(struct device *dev, struct device_attribute *attr, char *buf)
+{
+	size_t count = 0;
+	count += sprintf(buf, "%d\n", s2s_y_val_sleep_updwn);
+	return count;
+}
+
+static ssize_t elan_ktf3k_s2s_y_val_sleep_updwn_dump(struct device *dev, struct device_attribute *attr, const char *buf, size_t count)
+{
+	unsigned int input;
+	int ret;
+	ret = sscanf(buf, "%u", &input);
+	if (ret != 1)
+		return -EINVAL;
+
+	s2s_y_val_sleep_updwn = input;
+
+	return count;
+}
+
+static DEVICE_ATTR(s2s_y_val_sleep_updwn, (S_IWUSR|S_IRUGO),
+	elan_ktf3k_s2s_y_val_sleep_updwn_show, elan_ktf3k_s2s_y_val_sleep_updwn_dump); 
+
 /* end sweep2wake sysfs*/
 
 
@@ -860,6 +906,8 @@ static struct attribute *elan_attr[] = {
 	&dev_attr_sweep2wake.attr,
 	&dev_attr_doubletap2wake.attr,
 	&dev_attr_wake_timeout.attr,
+	&dev_attr_s2s_y_val_sleep_updwn.attr,
+	&dev_attr_s2s_y_val_sleep_proper.attr,    
 	NULL
 };
 
@@ -908,6 +956,16 @@ static int elan_ktf3k_touch_sysfs_init(void)
 		touch_debug(DEBUG_ERROR, "[elan]%s: sysfs_create_group failed\n", __func__);
 		return ret;
 	}
+	ret = sysfs_create_file(android_touch_kobj, &dev_attr_s2s_y_val_sleep_updwn.attr);
+	if (ret) {
+		touch_debug(DEBUG_ERROR, "[elan]%s: sysfs_create_group failed\n", __func__);
+		return ret;
+	}
+	ret = sysfs_create_file(android_touch_kobj, &dev_attr_s2s_y_val_sleep_proper.attr);
+	if (ret) {
+		touch_debug(DEBUG_ERROR, "[elan]%s: sysfs_create_group failed\n", __func__);
+		return ret;
+	}
 	return 0 ;
 }
 
@@ -919,7 +977,9 @@ static void elan_touch_sysfs_deinit(void)
 	sysfs_remove_file(android_touch_kobj, &dev_attr_sweep2wake.attr);
 	sysfs_remove_file(android_touch_kobj, &dev_attr_doubletap2wake.attr);
 	sysfs_remove_file(android_touch_kobj, &dev_attr_shortsweep.attr);
-	sysfs_remove_file(android_touch_kobj, &dev_attr_wake_timeout.attr);
+	sysfs_remove_file(android_touch_kobj, &dev_attr_wake_timeout.attr); 
+	sysfs_remove_file(android_touch_kobj, &dev_attr_s2s_y_val_sleep_updwn.attr);
+	sysfs_remove_file(android_touch_kobj, &dev_attr_s2s_y_val_sleep_proper.attr);
 	kobject_del(android_touch_kobj);
 }
 
@@ -2290,5 +2350,6 @@ module_exit(elan_ktf3k_ts_exit);
 
 MODULE_DESCRIPTION("ELAN KTF3K Touchscreen Driver");
 MODULE_LICENSE("GPL");
+
 
 

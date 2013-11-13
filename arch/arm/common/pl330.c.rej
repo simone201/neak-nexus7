@@ -1,0 +1,17 @@
+--- arch/arm/common/pl330.c
++++ arch/arm/common/pl330.c
+@@ -1496,12 +1496,13 @@
+ 	struct pl330_thread *thrd = ch_id;
+ 	struct pl330_dmac *pl330;
+ 	unsigned long flags;
+-	int ret = 0, active = thrd->req_running;
++	int ret = 0, active;
+ 
+ 	if (!thrd || thrd->free || thrd->dmac->state == DYING)
+ 		return -EINVAL;
+ 
+ 	pl330 = thrd->dmac;
++	active = thrd->req_running;
+ 
+ 	spin_lock_irqsave(&pl330->lock, flags);
+ 

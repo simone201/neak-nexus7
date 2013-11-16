@@ -46,6 +46,11 @@ static DEFINE_PER_CPU(char[CPUFREQ_NAME_LEN], cpufreq_cpu_governor);
 #endif
 static DEFINE_SPINLOCK(cpufreq_driver_lock);
 
+/*static const int core_millivolts[MAX_DVFS_FREQS] = { 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350 };
+unsigned int extended_core_millivolts[MAX_DVFS_FREQS] = { 950, 1000, 1050, 1100, 1150, 1400, 1400, 1400, 1400 };
+unsigned int high_core_millivolts[MAX_DVFS_FREQS] = { 950, 1000, 1050, 1100, 1150, 1500, 1500, 1500, 1500 }; */
+
+
 /*
  * cpu_policy_rwsem is a per CPU reader-writer semaphore designed to cure
  * all cpufreq/hotplug/workqueue/etc related lock issues.
@@ -715,18 +720,8 @@ static ssize_t store_gpuc_UV_mV_table(struct cpufreq_policy *policy, char *buf, 
 #ifdef CONFIG_GPU_OVERCLOCK
 static ssize_t show_gpu_oc(struct cpufreq_policy *policy, char *buf)
 {
-	char *c = buf;
 	struct clk *gpu = tegra_get_clock_by_name("3d");
-	unsigned int i = gpu->dvfs->num_freqs;
-	unsigned long gpu_freq = 0;
-
-	if (i <= 0)
-		gpu_freq = -1;
-
-	if (i >= 1)
-		gpu_freq = gpu->dvfs->freqs[gpu->dvfs->num_freqs-1]/1000000;
-
-	return sprintf(c, "%lu\n", gpu_freq);
+	return sprintf(buf, "%lu\n", gpu->dvfs->freq[7]/1000000);
 }
 
 static ssize_t store_gpu_oc(struct cpufreq_policy *policy, const char *buf, size_t count)
@@ -750,24 +745,21 @@ static ssize_t store_gpu_oc(struct cpufreq_policy *policy, const char *buf, size
 	struct clk *pll_c = tegra_get_clock_by_name("pll_c");
 
 	unsigned int array_size = three_d->dvfs->num_freqs;
-	char cur_size[array_size];
 
 	i = array_size;
-	if (i <= 0) 
+	
+	if (i == 0)
 		return -EINVAL;
 
+	
 	ret = sscanf(buf, "%lu", &gpu_freq);
-	if (ret == 0)
-		return -EINVAL;
 
-	if (gpu_freq > 520 || gpu_freq < 416) {
-		pr_info("GPU clock range is 416-520 MHz. Tried to set %lu\n",gpu_freq);
-		return -EINVAL;
-	}
+	if (ret == 0)
+        return -EINVAL;
 
 	new_gpu_freq = gpu_freq * 1000000;
-
-	rcu_read_lock();
+	new_gpu_pll_c_freq = (gpu_freq * 1000000) * 2);
+	new_gpu_host1x_freq = DIV_ROUND_UP((gpu_freq * 1000000), 2);
 
 	vde->max_rate = new_gpu_freq;
 	mpe->max_rate = new_gpu_freq;
@@ -777,8 +769,28 @@ static ssize_t store_gpu_oc(struct cpufreq_policy *policy, const char *buf, size
 	three_d2->max_rate = new_gpu_freq;
 	se->max_rate = new_gpu_freq;
 	cbus->max_rate = new_gpu_freq;
-	
+	host1x->max_rate = new_gpu_host1x_freq;
+	pll_c->max_rate = new_gpu_pll_c_freq;
+
+		
 	for (i--; i >= 5; i--) {
+		if (gpu_freq < 600) {
+			new_volt = 1250;
+			vde->dvfs->millivolts[i] = new_volt;
+			pr_info("gpu_freq is < 600 set vde voltage to: %d\n",
+                    vde->dvfs->millivolts[i]);
+		}			
+		if (gpu_freq >= 600 && gpu_freq < 700) {
+			new_volt = 1400;
+			vde->dvfs->millivolts[i] = new_volt;
+			pr_info("gpu_freq is >= 600 and < 700 set vde voltage to: %d\n",
+                    vde->dvfs->millivolts[i]);
+		}
+		if (gpu_freq >= 700) {
+			new_volt = 1550;
+			vde->dvfs->millivolts[i] = new_volt;
+			pr_info("gpu_freq is >= 700 set vde voltage to: %d\n", vde->dvfs->millivolts[i]);
+		}
 		vde->dvfs->freqs[i] = new_gpu_freq;
 		mpe->dvfs->freqs[i] = new_gpu_freq;
 		two_d->dvfs->freqs[i] = new_gpu_freq;
@@ -787,16 +799,8 @@ static ssize_t store_gpu_oc(struct cpufreq_policy *policy, const char *buf, size
 		three_d2->dvfs->freqs[i] = new_gpu_freq;
 		se->dvfs->freqs[i] = new_gpu_freq;
 		cbus->dvfs->freqs[i] = new_gpu_freq;
+		pll_c->dvfs->freqs[i] = new_gpu_pll_c_freq;
 	}
-
-	ret = sscanf(buf, "%s", cur_size);
-
-	if (ret == 0)
-		return -EINVAL;
-
-	buf += (strlen(cur_size) + 1);
-	
-	rcu_read_unlock();
 
 	return count;
 }

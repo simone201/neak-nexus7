@@ -2,7 +2,7 @@ VERSION = 3
 PATCHLEVEL = 2
 SUBLEVEL = 49
 EXTRAVERSION =
-NAME = oxydo
+NAME = Saber-toothed Squirrel
 
 # *DOCUMENTATION*
 # To see a list of typical targets execute "make help"

@@ -1621,13 +1621,8 @@ long do_io_submit(aio_context_t ctx_id, long nr,
 {
 	struct kioctx *ctx;
 	long ret = 0;
-<<<<<<< HEAD
 	int i;
 	struct blk_plug plug;
-=======
-	int i = 0;
-	struct kiocb_batch batch;
->>>>>>> 7ce8616...  AIO: Don't plug the I/O queue in do_io_submit()
 
 	if (unlikely(nr < 0))
 		return -EINVAL;
@@ -1644,11 +1639,7 @@ long do_io_submit(aio_context_t ctx_id, long nr,
 		return -EINVAL;
 	}
 
-<<<<<<< HEAD
 	blk_start_plug(&plug);
-=======
-	kiocb_batch_init(&batch, nr);
->>>>>>> 7ce8616...  AIO: Don't plug the I/O queue in do_io_submit()
 
 	/*
 	 * AKPM: should this return a partial result if some of the IOs were
@@ -1672,6 +1663,7 @@ long do_io_submit(aio_context_t ctx_id, long nr,
 		if (ret)
 			break;
 	}
+	blk_finish_plug(&plug);
 
 	put_ioctx(ctx);
 	return i ? i : ret;

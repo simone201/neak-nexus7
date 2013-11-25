@@ -80,21 +80,19 @@ struct cpufreq_interactive_core_lock {
 };
 
 /* default timeout for core lock down */
-#define DEFAULT_CORE_LOCK_PERIOD 200000 /* 200 ms */
-
+#define DEFAULT_CORE_LOCK_PERIOD 150000 /* 150 ms */
 static struct cpufreq_interactive_core_lock core_lock;
 
-
 /* Hi speed to bump to from lo speed when load burst (default max) */
-static u64 hispeed_freq;
+static unsigned int hispeed_freq = 1000000;
 
 /* Boost frequency by boost_factor when CPU load at or above this value. */
-#define DEFAULT_GO_MAXSPEED_LOAD 80
-static unsigned long go_maxspeed_load;
+#define DEFAULT_GO_MAXSPEED_LOAD 95
+static unsigned long go_maxspeed_load = DEFAULT_GO_MAXSPEED_LOAD;
 
 /* Go to hispeed_freq when CPU load at or above this value. */
-#define DEFAULT_GO_HISPEED_LOAD 80
-static unsigned long go_hispeed_load;
+#define DEFAULT_GO_HISPEED_LOAD 85
+static unsigned long go_hispeed_load = DEFAULT_GO_HISPEED_LOAD;
 
 /* Base of exponential raise to max speed; if 0 - jump to maximum */
 static unsigned long boost_factor;
@@ -103,7 +101,7 @@ static unsigned long boost_factor;
 static unsigned long max_boost;
 
 /* Consider IO as busy */
-static unsigned long io_is_busy;
+static unsigned long io_is_busy = 0;
 
 /*
  * Targeted sustainable load relatively to current frequency.
@@ -114,21 +112,21 @@ static unsigned long sustain_load;
 /*
  * The minimum amount of time to spend at a frequency before we can ramp down.
  */
-#define DEFAULT_MIN_SAMPLE_TIME 30000;
-static unsigned long min_sample_time;
+#define DEFAULT_MIN_SAMPLE_TIME 20000
+static unsigned long min_sample_time = DEFAULT_MIN_SAMPLE_TIME;
 
 /*
  * The sample rate of the timer used to increase frequency
  */
-#define DEFAULT_TIMER_RATE 20000;
-static unsigned long timer_rate;
+#define DEFAULT_TIMER_RATE DEFAULT_MIN_SAMPLE_TIME;
+static unsigned long timer_rate = DEFAULT_TIMER_RATE;
 
 /*
  * Wait this long before raising speed above hispeed, by default a single
  * timer interval.
  */
-#define DEFAULT_ABOVE_HISPEED_DELAY DEFAULT_TIMER_RATE
-static unsigned long above_hispeed_delay_val;
+#define DEFAULT_ABOVE_HISPEED_DELAY (2 * DEFAULT_MIN_SAMPLE_TIME)
+static unsigned long above_hispeed_delay_val = DEFAULT_ABOVE_HISPEED_DELAY;
 
 /*
  * Boost pulse to hispeed on touchscreen input.
@@ -915,7 +913,7 @@ static struct global_attr max_boost_attr = __ATTR(max_boost, 0644,
 static ssize_t show_hispeed_freq(struct kobject *kobj,
 				 struct attribute *attr, char *buf)
 {
-	return sprintf(buf, "%llu\n", hispeed_freq);
+	return sprintf(buf, "%u\n", hispeed_freq);
 }
 
 static ssize_t store_hispeed_freq(struct kobject *kobj,
@@ -923,9 +921,9 @@ static ssize_t store_hispeed_freq(struct kobject *kobj,
 				  size_t count)
 {
 	int ret;
-	u64 val;
+	long unsigned int val;
 
-	ret = strict_strtoull(buf, 0, &val);
+	ret = strict_strtoul(buf, 0, &val);
 	if (ret < 0)
 		return ret;
 	hispeed_freq = val;
@@ -1218,12 +1216,6 @@ static int __init cpufreq_interactive_init(void)
 	unsigned int i;
 	struct cpufreq_interactive_cpuinfo *pcpu;
 	struct sched_param param = { .sched_priority = MAX_RT_PRIO-1 };
-
-	go_maxspeed_load = DEFAULT_GO_MAXSPEED_LOAD;
-	go_hispeed_load = DEFAULT_GO_HISPEED_LOAD;
-	min_sample_time = DEFAULT_MIN_SAMPLE_TIME;
-	above_hispeed_delay_val = DEFAULT_ABOVE_HISPEED_DELAY;
-	timer_rate = DEFAULT_TIMER_RATE;
 
 	/* Initalize per-cpu timers */
 	for_each_possible_cpu(i) {

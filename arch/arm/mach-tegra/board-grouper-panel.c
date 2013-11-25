@@ -40,12 +40,14 @@
 #include "gpio-names.h"
 #include <mach/board-grouper-misc.h>
 
+#ifdef CONFIG_GROUPER_BLC
 static bool otf_scaling = 0;
 module_param(otf_scaling, bool, 0644);
 static unsigned int min_bl = 11;
 module_param(min_bl, uint, 0644);
 static unsigned max_bl = 160;
 module_param(max_bl, uint, 0644);
+#endif
 
 /* grouper default display board pins */
 #define grouper_lvds_avdd_en		TEGRA_GPIO_PH6
@@ -161,6 +163,12 @@ static int grouper_backlight_notify(struct device *unused, int brightness)
 	int max_bl_val = max_bl;
 
 	/* Apply any backlight response curve */
+#ifndef CONFIG_GROUPER_BLC
+	if (brightness > 255)
+		pr_info("Error: Brightness > 255!\n");
+		
+	return brightness;
+#else
 	if (brightness > 255) {
 		pr_info("Error: Brightness > 255!\n");
 	} else if ((brightness > 0) && (brightness < min_bl_val)) {	
@@ -172,11 +180,12 @@ static int grouper_backlight_notify(struct device *unused, int brightness)
 			brightness = min_bl_val + 
 			DIV_ROUND_CLOSEST(((max_bl_val - min_bl_val) * max((brightness - 10),0)),245);
 		} else {
-		brightness = bl_output[brightness];
+			brightness = bl_output[brightness];
 		}
 	}
 
-return brightness;
+	return brightness;
+#endif
 }
 
 static int grouper_disp1_check_fb(struct device *dev, struct fb_info *info);

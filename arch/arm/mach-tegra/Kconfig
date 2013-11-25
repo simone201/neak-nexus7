@@ -271,6 +271,12 @@ config TEGRA_EMC_SCALING_ENABLE
 	depends on TEGRA_SILICON_PLATFORM
 	default n
 
+config GROUPER_BLC
+	bool "Enable Backlight Control for Grouper"
+	default n
+	help
+		Support for Backlight Advanced Control for Grouper
+
 config VOLTAGE_CONTROL
 	bool "Enable user voltage control on Tegra CPU"
 	depends on TEGRA_SILICON_PLATFORM

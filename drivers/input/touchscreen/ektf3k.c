@@ -205,13 +205,16 @@ static int debug = DEBUG_INFO;
 
 /* sweep2wake */
 
+#define S2W_DEFAULT 0
+#define DT2W_DEFAULT 0
+
 static struct input_dev *sweep2wake_pwrdev;
 static DEFINE_MUTEX(s2w_lock);
-int dt2w_switch = 1;
-int dt2w_switch_temp = 1;
+int dt2w_switch = DT2W_DEFAULT;
+int dt2w_switch_temp = DT2W_DEFAULT;
 int dt2w_changed = 0;
-int s2w_switch = 1;
-int s2w_switch_temp = 1;
+int s2w_switch = S2W_DEFAULT;
+int s2w_switch_temp = S2W_DEFAULT;
 int s2w_changed = 0;
 int s2w_begin_v = 150;
 int s2w_end_v = 1200;

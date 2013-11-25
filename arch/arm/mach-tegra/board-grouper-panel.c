@@ -159,8 +159,10 @@ static int grouper_backlight_notify(struct device *unused, int brightness)
 
 	/* SD brightness is a percentage, 8-bit value. Define min/max_bl_val */
 	brightness = (brightness * cur_sd_brightness) / 255;
+#ifdef CONFIG_GROUPER_BLC
 	int min_bl_val = min_bl;
 	int max_bl_val = max_bl;
+#endif
 
 	/* Apply any backlight response curve */
 #ifndef CONFIG_GROUPER_BLC

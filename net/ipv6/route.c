@@ -76,7 +76,11 @@ static struct rt6_info *ip6_rt_copy(const struct rt6_info *ort,
 				    const struct in6_addr *dest);
 static struct dst_entry	*ip6_dst_check(struct dst_entry *dst, u32 cookie);
 static unsigned int	 ip6_default_advmss(const struct dst_entry *dst);
+<<<<<<< HEAD
 static unsigned int	 ip6_default_mtu(const struct dst_entry *dst);
+=======
+static unsigned int	 ip6_mtu(const struct dst_entry *dst);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static struct dst_entry *ip6_negative_advice(struct dst_entry *);
 static void		ip6_dst_destroy(struct dst_entry *);
 static void		ip6_dst_ifdown(struct dst_entry *,
@@ -143,7 +147,11 @@ static struct dst_ops ip6_dst_ops_template = {
 	.gc_thresh		=	1024,
 	.check			=	ip6_dst_check,
 	.default_advmss		=	ip6_default_advmss,
+<<<<<<< HEAD
 	.default_mtu		=	ip6_default_mtu,
+=======
+	.mtu			=	ip6_mtu,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.cow_metrics		=	ipv6_cow_metrics,
 	.destroy		=	ip6_dst_destroy,
 	.ifdown			=	ip6_dst_ifdown,
@@ -154,9 +162,17 @@ static struct dst_ops ip6_dst_ops_template = {
 	.neigh_lookup		=	ip6_neigh_lookup,
 };
 
+<<<<<<< HEAD
 static unsigned int ip6_blackhole_default_mtu(const struct dst_entry *dst)
 {
 	return 0;
+=======
+static unsigned int ip6_blackhole_mtu(const struct dst_entry *dst)
+{
+	unsigned int mtu = dst_metric_raw(dst, RTAX_MTU);
+
+	return mtu ? : dst->dev->mtu;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static void ip6_rt_blackhole_update_pmtu(struct dst_entry *dst, u32 mtu)
@@ -174,7 +190,11 @@ static struct dst_ops ip6_dst_blackhole_ops = {
 	.protocol		=	cpu_to_be16(ETH_P_IPV6),
 	.destroy		=	ip6_dst_destroy,
 	.check			=	ip6_dst_check,
+<<<<<<< HEAD
 	.default_mtu		=	ip6_blackhole_default_mtu,
+=======
+	.mtu			=	ip6_blackhole_mtu,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.default_advmss		=	ip6_default_advmss,
 	.update_pmtu		=	ip6_rt_blackhole_update_pmtu,
 	.cow_metrics		=	ip6_rt_blackhole_cow_metrics,
@@ -1040,10 +1060,22 @@ static unsigned int ip6_default_advmss(const struct dst_entry *dst)
 	return mtu;
 }
 
+<<<<<<< HEAD
 static unsigned int ip6_default_mtu(const struct dst_entry *dst)
 {
 	unsigned int mtu = IPV6_MIN_MTU;
 	struct inet6_dev *idev;
+=======
+static unsigned int ip6_mtu(const struct dst_entry *dst)
+{
+	struct inet6_dev *idev;
+	unsigned int mtu = dst_metric_raw(dst, RTAX_MTU);
+
+	if (mtu)
+		return mtu;
+
+	mtu = IPV6_MIN_MTU;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	rcu_read_lock();
 	idev = __in6_dev_get(dst->dev);
@@ -1910,7 +1942,12 @@ void rt6_purge_dflt_routers(struct net *net)
 restart:
 	read_lock_bh(&table->tb6_lock);
 	for (rt = table->tb6_root.leaf; rt; rt = rt->dst.rt6_next) {
+<<<<<<< HEAD
 		if (rt->rt6i_flags & (RTF_DEFAULT | RTF_ADDRCONF)) {
+=======
+		if (rt->rt6i_flags & (RTF_DEFAULT | RTF_ADDRCONF) &&
+		    (!rt->rt6i_idev || rt->rt6i_idev->cnf.accept_ra != 2)) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			dst_hold(&rt->dst);
 			read_unlock_bh(&table->tb6_lock);
 			ip6_del_rt(rt);

@@ -35,7 +35,11 @@ static u32 seq_scale(u32 seq)
 }
 
 #if defined(CONFIG_IPV6) || defined(CONFIG_IPV6_MODULE)
+<<<<<<< HEAD
 __u32 secure_tcpv6_sequence_number(__be32 *saddr, __be32 *daddr,
+=======
+__u32 secure_tcpv6_sequence_number(const __be32 *saddr, const __be32 *daddr,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				   __be16 sport, __be16 dport)
 {
 	u32 secret[MD5_MESSAGE_BYTES / 4];

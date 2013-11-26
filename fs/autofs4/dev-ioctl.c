@@ -376,7 +376,11 @@ static int autofs_dev_ioctl_setpipefd(struct file *fp,
 			err = -EBADF;
 			goto out;
 		}
+<<<<<<< HEAD
 		if (!pipe->f_op || !pipe->f_op->write) {
+=======
+		if (autofs_prepare_pipe(pipe) < 0) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			err = -EPIPE;
 			fput(pipe);
 			goto out;

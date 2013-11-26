@@ -790,7 +790,11 @@ static void icmp_redirect(struct sk_buff *skb)
 	if (iph->protocol == IPPROTO_ICMP &&
 	    iph->ihl >= 5 &&
 	    pskb_may_pull(skb, (iph->ihl<<2)+8)) {
+<<<<<<< HEAD
 		ping_v4_err(skb, icmp_hdr(skb)->un.gateway);
+=======
+		ping_err(skb, icmp_hdr(skb)->un.gateway);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 out:
@@ -1152,10 +1156,16 @@ static int __net_init icmp_sk_init(struct net *net)
 		net->ipv4.icmp_sk[i] = sk;
 
 		/* Enough space for 2 64K ICMP packets, including
+<<<<<<< HEAD
 		 * sk_buff struct overhead.
 		 */
 		sk->sk_sndbuf =
 			(2 * ((64 * 1024) + sizeof(struct sk_buff)));
+=======
+		 * sk_buff/skb_shared_info struct overhead.
+		 */
+		sk->sk_sndbuf =	2 * SKB_TRUESIZE(64 * 1024);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		/*
 		 * Speedup sock_wfree()

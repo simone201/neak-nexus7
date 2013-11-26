@@ -16,6 +16,10 @@
 #include <linux/net.h>
 #include <linux/netdevice.h>
 #include <linux/mutex.h>
+<<<<<<< HEAD
+=======
+#include <linux/module.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/netns/generic.h>
 #include <net/net_namespace.h>
 #include <net/pkt_sched.h>

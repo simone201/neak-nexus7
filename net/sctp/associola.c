@@ -1049,7 +1049,11 @@ struct sctp_transport *sctp_assoc_lookup_tsn(struct sctp_association *asoc,
 			transports) {
 
 		if (transport == active)
+<<<<<<< HEAD
 			break;
+=======
+			continue;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		list_for_each_entry(chunk, &transport->transmitted,
 				transmitted_list) {
 			if (key == chunk->subh.data_hdr->tsn) {

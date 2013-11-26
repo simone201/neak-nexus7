@@ -454,6 +454,7 @@ static struct sock *fanout_demux_cpu(struct packet_fanout *f, struct sk_buff *sk
 	return f->arr[cpu % num];
 }
 
+<<<<<<< HEAD
 static struct sk_buff *fanout_check_defrag(struct sk_buff *skb)
 {
 #ifdef CONFIG_INET
@@ -491,6 +492,8 @@ static struct sk_buff *fanout_check_defrag(struct sk_buff *skb)
 	return skb;
 }
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static int packet_rcv_fanout(struct sk_buff *skb, struct net_device *dev,
 			     struct packet_type *pt, struct net_device *orig_dev)
 {
@@ -509,7 +512,11 @@ static int packet_rcv_fanout(struct sk_buff *skb, struct net_device *dev,
 	case PACKET_FANOUT_HASH:
 	default:
 		if (f->defrag) {
+<<<<<<< HEAD
 			skb = fanout_check_defrag(skb);
+=======
+			skb = ip_check_defrag(skb, IP_DEFRAG_AF_PACKET);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			if (!skb)
 				return 0;
 		}
@@ -2063,12 +2070,20 @@ static int packet_getname_spkt(struct socket *sock, struct sockaddr *uaddr,
 		return -EOPNOTSUPP;
 
 	uaddr->sa_family = AF_PACKET;
+<<<<<<< HEAD
 	rcu_read_lock();
 	dev = dev_get_by_index_rcu(sock_net(sk), pkt_sk(sk)->ifindex);
 	if (dev)
 		strncpy(uaddr->sa_data, dev->name, 14);
 	else
 		memset(uaddr->sa_data, 0, 14);
+=======
+	memset(uaddr->sa_data, 0, sizeof(uaddr->sa_data));
+	rcu_read_lock();
+	dev = dev_get_by_index_rcu(sock_net(sk), pkt_sk(sk)->ifindex);
+	if (dev)
+		strlcpy(uaddr->sa_data, dev->name, sizeof(uaddr->sa_data));
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	rcu_read_unlock();
 	*uaddr_len = sizeof(*uaddr);
 

@@ -66,12 +66,24 @@ static void tick_broadcast_start_periodic(struct clock_event_device *bc)
  */
 int tick_check_broadcast_device(struct clock_event_device *dev)
 {
+<<<<<<< HEAD
 	if ((tick_broadcast_device.evtdev &&
+=======
+	struct clock_event_device *cur = tick_broadcast_device.evtdev;
+
+	if ((dev->features & CLOCK_EVT_FEAT_DUMMY) ||
+	    (tick_broadcast_device.evtdev &&
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	     tick_broadcast_device.evtdev->rating >= dev->rating) ||
 	     (dev->features & CLOCK_EVT_FEAT_C3STOP))
 		return 0;
 
 	clockevents_exchange_device(tick_broadcast_device.evtdev, dev);
+<<<<<<< HEAD
+=======
+	if (cur)
+		cur->event_handler = clockevents_handle_noop;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	tick_broadcast_device.evtdev = dev;
 	if (!cpumask_empty(tick_get_broadcast_mask()))
 		tick_broadcast_start_periodic(dev);

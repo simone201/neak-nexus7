@@ -161,6 +161,11 @@ static int hash_recvmsg(struct kiocb *unused, struct socket *sock,
 	else if (len < ds)
 		msg->msg_flags |= MSG_TRUNC;
 
+<<<<<<< HEAD
+=======
+	msg->msg_namelen = 0;
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	lock_sock(sk);
 	if (ctx->more) {
 		ctx->more = 0;

@@ -193,7 +193,11 @@ static int rpcb_create_local_unix(void)
 	if (IS_ERR(clnt)) {
 		dprintk("RPC:       failed to create AF_LOCAL rpcbind "
 				"client (errno %ld).\n", PTR_ERR(clnt));
+<<<<<<< HEAD
 		result = -PTR_ERR(clnt);
+=======
+		result = PTR_ERR(clnt);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto out;
 	}
 
@@ -242,7 +246,11 @@ static int rpcb_create_local_net(void)
 	if (IS_ERR(clnt)) {
 		dprintk("RPC:       failed to create local rpcbind "
 				"client (errno %ld).\n", PTR_ERR(clnt));
+<<<<<<< HEAD
 		result = -PTR_ERR(clnt);
+=======
+		result = PTR_ERR(clnt);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto out;
 	}
 

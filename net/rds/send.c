@@ -933,7 +933,10 @@ int rds_sendmsg(struct kiocb *iocb, struct socket *sock, struct msghdr *msg,
 	/* Mirror Linux UDP mirror of BSD error message compatibility */
 	/* XXX: Perhaps MSG_MORE someday */
 	if (msg->msg_flags & ~(MSG_DONTWAIT | MSG_CMSG_COMPAT)) {
+<<<<<<< HEAD
 		printk(KERN_INFO "msg_flags 0x%08X\n", msg->msg_flags);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		ret = -EOPNOTSUPP;
 		goto out;
 	}

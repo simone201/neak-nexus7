@@ -23,6 +23,10 @@ config IOSCHED_DEADLINE
 
 config IOSCHED_ROW
 	tristate "ROW I/O scheduler"
+<<<<<<< HEAD
+=======
+	default y
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	---help---
 	  The ROW I/O scheduler gives priority to READ requests over the
 	  WRITE requests when dispatching, without starving WRITE requests.
@@ -31,11 +35,14 @@ config IOSCHED_ROW
 	  according to queue priority.
 	  Most suitable for mobile devices.
 
+<<<<<<< HEAD
 config IOSCHED_ZEN
 	tristate "ZEN I/O scheduler"
 	---help---
 	  STUB.
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 config IOSCHED_CFQ
 	tristate "CFQ I/O scheduler"
 	# If BLK_CGROUP is a module, CFQ has to be built as module.
@@ -58,6 +65,7 @@ config CFQ_GROUP_IOSCHED
 	---help---
 	  Enable group IO scheduling in CFQ.
 
+<<<<<<< HEAD
 config IOSCHED_SIO
   tristate "Simple I/O scheduler"
   default y
@@ -74,6 +82,29 @@ config IOSCHED_VR
 	---help---
 	  Requests are chosen according to SSTF with a penalty of rev_penalty
 	  for switching head direction.
+=======
+config IOSCHED_BFQ
+	tristate "BFQ I/O scheduler"
+	depends on EXPERIMENTAL
+	default n
+	---help---
+	  The BFQ I/O scheduler tries to distribute bandwidth among
+	  all processes according to their weights.
+	  It aims at distributing the bandwidth as desired, independently of
+	  the disk parameters and with any workload. It also tries to
+	  guarantee low latency to interactive and soft real-time
+	  applications.  If compiled built-in (saying Y here), BFQ can
+	  be configured to support hierarchical scheduling.
+
+config CGROUP_BFQIO
+	bool "BFQ hierarchical scheduling support"
+	depends on CGROUPS && IOSCHED_BFQ=y
+	default n
+	---help---
+	  Enable hierarchical scheduling in BFQ, using the cgroups
+	  filesystem interface.  The name of the subsystem will be
+	  bfqio.
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 choice
 	prompt "Default I/O scheduler"
@@ -95,6 +126,7 @@ choice
 		  for each queue is defined according to queue priority.
 		  Most suitable for mobile devices.
 
+<<<<<<< HEAD
 	config DEFAULT_ZEN
 		bool "ZEN" if IOSCHED_ZEN=y
 		
@@ -109,6 +141,16 @@ choice
 	
 	config DEFAULT_VR
 		bool "V(R)" if IOSCHED_VR=y
+=======
+	config DEFAULT_CFQ
+		bool "CFQ" if IOSCHED_CFQ=y
+
+	config DEFAULT_BFQ
+		bool "BFQ" if IOSCHED_BFQ=y
+
+	config DEFAULT_NOOP
+		bool "No-op"
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 endchoice
 
@@ -116,11 +158,18 @@ config DEFAULT_IOSCHED
 	string
 	default "deadline" if DEFAULT_DEADLINE
 	default "row" if DEFAULT_ROW
+<<<<<<< HEAD
 	default "zen" if DEFAULT_ZEN
 	default "cfq" if DEFAULT_CFQ
 	default "noop" if DEFAULT_NOOP
 	default "sio" if DEFAULT_SIO
 	default "vr" if DEFAULT_VR
+=======
+	default "cfq" if DEFAULT_CFQ
+	default "bfq" if DEFAULT_BFQ
+	default "noop" if DEFAULT_NOOP
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 endmenu
 
 endif

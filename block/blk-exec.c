@@ -49,6 +49,10 @@ void blk_execute_rq_nowait(struct request_queue *q, struct gendisk *bd_disk,
 			   rq_end_io_fn *done)
 {
 	int where = at_head ? ELEVATOR_INSERT_FRONT : ELEVATOR_INSERT_BACK;
+<<<<<<< HEAD
+=======
+	bool is_pm_resume;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (unlikely(test_bit(QUEUE_FLAG_DEAD, &q->queue_flags))) {
 		rq->errors = -ENXIO;
@@ -59,12 +63,25 @@ void blk_execute_rq_nowait(struct request_queue *q, struct gendisk *bd_disk,
 
 	rq->rq_disk = bd_disk;
 	rq->end_io = done;
+<<<<<<< HEAD
+=======
+	/*
+	 * need to check this before __blk_run_queue(), because rq can
+	 * be freed before that returns.
+	 */
+	is_pm_resume = rq->cmd_type == REQ_TYPE_PM_RESUME;
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	WARN_ON(irqs_disabled());
 	spin_lock_irq(q->queue_lock);
 	__elv_add_request(q, rq, where);
 	__blk_run_queue(q);
 	/* the queue is stopped so it won't be run */
+<<<<<<< HEAD
 	if (rq->cmd_type == REQ_TYPE_PM_RESUME)
+=======
+	if (is_pm_resume)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		q->request_fn(q);
 	spin_unlock_irq(q->queue_lock);
 }

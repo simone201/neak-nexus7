@@ -2085,6 +2085,12 @@ static void scan_for_empty_cpusets(struct cpuset *root)
  * (of no affect) on systems that are actively using CPU hotplug
  * but making no active use of cpusets.
  *
+<<<<<<< HEAD
+=======
+ * The only exception to this is suspend/resume, where we don't
+ * modify cpusets at all.
+ *
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  * This routine ensures that top_cpuset.cpus_allowed tracks
  * cpu_active_mask on each CPU hotplug (cpuhp) event.
  *

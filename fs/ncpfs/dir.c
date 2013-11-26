@@ -1033,6 +1033,7 @@ static int ncp_rmdir(struct inode *dir, struct dentry *dentry)
 	DPRINTK("ncp_rmdir: removing %s/%s\n",
 		dentry->d_parent->d_name.name, dentry->d_name.name);
 
+<<<<<<< HEAD
 	/*
 	 * fail with EBUSY if there are still references to this
 	 * directory.
@@ -1042,6 +1043,8 @@ static int ncp_rmdir(struct inode *dir, struct dentry *dentry)
 	if (!d_unhashed(dentry))
 		goto out;
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	len = sizeof(__name);
 	error = ncp_io2vol(server, __name, &len, dentry->d_name.name,
 			   dentry->d_name.len, !ncp_preserve_case(dir));

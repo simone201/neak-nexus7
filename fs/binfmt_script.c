@@ -82,7 +82,13 @@ static int load_script(struct linux_binprm *bprm,struct pt_regs *regs)
 	retval = copy_strings_kernel(1, &i_name, bprm);
 	if (retval) return retval; 
 	bprm->argc++;
+<<<<<<< HEAD
 	bprm->interp = interp;
+=======
+	retval = bprm_change_interp(interp, bprm);
+	if (retval < 0)
+		return retval;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/*
 	 * OK, now restart the process with the interpreter's dentry.

@@ -230,9 +230,12 @@ struct vm_area_struct {
 #ifdef CONFIG_NUMA
 	struct mempolicy *vm_policy;	/* NUMA policy for the VMA */
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_UKSM
 	struct vma_slot *uksm_vma_slot;
 #endif
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 struct core_thread {

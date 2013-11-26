@@ -575,6 +575,10 @@ static struct buffer_head *inode_getblk(struct inode *inode, sector_t block,
 	struct udf_inode_info *iinfo = UDF_I(inode);
 	int goal = 0, pgoal = iinfo->i_location.logicalBlockNum;
 	int lastblock = 0;
+<<<<<<< HEAD
+=======
+	bool isBeyondEOF;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	prev_epos.offset = udf_file_entry_alloc_offset(inode);
 	prev_epos.block = iinfo->i_location;
@@ -653,7 +657,11 @@ static struct buffer_head *inode_getblk(struct inode *inode, sector_t block,
 	/* Are we beyond EOF? */
 	if (etype == -1) {
 		int ret;
+<<<<<<< HEAD
 
+=======
+		isBeyondEOF = 1;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (count) {
 			if (c)
 				laarr[0] = laarr[1];
@@ -696,6 +704,10 @@ static struct buffer_head *inode_getblk(struct inode *inode, sector_t block,
 		endnum = c + 1;
 		lastblock = 1;
 	} else {
+<<<<<<< HEAD
+=======
+		isBeyondEOF = 0;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		endnum = startnum = ((count > 2) ? 2 : count);
 
 		/* if the current extent is in position 0,
@@ -741,7 +753,12 @@ static struct buffer_head *inode_getblk(struct inode *inode, sector_t block,
 			*err = -ENOSPC;
 			return NULL;
 		}
+<<<<<<< HEAD
 		iinfo->i_lenExtents += inode->i_sb->s_blocksize;
+=======
+		if (isBeyondEOF)
+			iinfo->i_lenExtents += inode->i_sb->s_blocksize;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 	/* if the extent the requsted block is located in contains multiple

@@ -358,7 +358,10 @@ int ip_options_compile(struct net *net,
 				}
 				switch (optptr[3]&0xF) {
 				      case IPOPT_TS_TSONLY:
+<<<<<<< HEAD
 					opt->ts = optptr - iph;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 					if (skb)
 						timeptr = &optptr[optptr[2]-1];
 					opt->ts_needtime = 1;
@@ -369,7 +372,10 @@ int ip_options_compile(struct net *net,
 						pp_ptr = optptr + 2;
 						goto error;
 					}
+<<<<<<< HEAD
 					opt->ts = optptr - iph;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 					if (rt)  {
 						memcpy(&optptr[optptr[2]-1], &rt->rt_spec_dst, 4);
 						timeptr = &optptr[optptr[2]+3];
@@ -383,7 +389,10 @@ int ip_options_compile(struct net *net,
 						pp_ptr = optptr + 2;
 						goto error;
 					}
+<<<<<<< HEAD
 					opt->ts = optptr - iph;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 					{
 						__be32 addr;
 						memcpy(&addr, &optptr[optptr[2]-1], 4);
@@ -416,12 +425,19 @@ int ip_options_compile(struct net *net,
 					pp_ptr = optptr + 3;
 					goto error;
 				}
+<<<<<<< HEAD
 				opt->ts = optptr - iph;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				if (skb) {
 					optptr[3] = (optptr[3]&0xF)|((overflow+1)<<4);
 					opt->is_changed = 1;
 				}
 			}
+<<<<<<< HEAD
+=======
+			opt->ts = optptr - iph;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			break;
 		      case IPOPT_RA:
 			if (optlen < 4) {
@@ -568,11 +584,19 @@ void ip_forward_options(struct sk_buff *skb)
 		     ) {
 			if (srrptr + 3 > srrspace)
 				break;
+<<<<<<< HEAD
 			if (memcmp(&ip_hdr(skb)->daddr, &optptr[srrptr-1], 4) == 0)
+=======
+			if (memcmp(&opt->nexthop, &optptr[srrptr-1], 4) == 0)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				break;
 		}
 		if (srrptr + 3 <= srrspace) {
 			opt->is_changed = 1;
+<<<<<<< HEAD
+=======
+			ip_hdr(skb)->daddr = opt->nexthop;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			ip_rt_get_source(&optptr[srrptr-1], skb, rt);
 			optptr[2] = srrptr+4;
 		} else if (net_ratelimit())
@@ -640,7 +664,11 @@ int ip_options_rcv_srr(struct sk_buff *skb)
 	}
 	if (srrptr <= srrspace) {
 		opt->srr_is_hit = 1;
+<<<<<<< HEAD
 		iph->daddr = nexthop;
+=======
+		opt->nexthop = nexthop;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		opt->is_changed = 1;
 	}
 	return 0;

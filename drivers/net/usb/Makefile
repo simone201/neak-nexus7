@@ -11,6 +11,10 @@ obj-$(CONFIG_USB_NET_AX8817X)	+= asix.o
 obj-$(CONFIG_USB_NET_CDCETHER)	+= cdc_ether.o
 obj-$(CONFIG_USB_NET_CDC_EEM)	+= cdc_eem.o
 obj-$(CONFIG_USB_NET_DM9601)	+= dm9601.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_USB_NET_QF9700)	+= qf9700.o
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 obj-$(CONFIG_USB_NET_SMSC75XX)	+= smsc75xx.o
 obj-$(CONFIG_USB_NET_SMSC95XX)	+= smsc95xx.o
 obj-$(CONFIG_USB_NET_GL620A)	+= gl620a.o

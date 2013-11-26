@@ -1094,8 +1094,15 @@ static struct dentry *d_inode_lookup(struct dentry *parent, struct dentry *dentr
 	struct dentry *old;
 
 	/* Don't create child dentry for a dead directory. */
+<<<<<<< HEAD
 	if (unlikely(IS_DEADDIR(inode)))
 		return ERR_PTR(-ENOENT);
+=======
+	if (unlikely(IS_DEADDIR(inode))) {
+		dput(dentry);
+		return ERR_PTR(-ENOENT);
+	}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	old = inode->i_op->lookup(inode, dentry, nd);
 	if (unlikely(old)) {
@@ -2140,7 +2147,11 @@ static struct file *do_last(struct nameidata *nd, struct path *path,
 		/* sayonara */
 		error = complete_walk(nd);
 		if (error)
+<<<<<<< HEAD
 			return ERR_PTR(-ECHILD);
+=======
+			return ERR_PTR(error);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		error = -ENOTDIR;
 		if (nd->flags & LOOKUP_DIRECTORY) {
@@ -2239,7 +2250,11 @@ static struct file *do_last(struct nameidata *nd, struct path *path,
 	/* Why this, you ask?  _Now_ we might have grown LOOKUP_JUMPED... */
 	error = complete_walk(nd);
 	if (error)
+<<<<<<< HEAD
 		goto exit;
+=======
+		return ERR_PTR(error);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	error = -EISDIR;
 	if (S_ISDIR(nd->inode->i_mode))
 		goto exit;

@@ -290,7 +290,11 @@ handle_fragments:
 
 check_directory_table:
 	/* Sanity check directory_table */
+<<<<<<< HEAD
 	if (msblk->directory_table >= next_table) {
+=======
+	if (msblk->directory_table > next_table) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		err = -EINVAL;
 		goto failed_mount;
 	}

@@ -61,6 +61,7 @@ static int autofs4_mount_busy(struct vfsmount *mnt, struct dentry *dentry)
 		/* This is an autofs submount, we can't expire it */
 		if (autofs_type_indirect(sbi->type))
 			goto done;
+<<<<<<< HEAD
 
 		/*
 		 * Otherwise it's an offset mount and we need to check
@@ -70,6 +71,8 @@ static int autofs4_mount_busy(struct vfsmount *mnt, struct dentry *dentry)
 			status = 0;
 			goto done;
 		}
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 	/* Update the expiry counter if fs is busy */

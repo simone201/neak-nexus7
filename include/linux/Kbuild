@@ -224,6 +224,10 @@ header-y += kd.h
 header-y += kdev_t.h
 header-y += kernel.h
 header-y += kernelcapi.h
+<<<<<<< HEAD
+=======
+header-y += kernel-page-flags.h
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 header-y += keyboard.h
 header-y += keyctl.h
 header-y += l2tp.h
@@ -267,6 +271,10 @@ header-y += netfilter_ipv4.h
 header-y += netfilter_ipv6.h
 header-y += netlink.h
 header-y += netrom.h
+<<<<<<< HEAD
+=======
+header-y += nfc.h
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 header-y += nfs.h
 header-y += nfs2.h
 header-y += nfs3.h

@@ -266,7 +266,13 @@ good_area:
 	return fault;
 
 check_stack:
+<<<<<<< HEAD
 	if (vma->vm_flags & VM_GROWSDOWN && !expand_stack(vma, addr))
+=======
+	/* Don't allow expansion below FIRST_USER_ADDRESS */
+	if (vma->vm_flags & VM_GROWSDOWN &&
+	    addr >= FIRST_USER_ADDRESS && !expand_stack(vma, addr))
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto good_area;
 out:
 	return fault;

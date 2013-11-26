@@ -385,6 +385,11 @@ int copy_creds(struct task_struct *p, unsigned long clone_flags)
 	struct cred *new;
 	int ret;
 
+<<<<<<< HEAD
+=======
+	p->replacement_session_keyring = NULL;
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (
 #ifdef CONFIG_KEYS
 		!p->cred->thread_keyring &&

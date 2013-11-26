@@ -716,6 +716,10 @@ static netdev_tx_t ipgre_tunnel_xmit(struct sk_buff *skb, struct net_device *dev
 		tiph = &tunnel->parms.iph;
 	}
 
+<<<<<<< HEAD
+=======
+	memset(&(IPCB(skb)->opt), 0, sizeof(IPCB(skb)->opt));
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if ((dst = tiph->daddr) == 0) {
 		/* NBMA tunnel */
 
@@ -835,8 +839,11 @@ static netdev_tx_t ipgre_tunnel_xmit(struct sk_buff *skb, struct net_device *dev
 	if (skb_headroom(skb) < max_headroom || skb_shared(skb)||
 	    (skb_cloned(skb) && !skb_clone_writable(skb, 0))) {
 		struct sk_buff *new_skb = skb_realloc_headroom(skb, max_headroom);
+<<<<<<< HEAD
 		if (max_headroom > dev->needed_headroom)
 			dev->needed_headroom = max_headroom;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (!new_skb) {
 			ip_rt_put(rt);
 			dev->stats.tx_dropped++;
@@ -853,7 +860,10 @@ static netdev_tx_t ipgre_tunnel_xmit(struct sk_buff *skb, struct net_device *dev
 	skb_reset_transport_header(skb);
 	skb_push(skb, gre_hlen);
 	skb_reset_network_header(skb);
+<<<<<<< HEAD
 	memset(&(IPCB(skb)->opt), 0, sizeof(IPCB(skb)->opt));
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	IPCB(skb)->flags &= ~(IPSKB_XFRM_TUNNEL_SIZE | IPSKB_XFRM_TRANSFORMED |
 			      IPSKB_REROUTED);
 	skb_dst_drop(skb);

@@ -114,7 +114,11 @@ static __inline__ __sum16 tcp_v6_check(int len,
 	return csum_ipv6_magic(saddr, daddr, len, IPPROTO_TCP, base);
 }
 
+<<<<<<< HEAD
 static __u32 tcp_v6_init_sequence(struct sk_buff *skb)
+=======
+static __u32 tcp_v6_init_sequence(const struct sk_buff *skb)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	return secure_tcpv6_sequence_number(ipv6_hdr(skb)->daddr.s6_addr32,
 					    ipv6_hdr(skb)->saddr.s6_addr32,
@@ -761,7 +765,11 @@ static int tcp_v6_md5_hash_pseudoheader(struct tcp_md5sig_pool *hp,
 
 static int tcp_v6_md5_hash_hdr(char *md5_hash, struct tcp_md5sig_key *key,
 			       const struct in6_addr *daddr, struct in6_addr *saddr,
+<<<<<<< HEAD
 			       struct tcphdr *th)
+=======
+			       const struct tcphdr *th)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	struct tcp_md5sig_pool *hp;
 	struct hash_desc *desc;
@@ -793,13 +801,23 @@ clear_hash_noput:
 }
 
 static int tcp_v6_md5_hash_skb(char *md5_hash, struct tcp_md5sig_key *key,
+<<<<<<< HEAD
 			       struct sock *sk, struct request_sock *req,
 			       struct sk_buff *skb)
+=======
+			       const struct sock *sk,
+			       const struct request_sock *req,
+			       const struct sk_buff *skb)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	const struct in6_addr *saddr, *daddr;
 	struct tcp_md5sig_pool *hp;
 	struct hash_desc *desc;
+<<<<<<< HEAD
 	struct tcphdr *th = tcp_hdr(skb);
+=======
+	const struct tcphdr *th = tcp_hdr(skb);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (sk) {
 		saddr = &inet6_sk(sk)->saddr;
@@ -842,12 +860,21 @@ clear_hash_noput:
 	return 1;
 }
 
+<<<<<<< HEAD
 static int tcp_v6_inbound_md5_hash (struct sock *sk, struct sk_buff *skb)
 {
 	__u8 *hash_location = NULL;
 	struct tcp_md5sig_key *hash_expected;
 	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
 	struct tcphdr *th = tcp_hdr(skb);
+=======
+static int tcp_v6_inbound_md5_hash(struct sock *sk, const struct sk_buff *skb)
+{
+	const __u8 *hash_location = NULL;
+	struct tcp_md5sig_key *hash_expected;
+	const struct ipv6hdr *ip6h = ipv6_hdr(skb);
+	const struct tcphdr *th = tcp_hdr(skb);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	int genhash;
 	u8 newhash[16];
 
@@ -980,7 +1007,12 @@ static int tcp6_gro_complete(struct sk_buff *skb)
 static void tcp_v6_send_response(struct sk_buff *skb, u32 seq, u32 ack, u32 win,
 				 u32 ts, struct tcp_md5sig_key *key, int rst)
 {
+<<<<<<< HEAD
 	struct tcphdr *th = tcp_hdr(skb), *t1;
+=======
+	const struct tcphdr *th = tcp_hdr(skb);
+	struct tcphdr *t1;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct sk_buff *buff;
 	struct flowi6 fl6;
 	struct net *net = dev_net(skb_dst(skb)->dev);
@@ -1046,7 +1078,12 @@ static void tcp_v6_send_response(struct sk_buff *skb, u32 seq, u32 ack, u32 win,
 	__tcp_v6_send_check(buff, &fl6.saddr, &fl6.daddr);
 
 	fl6.flowi6_proto = IPPROTO_TCP;
+<<<<<<< HEAD
 	fl6.flowi6_oif = inet6_iif(skb);
+=======
+	if (ipv6_addr_type(&fl6.daddr) & IPV6_ADDR_LINKLOCAL)
+		fl6.flowi6_oif = inet6_iif(skb);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	fl6.fl6_dport = t1->dest;
 	fl6.fl6_sport = t1->source;
 	security_skb_classify_flow(skb, flowi6_to_flowi(&fl6));
@@ -1070,7 +1107,11 @@ static void tcp_v6_send_response(struct sk_buff *skb, u32 seq, u32 ack, u32 win,
 
 static void tcp_v6_send_reset(struct sock *sk, struct sk_buff *skb)
 {
+<<<<<<< HEAD
 	struct tcphdr *th = tcp_hdr(skb);
+=======
+	const struct tcphdr *th = tcp_hdr(skb);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	u32 seq = 0, ack_seq = 0;
 	struct tcp_md5sig_key *key = NULL;
 
@@ -1160,7 +1201,11 @@ static int tcp_v6_conn_request(struct sock *sk, struct sk_buff *skb)
 {
 	struct tcp_extend_values tmp_ext;
 	struct tcp_options_received tmp_opt;
+<<<<<<< HEAD
 	u8 *hash_location;
+=======
+	const u8 *hash_location;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct request_sock *req;
 	struct inet6_request_sock *treq;
 	struct ipv6_pinfo *np = inet6_sk(sk);
@@ -1515,7 +1560,12 @@ static struct sock * tcp_v6_syn_recv_sock(struct sock *sk, struct sk_buff *skb,
 #endif
 
 	if (__inet_inherit_port(sk, newsk) < 0) {
+<<<<<<< HEAD
 		sock_put(newsk);
+=======
+		inet_csk_prepare_forced_close(newsk);
+		tcp_done(newsk);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto out;
 	}
 	__inet6_hash(newsk, NULL);
@@ -1688,7 +1738,11 @@ ipv6_pktoptions:
 
 static int tcp_v6_rcv(struct sk_buff *skb)
 {
+<<<<<<< HEAD
 	struct tcphdr *th;
+=======
+	const struct tcphdr *th;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	const struct ipv6hdr *hdr;
 	struct sock *sk;
 	int ret;
@@ -1722,7 +1776,11 @@ static int tcp_v6_rcv(struct sk_buff *skb)
 				    skb->len - th->doff*4);
 	TCP_SKB_CB(skb)->ack_seq = ntohl(th->ack_seq);
 	TCP_SKB_CB(skb)->when = 0;
+<<<<<<< HEAD
 	TCP_SKB_CB(skb)->flags = ipv6_get_dsfield(hdr);
+=======
+	TCP_SKB_CB(skb)->ip_dsfield = ipv6_get_dsfield(hdr);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	TCP_SKB_CB(skb)->sacked = 0;
 
 	sk = __inet6_lookup_skb(&tcp_hashinfo, skb, th->source, th->dest);
@@ -1856,8 +1914,13 @@ static struct inet_peer *tcp_v6_get_peer(struct sock *sk, bool *release_it)
 
 static void *tcp_v6_tw_get_peer(struct sock *sk)
 {
+<<<<<<< HEAD
 	struct inet6_timewait_sock *tw6 = inet6_twsk(sk);
 	struct inet_timewait_sock *tw = inet_twsk(sk);
+=======
+	const struct inet6_timewait_sock *tw6 = inet6_twsk(sk);
+	const struct inet_timewait_sock *tw = inet_twsk(sk);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (tw->tw_family == AF_INET)
 		return tcp_v4_tw_get_peer(sk);
@@ -2012,7 +2075,11 @@ static void tcp_v6_destroy_sock(struct sock *sk)
 #ifdef CONFIG_PROC_FS
 /* Proc filesystem TCPv6 sock list dumping. */
 static void get_openreq6(struct seq_file *seq,
+<<<<<<< HEAD
 			 struct sock *sk, struct request_sock *req, int i, int uid)
+=======
+			 const struct sock *sk, struct request_sock *req, int i, int uid)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	int ttd = req->expires - jiffies;
 	const struct in6_addr *src = &inet6_rsk(req)->loc_addr;
@@ -2048,10 +2115,17 @@ static void get_tcp6_sock(struct seq_file *seq, struct sock *sp, int i)
 	__u16 destp, srcp;
 	int timer_active;
 	unsigned long timer_expires;
+<<<<<<< HEAD
 	struct inet_sock *inet = inet_sk(sp);
 	struct tcp_sock *tp = tcp_sk(sp);
 	const struct inet_connection_sock *icsk = inet_csk(sp);
 	struct ipv6_pinfo *np = inet6_sk(sp);
+=======
+	const struct inet_sock *inet = inet_sk(sp);
+	const struct tcp_sock *tp = tcp_sk(sp);
+	const struct inet_connection_sock *icsk = inet_csk(sp);
+	const struct ipv6_pinfo *np = inet6_sk(sp);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	dest  = &np->daddr;
 	src   = &np->rcv_saddr;
@@ -2103,7 +2177,11 @@ static void get_timewait6_sock(struct seq_file *seq,
 {
 	const struct in6_addr *dest, *src;
 	__u16 destp, srcp;
+<<<<<<< HEAD
 	struct inet6_timewait_sock *tw6 = inet6_twsk((struct sock *)tw);
+=======
+	const struct inet6_timewait_sock *tw6 = inet6_twsk((struct sock *)tw);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	int ttd = tw->tw_ttd - jiffies;
 
 	if (ttd < 0)
@@ -2158,12 +2236,27 @@ out:
 	return 0;
 }
 
+<<<<<<< HEAD
 static struct tcp_seq_afinfo tcp6_seq_afinfo = {
 	.name		= "tcp6",
 	.family		= AF_INET6,
 	.seq_fops	= {
 		.owner		= THIS_MODULE,
 	},
+=======
+static const struct file_operations tcp6_afinfo_seq_fops = {
+	.owner   = THIS_MODULE,
+	.open    = tcp_seq_open,
+	.read    = seq_read,
+	.llseek  = seq_lseek,
+	.release = seq_release_net
+};
+
+static struct tcp_seq_afinfo tcp6_seq_afinfo = {
+	.name		= "tcp6",
+	.family		= AF_INET6,
+	.seq_fops	= &tcp6_afinfo_seq_fops,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.seq_ops	= {
 		.show		= tcp6_seq_show,
 	},
@@ -2180,6 +2273,20 @@ void tcp6_proc_exit(struct net *net)
 }
 #endif
 
+<<<<<<< HEAD
+=======
+static void tcp_v6_clear_sk(struct sock *sk, int size)
+{
+	struct inet_sock *inet = inet_sk(sk);
+
+	/* we do not want to clear pinet6 field, because of RCU lookups */
+	sk_prot_clear_nulls(sk, offsetof(struct inet_sock, pinet6));
+
+	size -= offsetof(struct inet_sock, pinet6) + sizeof(inet->pinet6);
+	memset(&inet->pinet6 + 1, 0, size);
+}
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 struct proto tcpv6_prot = {
 	.name			= "TCPv6",
 	.owner			= THIS_MODULE,
@@ -2219,6 +2326,10 @@ struct proto tcpv6_prot = {
 	.compat_setsockopt	= compat_tcp_setsockopt,
 	.compat_getsockopt	= compat_tcp_getsockopt,
 #endif
+<<<<<<< HEAD
+=======
+	.clear_sk		= tcp_v6_clear_sk,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 static const struct inet6_protocol tcpv6_protocol = {

@@ -28,6 +28,11 @@ obj-y                                   += pm.o
 obj-$(CONFIG_TEGRA_WDT_RECOVERY)        += wdt-recovery.o
 obj-$(CONFIG_PM_SLEEP)                  += pm-irq.o
 obj-y                                   += gic.o
+<<<<<<< HEAD
+=======
+#obj-y                           		+= otgfi.o          # tmtmtm
+obj-$(CONFIG_USBHOST)              	    += usbhost.o        # tmtmtm
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 
 obj-y                                   += sleep.o

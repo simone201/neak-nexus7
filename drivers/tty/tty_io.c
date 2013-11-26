@@ -940,6 +940,17 @@ void start_tty(struct tty_struct *tty)
 
 EXPORT_SYMBOL(start_tty);
 
+<<<<<<< HEAD
+=======
+/* We limit tty time update visibility to every 8 seconds or so. */
+static void tty_update_time(struct timespec *time)
+{
+	unsigned long sec = get_seconds() & ~7;
+	if ((long)(sec - time->tv_sec) > 0)
+		time->tv_sec = sec;
+}
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /**
  *	tty_read	-	read method for tty device files
  *	@file: pointer to tty file
@@ -976,8 +987,15 @@ static ssize_t tty_read(struct file *file, char __user *buf, size_t count,
 	else
 		i = -EIO;
 	tty_ldisc_deref(ld);
+<<<<<<< HEAD
 	if (i > 0)
 		inode->i_atime = current_fs_time(inode->i_sb);
+=======
+
+	if (i > 0)
+		tty_update_time(&inode->i_atime);
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return i;
 }
 
@@ -1079,8 +1097,13 @@ static inline ssize_t do_tty_write(
 		cond_resched();
 	}
 	if (written) {
+<<<<<<< HEAD
 		struct inode *inode = file->f_path.dentry->d_inode;
 		inode->i_mtime = current_fs_time(inode->i_sb);
+=======
+               struct inode *inode = file->f_path.dentry->d_inode;
+		tty_update_time(&inode->i_mtime);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		ret = written;
 	}
 out:

@@ -55,7 +55,11 @@ struct proto udplitev6_prot = {
 	.compat_setsockopt = compat_udpv6_setsockopt,
 	.compat_getsockopt = compat_udpv6_getsockopt,
 #endif
+<<<<<<< HEAD
 	.clear_sk	   = sk_prot_clear_portaddr_nulls,
+=======
+	.clear_sk	   = udp_v6_clear_sk,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 static struct inet_protosw udplite6_protosw = {
@@ -93,13 +97,29 @@ void udplitev6_exit(void)
 }
 
 #ifdef CONFIG_PROC_FS
+<<<<<<< HEAD
+=======
+
+static const struct file_operations udplite6_afinfo_seq_fops = {
+	.owner    = THIS_MODULE,
+	.open     = udp_seq_open,
+	.read     = seq_read,
+	.llseek   = seq_lseek,
+	.release  = seq_release_net
+};
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static struct udp_seq_afinfo udplite6_seq_afinfo = {
 	.name		= "udplite6",
 	.family		= AF_INET6,
 	.udp_table	= &udplite_table,
+<<<<<<< HEAD
 	.seq_fops	= {
 		.owner	=	THIS_MODULE,
 	},
+=======
+	.seq_fops	= &udplite6_afinfo_seq_fops,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.seq_ops	= {
 		.show		= udp6_seq_show,
 	},

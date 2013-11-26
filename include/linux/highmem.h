@@ -38,10 +38,23 @@ extern unsigned long totalhigh_pages;
 
 void kmap_flush_unused(void);
 
+<<<<<<< HEAD
+=======
+struct page *kmap_to_page(void *addr);
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #else /* CONFIG_HIGHMEM */
 
 static inline unsigned int nr_free_highpages(void) { return 0; }
 
+<<<<<<< HEAD
+=======
+static inline struct page *kmap_to_page(void *addr)
+{
+	return virt_to_page(addr);
+}
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #define totalhigh_pages 0UL
 
 #ifndef ARCH_HAS_KMAP

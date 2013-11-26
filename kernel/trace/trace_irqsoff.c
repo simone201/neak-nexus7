@@ -23,7 +23,11 @@ static int				tracer_enabled __read_mostly;
 
 static DEFINE_PER_CPU(int, tracing_cpu);
 
+<<<<<<< HEAD
 static DEFINE_SPINLOCK(max_trace_lock);
+=======
+static DEFINE_RAW_SPINLOCK(max_trace_lock);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 enum {
 	TRACER_IRQS_OFF		= (1 << 1),
@@ -32,7 +36,11 @@ enum {
 
 static int trace_type __read_mostly;
 
+<<<<<<< HEAD
 static int save_lat_flag;
+=======
+static int save_flags;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 static void stop_irqsoff_tracer(struct trace_array *tr, int graph);
 static int start_irqsoff_tracer(struct trace_array *tr, int graph);
@@ -321,7 +329,11 @@ check_critical_timing(struct trace_array *tr,
 	if (!report_latency(delta))
 		goto out;
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&max_trace_lock, flags);
+=======
+	raw_spin_lock_irqsave(&max_trace_lock, flags);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* check if we are still the max latency */
 	if (!report_latency(delta))
@@ -344,7 +356,11 @@ check_critical_timing(struct trace_array *tr,
 	max_sequence++;
 
 out_unlock:
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&max_trace_lock, flags);
+=======
+	raw_spin_unlock_irqrestore(&max_trace_lock, flags);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 out:
 	data->critical_sequence = max_sequence;
@@ -546,8 +562,16 @@ static void stop_irqsoff_tracer(struct trace_array *tr, int graph)
 
 static void __irqsoff_tracer_init(struct trace_array *tr)
 {
+<<<<<<< HEAD
 	save_lat_flag = trace_flags & TRACE_ITER_LATENCY_FMT;
 	trace_flags |= TRACE_ITER_LATENCY_FMT;
+=======
+	save_flags = trace_flags;
+
+	/* non overwrite screws up the latency tracers */
+	set_tracer_flag(TRACE_ITER_OVERWRITE, 1);
+	set_tracer_flag(TRACE_ITER_LATENCY_FMT, 1);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	tracing_max_latency = 0;
 	irqsoff_trace = tr;
@@ -561,10 +585,20 @@ static void __irqsoff_tracer_init(struct trace_array *tr)
 
 static void irqsoff_tracer_reset(struct trace_array *tr)
 {
+<<<<<<< HEAD
 	stop_irqsoff_tracer(tr, is_graph());
 
 	if (!save_lat_flag)
 		trace_flags &= ~TRACE_ITER_LATENCY_FMT;
+=======
+	int lat_flag = save_flags & TRACE_ITER_LATENCY_FMT;
+	int overwrite_flag = save_flags & TRACE_ITER_OVERWRITE;
+
+	stop_irqsoff_tracer(tr, is_graph());
+
+	set_tracer_flag(TRACE_ITER_LATENCY_FMT, lat_flag);
+	set_tracer_flag(TRACE_ITER_OVERWRITE, overwrite_flag);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static void irqsoff_tracer_start(struct trace_array *tr)
@@ -597,6 +631,10 @@ static struct tracer irqsoff_tracer __read_mostly =
 	.print_line     = irqsoff_print_line,
 	.flags		= &tracer_flags,
 	.set_flag	= irqsoff_set_flag,
+<<<<<<< HEAD
+=======
+	.flag_changed	= trace_keep_overwrite,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #ifdef CONFIG_FTRACE_SELFTEST
 	.selftest    = trace_selftest_startup_irqsoff,
 #endif
@@ -630,6 +668,10 @@ static struct tracer preemptoff_tracer __read_mostly =
 	.print_line     = irqsoff_print_line,
 	.flags		= &tracer_flags,
 	.set_flag	= irqsoff_set_flag,
+<<<<<<< HEAD
+=======
+	.flag_changed	= trace_keep_overwrite,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #ifdef CONFIG_FTRACE_SELFTEST
 	.selftest    = trace_selftest_startup_preemptoff,
 #endif
@@ -665,6 +707,10 @@ static struct tracer preemptirqsoff_tracer __read_mostly =
 	.print_line     = irqsoff_print_line,
 	.flags		= &tracer_flags,
 	.set_flag	= irqsoff_set_flag,
+<<<<<<< HEAD
+=======
+	.flag_changed	= trace_keep_overwrite,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #ifdef CONFIG_FTRACE_SELFTEST
 	.selftest    = trace_selftest_startup_preemptirqsoff,
 #endif

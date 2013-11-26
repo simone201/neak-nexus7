@@ -144,7 +144,11 @@ static unsigned long expires_ljiffies;
 
 static struct dst_entry *ipv4_dst_check(struct dst_entry *dst, u32 cookie);
 static unsigned int	 ipv4_default_advmss(const struct dst_entry *dst);
+<<<<<<< HEAD
 static unsigned int	 ipv4_default_mtu(const struct dst_entry *dst);
+=======
+static unsigned int	 ipv4_mtu(const struct dst_entry *dst);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static void		 ipv4_dst_destroy(struct dst_entry *dst);
 static struct dst_entry *ipv4_negative_advice(struct dst_entry *dst);
 static void		 ipv4_link_failure(struct sk_buff *skb);
@@ -199,7 +203,11 @@ static struct dst_ops ipv4_dst_ops = {
 	.gc =			rt_garbage_collect,
 	.check =		ipv4_dst_check,
 	.default_advmss =	ipv4_default_advmss,
+<<<<<<< HEAD
 	.default_mtu =		ipv4_default_mtu,
+=======
+	.mtu =			ipv4_mtu,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.cow_metrics =		ipv4_cow_metrics,
 	.destroy =		ipv4_dst_destroy,
 	.ifdown =		ipv4_dst_ifdown,
@@ -329,7 +337,11 @@ static struct rtable *rt_cache_get_first(struct seq_file *seq)
 	struct rtable *r = NULL;
 
 	for (st->bucket = rt_hash_mask; st->bucket >= 0; --st->bucket) {
+<<<<<<< HEAD
 		if (!rcu_dereference_raw(rt_hash_table[st->bucket].chain))
+=======
+		if (!rcu_access_pointer(rt_hash_table[st->bucket].chain))
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			continue;
 		rcu_read_lock_bh();
 		r = rcu_dereference_bh(rt_hash_table[st->bucket].chain);
@@ -355,7 +367,11 @@ static struct rtable *__rt_cache_get_next(struct seq_file *seq,
 		do {
 			if (--st->bucket < 0)
 				return NULL;
+<<<<<<< HEAD
 		} while (!rcu_dereference_raw(rt_hash_table[st->bucket].chain));
+=======
+		} while (!rcu_access_pointer(rt_hash_table[st->bucket].chain));
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		rcu_read_lock_bh();
 		r = rcu_dereference_bh(rt_hash_table[st->bucket].chain);
 	}
@@ -770,7 +786,11 @@ static void rt_do_flush(struct net *net, int process_context)
 
 		if (process_context && need_resched())
 			cond_resched();
+<<<<<<< HEAD
 		rth = rcu_dereference_raw(rt_hash_table[i].chain);
+=======
+		rth = rcu_access_pointer(rt_hash_table[i].chain);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (!rth)
 			continue;
 
@@ -1921,12 +1941,26 @@ static unsigned int ipv4_default_advmss(const struct dst_entry *dst)
 	return advmss;
 }
 
+<<<<<<< HEAD
 static unsigned int ipv4_default_mtu(const struct dst_entry *dst)
 {
 	unsigned int mtu = dst->dev->mtu;
 
 	if (unlikely(dst_metric_locked(dst, RTAX_MTU))) {
 		const struct rtable *rt = (const struct rtable *) dst;
+=======
+static unsigned int ipv4_mtu(const struct dst_entry *dst)
+{
+	const struct rtable *rt = (const struct rtable *) dst;
+	unsigned int mtu = dst_metric_raw(dst, RTAX_MTU);
+
+	if (mtu && rt_is_output_route(rt))
+		return mtu;
+
+	mtu = dst->dev->mtu;
+
+	if (unlikely(dst_metric_locked(dst, RTAX_MTU))) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		if (rt->rt_gateway != rt->rt_dst && mtu > 576)
 			mtu = 576;
@@ -2866,9 +2900,17 @@ static struct dst_entry *ipv4_blackhole_dst_check(struct dst_entry *dst, u32 coo
 	return NULL;
 }
 
+<<<<<<< HEAD
 static unsigned int ipv4_blackhole_default_mtu(const struct dst_entry *dst)
 {
 	return 0;
+=======
+static unsigned int ipv4_blackhole_mtu(const struct dst_entry *dst)
+{
+	unsigned int mtu = dst_metric_raw(dst, RTAX_MTU);
+
+	return mtu ? : dst->dev->mtu;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static void ipv4_rt_blackhole_update_pmtu(struct dst_entry *dst, u32 mtu)
@@ -2886,7 +2928,11 @@ static struct dst_ops ipv4_dst_blackhole_ops = {
 	.protocol		=	cpu_to_be16(ETH_P_IP),
 	.destroy		=	ipv4_dst_destroy,
 	.check			=	ipv4_blackhole_dst_check,
+<<<<<<< HEAD
 	.default_mtu		=	ipv4_blackhole_default_mtu,
+=======
+	.mtu			=	ipv4_blackhole_mtu,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.default_advmss		=	ipv4_default_advmss,
 	.update_pmtu		=	ipv4_rt_blackhole_update_pmtu,
 	.cow_metrics		=	ipv4_rt_blackhole_cow_metrics,
@@ -2964,7 +3010,11 @@ static int rt_fill_info(struct net *net,
 	struct rtable *rt = skb_rtable(skb);
 	struct rtmsg *r;
 	struct nlmsghdr *nlh;
+<<<<<<< HEAD
 	long expires = 0;
+=======
+	unsigned long expires = 0;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	const struct inet_peer *peer = rt->peer;
 	u32 id = 0, ts = 0, tsage = 0, error;
 
@@ -3021,8 +3071,17 @@ static int rt_fill_info(struct net *net,
 			tsage = get_seconds() - peer->tcp_ts_stamp;
 		}
 		expires = ACCESS_ONCE(peer->pmtu_expires);
+<<<<<<< HEAD
 		if (expires)
 			expires -= jiffies;
+=======
+		if (expires) {
+			if (time_before(jiffies, expires))
+				expires -= jiffies;
+			else
+				expires = 0;
+		}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 	if (rt_is_input_route(rt)) {

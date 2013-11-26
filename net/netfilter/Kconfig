@@ -542,7 +542,10 @@ config NETFILTER_XT_TARGET_NOTRACK
 	tristate  '"NOTRACK" target support'
 	depends on IP_NF_RAW || IP6_NF_RAW
 	depends on NF_CONNTRACK
+<<<<<<< HEAD
 	depends on NETFILTER_ADVANCED
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	help
 	  The NOTRACK target allows a select rule to specify
 	  which packets *not* to enter the conntrack/NAT

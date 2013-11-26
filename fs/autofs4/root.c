@@ -392,10 +392,19 @@ static struct vfsmount *autofs4_d_automount(struct path *path)
 		ino->flags |= AUTOFS_INF_PENDING;
 		spin_unlock(&sbi->fs_lock);
 		status = autofs4_mount_wait(dentry);
+<<<<<<< HEAD
 		if (status)
 			return ERR_PTR(status);
 		spin_lock(&sbi->fs_lock);
 		ino->flags &= ~AUTOFS_INF_PENDING;
+=======
+		spin_lock(&sbi->fs_lock);
+		ino->flags &= ~AUTOFS_INF_PENDING;
+		if (status) {
+			spin_unlock(&sbi->fs_lock);
+			return ERR_PTR(status);
+		}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 done:
 	if (!(ino->flags & AUTOFS_INF_EXPIRING)) {

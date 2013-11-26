@@ -630,7 +630,11 @@ nfsd_dispatch(struct svc_rqst *rqstp, __be32 *statp)
 	}
 
 	/* Store reply in cache. */
+<<<<<<< HEAD
 	nfsd_cache_update(rqstp, proc->pc_cachetype, statp + 1);
+=======
+	nfsd_cache_update(rqstp, rqstp->rq_cachetype, statp + 1);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return 1;
 }
 

@@ -165,6 +165,10 @@ struct dentry_operations {
 			unsigned int, const char *, const struct qstr *);
 	int (*d_delete)(const struct dentry *);
 	void (*d_release)(struct dentry *);
+<<<<<<< HEAD
+=======
+	void (*d_prune)(struct dentry *);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	void (*d_iput)(struct dentry *, struct inode *);
 	char *(*d_dname)(struct dentry *, char *, int);
 	struct vfsmount *(*d_automount)(struct path *);
@@ -184,8 +188,14 @@ struct dentry_operations {
 #define DCACHE_OP_COMPARE	0x0002
 #define DCACHE_OP_REVALIDATE	0x0004
 #define DCACHE_OP_DELETE	0x0008
+<<<<<<< HEAD
 
 #define	DCACHE_DISCONNECTED	0x0010
+=======
+#define DCACHE_OP_PRUNE         0x0010
+
+#define	DCACHE_DISCONNECTED	0x0020
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
      /* This dentry is possibly not currently connected to the dcache tree, in
       * which case its parent will either be itself, or will have this flag as
       * well.  nfsd will not use a dentry with this bit set, but will first
@@ -196,11 +206,20 @@ struct dentry_operations {
       * dentry into place and return that dentry rather than the passed one,
       * typically using d_splice_alias. */
 
+<<<<<<< HEAD
 #define DCACHE_REFERENCED	0x0020  /* Recently used, don't discard. */
 #define DCACHE_RCUACCESS	0x0040	/* Entry has ever been RCU-visible */
 
 #define DCACHE_CANT_MOUNT	0x0100
 #define DCACHE_GENOCIDE		0x0200
+=======
+#define DCACHE_REFERENCED	0x0040  /* Recently used, don't discard. */
+#define DCACHE_RCUACCESS	0x0080	/* Entry has ever been RCU-visible */
+
+#define DCACHE_CANT_MOUNT	0x0100
+#define DCACHE_GENOCIDE		0x0200
+#define DCACHE_SHRINK_LIST	0x0400
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #define DCACHE_NFSFS_RENAMED	0x1000
      /* this dentry has been "silly renamed" and has to be deleted on the last
@@ -216,6 +235,11 @@ struct dentry_operations {
 #define DCACHE_MANAGED_DENTRY \
 	(DCACHE_MOUNTED|DCACHE_NEED_AUTOMOUNT|DCACHE_MANAGE_TRANSIT)
 
+<<<<<<< HEAD
+=======
+#define DCACHE_DENTRY_KILLED	0x100000
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern seqlock_t rename_lock;
 
 static inline int dname_external(struct dentry *dentry)

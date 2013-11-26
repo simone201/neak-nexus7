@@ -51,7 +51,14 @@ static int rawsock_release(struct socket *sock)
 {
 	struct sock *sk = sock->sk;
 
+<<<<<<< HEAD
 	nfc_dbg("sock=%p", sock);
+=======
+	nfc_dbg("sock=%p sk=%p", sock, sk);
+
+	if (!sk)
+		return 0;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	sock_orphan(sk);
 	sock_put(sk);

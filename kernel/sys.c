@@ -125,7 +125,11 @@ EXPORT_SYMBOL(cad_pid);
 
 void (*pm_power_off_prepare)(void);
 
+<<<<<<< HEAD
  //extern void disable_auto_hotplug(void);
+=======
+ extern void disable_auto_hotplug(void);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * Returns true if current's euid is same as p's uid or euid,
  * or has CAP_SYS_NICE to p's user_ns.
@@ -323,7 +327,10 @@ void kernel_restart_prepare(char *cmd)
 	system_state = SYSTEM_RESTART;
 	usermodehelper_disable();
 	device_shutdown();
+<<<<<<< HEAD
 	syscore_shutdown();
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /**
@@ -357,6 +364,32 @@ int unregister_reboot_notifier(struct notifier_block *nb)
 }
 EXPORT_SYMBOL(unregister_reboot_notifier);
 
+<<<<<<< HEAD
+=======
+/* Add backwards compatibility for stable trees. */
+#ifndef PF_NO_SETAFFINITY
+#define PF_NO_SETAFFINITY		PF_THREAD_BOUND
+#endif
+
+static void migrate_to_reboot_cpu(void)
+{
+	/* The boot cpu is always logical cpu 0 */
+	int cpu = 0;
+
+	cpu_hotplug_disable();
+
+	/* Make certain the cpu I'm about to reboot on is online */
+	if (!cpu_online(cpu))
+		cpu = cpumask_first(cpu_online_mask);
+
+	/* Prevent races with other tasks migrating this task */
+	current->flags |= PF_NO_SETAFFINITY;
+
+	/* Make certain I only run on the appropriate processor */
+	set_cpus_allowed_ptr(current, cpumask_of(cpu));
+}
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /**
  *	kernel_restart - reboot the system
  *	@cmd: pointer to buffer containing command to execute for restart
@@ -367,8 +400,15 @@ EXPORT_SYMBOL(unregister_reboot_notifier);
  */
 void kernel_restart(char *cmd)
 {
+<<<<<<< HEAD
 	//disable_auto_hotplug();
 	kernel_restart_prepare(cmd);
+=======
+	disable_auto_hotplug();
+	kernel_restart_prepare(cmd);
+	migrate_to_reboot_cpu();
+	syscore_shutdown();
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (!cmd)
 		printk(KERN_EMERG "Restarting system.\n");
 	else
@@ -394,6 +434,10 @@ static void kernel_shutdown_prepare(enum system_states state)
 void kernel_halt(void)
 {
 	kernel_shutdown_prepare(SYSTEM_HALT);
+<<<<<<< HEAD
+=======
+	migrate_to_reboot_cpu();
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	syscore_shutdown();
 	printk(KERN_EMERG "System halted.\n");
 	kmsg_dump(KMSG_DUMP_HALT);
@@ -418,11 +462,19 @@ void kernel_power_off(void)
 		kernel_restart(cmd);
 	 }
 
+<<<<<<< HEAD
 	//disable_auto_hotplug();
 	kernel_shutdown_prepare(SYSTEM_POWER_OFF);
 	if (pm_power_off_prepare)
 		pm_power_off_prepare();
 	disable_nonboot_cpus();
+=======
+	disable_auto_hotplug();
+	kernel_shutdown_prepare(SYSTEM_POWER_OFF);
+	if (pm_power_off_prepare)
+		pm_power_off_prepare();
+	migrate_to_reboot_cpu();
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	syscore_shutdown();
 	printk(KERN_EMERG "Power down.\n");
 	kmsg_dump(KMSG_DUMP_POWEROFF);
@@ -1811,9 +1863,12 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 		case PR_GET_TIMERSLACK:
 			error = current->timer_slack_ns;
 			break;
+<<<<<<< HEAD
 		case PR_GET_EFFECTIVE_TIMERSLACK:
 			error = task_get_effective_timer_slack(current);
 			break;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		case PR_SET_TIMERSLACK:
 			if (arg2 <= 0)
 				current->timer_slack_ns =

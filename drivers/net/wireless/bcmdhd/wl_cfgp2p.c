@@ -1324,7 +1324,11 @@ wl_cfgp2p_discover_listen(struct wl_priv *wl, s32 channel, u32 duration_ms)
 
 	} else
 		wl_clr_p2p_status(wl, LISTEN_EXPIRED);
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (wl_add_remove_eventmsg(wl_to_prmry_ndev(wl), WLC_E_P2P_PROBREQ_MSG, true) != BCME_OK) {
 		CFGP2P_ERR((" failed to set WLC_E_P2P_PROPREQ_MSG\n"));
 	}
@@ -1758,10 +1762,13 @@ wl_cfgp2p_set_p2p_ps(struct wl_priv *wl, struct net_device *ndev, char* buf, int
 
 		if (legacy_ps != -1) {
 			s32 pm = legacy_ps ? PM_MAX : PM_OFF;
+<<<<<<< HEAD
 #if defined(SUPPORT_PM2_ONLY)
 			if (pm == PM_MAX)
 				pm = PM_FAST;
 #endif /* SUPPORT_PM2_ONLY */
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			ret = wldev_ioctl(wl_to_p2p_bss_ndev(wl, P2PAPI_BSSCFG_CONNECTION),
 				WLC_SET_PM, &pm, sizeof(pm), true);
 			if (unlikely(ret)) {
@@ -1830,6 +1837,7 @@ wl_cfgp2p_retreive_p2pattrib(void *buf, u8 element_id)
 }
 
 #define P2P_GROUP_CAPAB_GO_BIT	0x01
+<<<<<<< HEAD
 
 u8*
 wl_cfgp2p_find_attrib_in_all_p2p_Ies(u8 *parse, u32 len, u32 attrib)
@@ -1862,6 +1870,8 @@ wl_cfgp2p_find_attrib_in_all_p2p_Ies(u8 *parse, u32 len, u32 attrib)
 	return NULL;
 }
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 u8 *
 wl_cfgp2p_retreive_p2p_dev_addr(wl_bss_info_t *bi, u32 bi_length)
 {
@@ -1870,8 +1880,17 @@ wl_cfgp2p_retreive_p2p_dev_addr(wl_bss_info_t *bi, u32 bi_length)
 	bool p2p_go	= 0;
 	u8 *ptr = NULL;
 
+<<<<<<< HEAD
 	if ((capability = wl_cfgp2p_find_attrib_in_all_p2p_Ies(((u8 *) bi) + bi->ie_offset,
 		bi->ie_length, P2P_SEID_P2P_INFO)) == NULL) {
+=======
+	if (!(p2p_ie = wl_cfgp2p_find_p2pie(((u8 *) bi) + bi->ie_offset, bi->ie_length))) {
+		WL_ERR(("P2P IE not found"));
+		return NULL;
+	}
+
+	if (!(capability = wl_cfgp2p_retreive_p2pattrib(p2p_ie, P2P_SEID_P2P_INFO))) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		WL_ERR(("P2P Capability attribute not found"));
 		return NULL;
 	}

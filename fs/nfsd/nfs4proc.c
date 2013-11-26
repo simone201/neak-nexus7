@@ -213,7 +213,11 @@ do_open_lookup(struct svc_rqst *rqstp, struct svc_fh *current_fh, struct nfsd4_o
 		 */
 		if (open->op_createmode == NFS4_CREATE_EXCLUSIVE && status == 0)
 			open->op_bmval[1] = (FATTR4_WORD1_TIME_ACCESS |
+<<<<<<< HEAD
 						FATTR4_WORD1_TIME_MODIFY);
+=======
+							FATTR4_WORD1_TIME_MODIFY);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	} else {
 		status = nfsd_lookup(rqstp, current_fh,
 				     open->op_fname.data, open->op_fname.len, &resfh);
@@ -221,6 +225,12 @@ do_open_lookup(struct svc_rqst *rqstp, struct svc_fh *current_fh, struct nfsd4_o
 	}
 	if (status)
 		goto out;
+<<<<<<< HEAD
+=======
+	status = nfsd_check_obj_isreg(&resfh);
+	if (status)
+		goto out;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (is_create_with_attrs(open) && open->op_acl != NULL)
 		do_set_nfs4_acl(rqstp, &resfh, open->op_acl, open->op_bmval);
@@ -244,6 +254,10 @@ static __be32
 do_open_fhandle(struct svc_rqst *rqstp, struct svc_fh *current_fh, struct nfsd4_open *open)
 {
 	__be32 status;
+<<<<<<< HEAD
+=======
+	int accmode = 0;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* Only reclaims from previously confirmed clients are valid */
 	if ((status = nfs4_check_open_reclaim(&open->op_clientid)))
@@ -261,9 +275,25 @@ do_open_fhandle(struct svc_rqst *rqstp, struct svc_fh *current_fh, struct nfsd4_
 
 	open->op_truncate = (open->op_iattr.ia_valid & ATTR_SIZE) &&
 		(open->op_iattr.ia_size == 0);
+<<<<<<< HEAD
 
 	status = do_open_permission(rqstp, current_fh, open,
 				    NFSD_MAY_OWNER_OVERRIDE);
+=======
+	/*
+	 * In the delegation case, the client is telling us about an
+	 * open that it *already* performed locally, some time ago.  We
+	 * should let it succeed now if possible.
+	 *
+	 * In the case of a CLAIM_FH open, on the other hand, the client
+	 * may be counting on us to enforce permissions (the Linux 4.1
+	 * client uses this for normal opens, for example).
+	 */
+	if (open->op_claim_type == NFS4_OPEN_CLAIM_DELEG_CUR_FH)
+		accmode = NFSD_MAY_OWNER_OVERRIDE;
+
+	status = do_open_permission(rqstp, current_fh, open, accmode);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return status;
 }
@@ -821,6 +851,10 @@ nfsd4_setattr(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
 	      struct nfsd4_setattr *setattr)
 {
 	__be32 status = nfs_ok;
+<<<<<<< HEAD
+=======
+	int err;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (setattr->sa_iattr.ia_valid & ATTR_SIZE) {
 		nfs4_lock_state();
@@ -832,9 +866,15 @@ nfsd4_setattr(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
 			return status;
 		}
 	}
+<<<<<<< HEAD
 	status = mnt_want_write(cstate->current_fh.fh_export->ex_path.mnt);
 	if (status)
 		return status;
+=======
+	err = mnt_want_write(cstate->current_fh.fh_export->ex_path.mnt);
+	if (err)
+		return nfserrno(err);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	status = nfs_ok;
 
 	status = check_attr_support(rqstp, cstate, setattr->sa_bmval,
@@ -871,6 +911,7 @@ nfsd4_write(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
 
 	nfs4_lock_state();
 	status = nfs4_preprocess_stateid_op(cstate, stateid, WR_STATE, &filp);
+<<<<<<< HEAD
 	if (filp)
 		get_file(filp);
 	nfs4_unlock_state();
@@ -879,6 +920,16 @@ nfsd4_write(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
 		dprintk("NFSD: nfsd4_write: couldn't process stateid!\n");
 		return status;
 	}
+=======
+	if (status) {
+		nfs4_unlock_state();
+		dprintk("NFSD: nfsd4_write: couldn't process stateid!\n");
+		return status;
+	}
+	if (filp)
+		get_file(filp);
+	nfs4_unlock_state();
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	cnt = write->wr_buflen;
 	write->wr_how_written = write->wr_stable_how;

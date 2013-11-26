@@ -126,7 +126,12 @@ struct inet_timewait_sock {
 	/* And these are ours. */
 	unsigned int		tw_ipv6only     : 1,
 				tw_transparent  : 1,
+<<<<<<< HEAD
 				tw_pad		: 14,	/* 14 bits hole */
+=======
+				tw_pad		: 6,	/* 6 bits hole */
+				tw_tos		: 8,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				tw_ipv6_offset  : 16;
 	kmemcheck_bitfield_end(flags);
 	unsigned long		tw_ttd;

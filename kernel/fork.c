@@ -371,12 +371,21 @@ static int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
 		}
 		charge = 0;
 		if (mpnt->vm_flags & VM_ACCOUNT) {
+<<<<<<< HEAD
 			unsigned int len = (mpnt->vm_end - mpnt->vm_start) >> PAGE_SHIFT;
+=======
+			unsigned long len;
+			len = (mpnt->vm_end - mpnt->vm_start) >> PAGE_SHIFT;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			if (security_vm_enough_memory(len))
 				goto fail_nomem;
 			charge = len;
 		}
+<<<<<<< HEAD
 		tmp = kmem_cache_zalloc(vm_area_cachep, GFP_KERNEL);
+=======
+		tmp = kmem_cache_alloc(vm_area_cachep, GFP_KERNEL);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (!tmp)
 			goto fail_nomem;
 		*tmp = *mpnt;
@@ -428,7 +437,11 @@ static int dup_mmap(struct mm_struct *mm, struct mm_struct *oldmm)
 		__vma_link_rb(mm, tmp, rb_link, rb_parent);
 		rb_link = &tmp->vm_rb.rb_right;
 		rb_parent = &tmp->vm_rb;
+<<<<<<< HEAD
 		uksm_vma_add_new(tmp);
+=======
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		mm->map_count++;
 		retval = copy_page_range(mm, oldmm, mpnt);
 
@@ -1073,7 +1086,10 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 {
 	int retval;
 	struct task_struct *p;
+<<<<<<< HEAD
 	int cgroup_callbacks_done = 0;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if ((clone_flags & (CLONE_NEWNS|CLONE_FS)) == (CLONE_NEWNS|CLONE_FS))
 		return ERR_PTR(-EINVAL);
@@ -1169,10 +1185,13 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 	memset(&p->rss_stat, 0, sizeof(p->rss_stat));
 #endif
 
+<<<<<<< HEAD
 	/*
 	 * Save current task's (not effective) timer slack value as default
 	 * timer slack value for new task.
 	 */
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	p->default_timer_slack_ns = current->timer_slack_ns;
 
 	task_io_accounting_init(&p->ioac);
@@ -1329,12 +1348,15 @@ static struct task_struct *copy_process(unsigned long clone_flags,
 	p->group_leader = p;
 	INIT_LIST_HEAD(&p->thread_group);
 
+<<<<<<< HEAD
 	/* Now that the task is set up, run cgroup callbacks if
 	 * necessary. We need to run them before the task is visible
 	 * on the tasklist. */
 	cgroup_fork_callbacks(p);
 	cgroup_callbacks_done = 1;
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/* Need tasklist lock for parent etc handling! */
 	write_lock_irq(&tasklist_lock);
 
@@ -1439,7 +1461,11 @@ bad_fork_cleanup_cgroup:
 #endif
 	if (clone_flags & CLONE_THREAD)
 		threadgroup_fork_read_unlock(current);
+<<<<<<< HEAD
 	cgroup_exit(p, cgroup_callbacks_done);
+=======
+	cgroup_exit(p, 0);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	delayacct_tsk_free(p);
 	module_put(task_thread_info(p)->exec_domain->module);
 bad_fork_cleanup_count:

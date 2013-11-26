@@ -197,6 +197,7 @@ static void freezer_fork(struct cgroup_subsys *ss, struct task_struct *task)
 {
 	struct freezer *freezer;
 
+<<<<<<< HEAD
 	/*
 	 * No lock is needed, since the task isn't on tasklist yet,
 	 * so it can't be moved to another cgroup, which means the
@@ -207,13 +208,21 @@ static void freezer_fork(struct cgroup_subsys *ss, struct task_struct *task)
 	rcu_read_lock();
 	freezer = task_freezer(task);
 	rcu_read_unlock();
+=======
+	rcu_read_lock();
+	freezer = task_freezer(task);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/*
 	 * The root cgroup is non-freezable, so we can skip the
 	 * following check.
 	 */
 	if (!freezer->css.cgroup->parent)
+<<<<<<< HEAD
 		return;
+=======
+		goto out;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	spin_lock_irq(&freezer->lock);
 	BUG_ON(freezer->state == CGROUP_FROZEN);
@@ -221,7 +230,14 @@ static void freezer_fork(struct cgroup_subsys *ss, struct task_struct *task)
 	/* Locking avoids race with FREEZING -> THAWED transitions. */
 	if (freezer->state == CGROUP_FREEZING)
 		freeze_task(task, true);
+<<<<<<< HEAD
 	spin_unlock_irq(&freezer->lock);
+=======
+
+	spin_unlock_irq(&freezer->lock);
+out:
+	rcu_read_unlock();
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /*

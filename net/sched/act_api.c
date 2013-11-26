@@ -20,6 +20,10 @@
 #include <linux/init.h>
 #include <linux/kmod.h>
 #include <linux/err.h>
+<<<<<<< HEAD
+=======
+#include <linux/module.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/net_namespace.h>
 #include <net/sock.h>
 #include <net/sch_generic.h>

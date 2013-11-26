@@ -1567,6 +1567,13 @@ static loff_t fuse_file_llseek(struct file *file, loff_t offset, int origin)
 		offset += i_size_read(inode);
 		break;
 	case SEEK_CUR:
+<<<<<<< HEAD
+=======
+		if (offset == 0) {
+			retval = file->f_pos;
+			goto exit;
+		}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		offset += file->f_pos;
 		break;
 	case SEEK_DATA:
@@ -1683,7 +1690,11 @@ static int fuse_verify_ioctl_iov(struct iovec *iov, size_t count)
 	size_t n;
 	u32 max = FUSE_MAX_PAGES_PER_REQ << PAGE_SHIFT;
 
+<<<<<<< HEAD
 	for (n = 0; n < count; n++) {
+=======
+	for (n = 0; n < count; n++, iov++) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (iov->iov_len > (size_t) max)
 			return -ENOMEM;
 		max -= iov->iov_len;

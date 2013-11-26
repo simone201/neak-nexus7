@@ -28,6 +28,10 @@
 #include <linux/task_io_accounting_ops.h>
 #include <linux/fault-inject.h>
 #include <linux/list_sort.h>
+<<<<<<< HEAD
+=======
+#include <linux/ratelimit.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/block.h>
@@ -309,9 +313,15 @@ void __blk_run_queue(struct request_queue *q)
 		return;
 
 	if (!q->notified_urgent &&
+<<<<<<< HEAD
 		q->elevator->elevator_type->ops.elevator_is_urgent_fn &&
 		q->urgent_request_fn &&
 		q->elevator->elevator_type->ops.elevator_is_urgent_fn(q)) {
+=======
+		q->elevator->ops->elevator_is_urgent_fn &&
+		q->urgent_request_fn &&
+		q->elevator->ops->elevator_is_urgent_fn(q)) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		q->notified_urgent = true;
 		q->urgent_request_fn(q);
 	} else
@@ -982,7 +992,11 @@ bool blk_reinsert_req_sup(struct request_queue *q)
 {
 	if (unlikely(!q))
 		return false;
+<<<<<<< HEAD
 	return q->elevator->elevator_type->ops.elevator_reinsert_req_fn ? true : false;
+=======
+	return q->elevator->ops->elevator_reinsert_req_fn ? true : false;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 EXPORT_SYMBOL(blk_reinsert_req_sup);
 
@@ -2113,9 +2127,17 @@ bool blk_update_request(struct request *req, int error, unsigned int nr_bytes)
 			error_type = "I/O";
 			break;
 		}
+<<<<<<< HEAD
 		printk(KERN_ERR "end_request: %s error, dev %s, sector %llu\n",
 		       error_type, req->rq_disk ? req->rq_disk->disk_name : "?",
 		       (unsigned long long)blk_rq_pos(req));
+=======
+		printk_ratelimited(
+			KERN_ERR "end_request: %s error, dev %s, sector %llu\n",
+			error_type,
+			req->rq_disk ? req->rq_disk->disk_name : "?",
+			(unsigned long long)blk_rq_pos(req));
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 	blk_account_io_completion(req, nr_bytes);
@@ -2711,6 +2733,7 @@ void blk_start_plug(struct blk_plug *plug)
 }
 EXPORT_SYMBOL(blk_start_plug);
 
+<<<<<<< HEAD
 static int plug_rq_cmp(void *priv, struct list_head *a, struct list_head *b)
 {
 	struct request *rqa = container_of(a, struct request, queuelist);
@@ -2719,6 +2742,8 @@ static int plug_rq_cmp(void *priv, struct list_head *a, struct list_head *b)
 	return !(rqa->q <= rqb->q);
 }
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * If 'from_schedule' is true, then postpone the dispatch of requests
  * until a safe kblockd context. We due this to avoid accidental big
@@ -2780,11 +2805,14 @@ void blk_flush_plug_list(struct blk_plug *plug, bool from_schedule)
 
 	list_splice_init(&plug->list, &list);
 
+<<<<<<< HEAD
 	if (plug->should_sort) {
 		list_sort(NULL, &list, plug_rq_cmp);
 		plug->should_sort = 0;
 	}
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	q = NULL;
 	depth = 0;
 

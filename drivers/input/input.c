@@ -208,6 +208,10 @@ static void input_repeat_key(unsigned long data)
 static int input_handle_abs_event(struct input_dev *dev,
 				  unsigned int code, int *pval)
 {
+<<<<<<< HEAD
+=======
+	struct input_mt *mt = dev->mt;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	bool is_mt_event;
 	int *pold;
 
@@ -216,12 +220,18 @@ static int input_handle_abs_event(struct input_dev *dev,
 		 * "Stage" the event; we'll flush it later, when we
 		 * get actual touch data.
 		 */
+<<<<<<< HEAD
 		if (*pval >= 0 && *pval < dev->mtsize)
 			dev->slot = *pval;
+=======
+		if (mt && *pval >= 0 && *pval < mt->num_slots)
+			mt->slot = *pval;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		return INPUT_IGNORE_EVENT;
 	}
 
+<<<<<<< HEAD
 	is_mt_event = code >= ABS_MT_FIRST && code <= ABS_MT_LAST;
 
 	if (!is_mt_event) {
@@ -229,6 +239,14 @@ static int input_handle_abs_event(struct input_dev *dev,
 	} else if (dev->mt) {
 		struct input_mt_slot *mtslot = &dev->mt[dev->slot];
 		pold = &mtslot->abs[code - ABS_MT_FIRST];
+=======
+	is_mt_event = input_is_mt_value(code);
+
+	if (!is_mt_event) {
+		pold = &dev->absinfo[code].value;
+	} else if (mt) {
+		pold = &mt->slots[mt->slot].abs[code - ABS_MT_FIRST];
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	} else {
 		/*
 		 * Bypass filtering for multi-touch events when
@@ -247,8 +265,13 @@ static int input_handle_abs_event(struct input_dev *dev,
 	}
 
 	/* Flush pending "slot" event */
+<<<<<<< HEAD
 	if (is_mt_event && dev->slot != input_abs_get_val(dev, ABS_MT_SLOT)) {
 		input_abs_set_val(dev, ABS_MT_SLOT, dev->slot);
+=======
+	if (is_mt_event && mt && mt->slot != input_abs_get_val(dev, ABS_MT_SLOT)) {
+		input_abs_set_val(dev, ABS_MT_SLOT, mt->slot);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		return INPUT_PASS_TO_HANDLERS | INPUT_SLOT;
 	}
 
@@ -278,6 +301,7 @@ static int input_get_disposition(struct input_dev *dev,
 		break;
 
 	case EV_KEY:
+<<<<<<< HEAD
 		if (is_event_supported(code, dev->keybit, KEY_MAX) &&
 		    !!test_bit(code, dev->key) != value) {
 
@@ -290,12 +314,31 @@ static int input_get_disposition(struct input_dev *dev,
 			}
 
 			disposition = INPUT_PASS_TO_HANDLERS;
+=======
+		if (is_event_supported(code, dev->keybit, KEY_MAX)) {
+
+			/* auto-repeat bypasses state updates */
+			if (value == 2) {
+				disposition = INPUT_PASS_TO_HANDLERS;
+				break;
+			}
+
+			if (!!test_bit(code, dev->key) != !!value) {
+
+				__change_bit(code, dev->key);
+				disposition = INPUT_PASS_TO_HANDLERS;
+			}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		}
 		break;
 
 	case EV_SW:
 		if (is_event_supported(code, dev->swbit, SW_MAX) &&
+<<<<<<< HEAD
 		    !!test_bit(code, dev->sw) != value) {
+=======
+		    !!test_bit(code, dev->sw) != !!value) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 			__change_bit(code, dev->sw);
 			disposition = INPUT_PASS_TO_HANDLERS;
@@ -322,7 +365,11 @@ static int input_get_disposition(struct input_dev *dev,
 
 	case EV_LED:
 		if (is_event_supported(code, dev->ledbit, LED_MAX) &&
+<<<<<<< HEAD
 		    !!test_bit(code, dev->led) != value) {
+=======
+		    !!test_bit(code, dev->led) != !!value) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 			__change_bit(code, dev->led);
 			disposition = INPUT_PASS_TO_ALL;
@@ -378,7 +425,11 @@ static void input_handle_event(struct input_dev *dev,
 			v = &dev->vals[dev->num_vals++];
 			v->type = EV_ABS;
 			v->code = ABS_MT_SLOT;
+<<<<<<< HEAD
 			v->value = dev->slot;
+=======
+			v->value = dev->mt->slot;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		}
 
 		v = &dev->vals[dev->num_vals++];
@@ -917,6 +968,7 @@ int input_set_keycode(struct input_dev *dev,
 }
 EXPORT_SYMBOL(input_set_keycode);
 
+<<<<<<< HEAD
 #define MATCH_BIT(bit, max) \
 		for (i = 0; i < BITS_TO_LONGS(max); i++) \
 			if ((id->bit[i] & dev->bit[i]) != id->bit[i]) \
@@ -924,11 +976,16 @@ EXPORT_SYMBOL(input_set_keycode);
 		if (i != BITS_TO_LONGS(max)) \
 			continue;
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static const struct input_device_id *input_match_device(struct input_handler *handler,
 							struct input_dev *dev)
 {
 	const struct input_device_id *id;
+<<<<<<< HEAD
 	int i;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	for (id = handler->id_table; id->flags || id->driver_info; id++) {
 
@@ -948,6 +1005,7 @@ static const struct input_device_id *input_match_device(struct input_handler *ha
 			if (id->version != dev->id.version)
 				continue;
 
+<<<<<<< HEAD
 		MATCH_BIT(evbit,  EV_MAX);
 		MATCH_BIT(keybit, KEY_MAX);
 		MATCH_BIT(relbit, REL_MAX);
@@ -957,6 +1015,34 @@ static const struct input_device_id *input_match_device(struct input_handler *ha
 		MATCH_BIT(sndbit, SND_MAX);
 		MATCH_BIT(ffbit,  FF_MAX);
 		MATCH_BIT(swbit,  SW_MAX);
+=======
+		if (!bitmap_subset(id->evbit, dev->evbit, EV_MAX))
+			continue;
+
+		if (!bitmap_subset(id->keybit, dev->keybit, KEY_MAX))
+			continue;
+
+		if (!bitmap_subset(id->relbit, dev->relbit, REL_MAX))
+			continue;
+
+		if (!bitmap_subset(id->absbit, dev->absbit, ABS_MAX))
+			continue;
+
+		if (!bitmap_subset(id->mscbit, dev->mscbit, MSC_MAX))
+			continue;
+
+		if (!bitmap_subset(id->ledbit, dev->ledbit, LED_MAX))
+			continue;
+
+		if (!bitmap_subset(id->sndbit, dev->sndbit, SND_MAX))
+			continue;
+
+		if (!bitmap_subset(id->ffbit, dev->ffbit, FF_MAX))
+			continue;
+
+		if (!bitmap_subset(id->swbit, dev->swbit, SW_MAX))
+			continue;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		if (!handler->match || handler->match(handler, dev))
 			return id;
@@ -1825,8 +1911,13 @@ static unsigned int input_estimate_events_per_packet(struct input_dev *dev)
 	int i;
 	unsigned int events;
 
+<<<<<<< HEAD
 	if (dev->mtsize) {
 		mt_slots = dev->mtsize;
+=======
+	if (dev->mt) {
+		mt_slots = dev->mt->num_slots;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	} else if (test_bit(ABS_MT_TRACKING_ID, dev->absbit)) {
 		mt_slots = dev->absinfo[ABS_MT_TRACKING_ID].maximum -
 			   dev->absinfo[ABS_MT_TRACKING_ID].minimum + 1,

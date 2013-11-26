@@ -26,29 +26,44 @@
 #include <linux/debugfs.h>
 #include <linux/seq_file.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_RCU_TRACE
 #define RCU_TRACE(stmt)	stmt
 #else /* #ifdef CONFIG_RCU_TRACE */
 #define RCU_TRACE(stmt)
 #endif /* #else #ifdef CONFIG_RCU_TRACE */
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /* Global control variables for rcupdate callback mechanism. */
 struct rcu_ctrlblk {
 	struct rcu_head *rcucblist;	/* List of pending callbacks (CBs). */
 	struct rcu_head **donetail;	/* ->next pointer of last "done" CB. */
 	struct rcu_head **curtail;	/* ->next pointer of last CB. */
 	RCU_TRACE(long qlen);		/* Number of pending CBs. */
+<<<<<<< HEAD
+=======
+	RCU_TRACE(char *name);		/* Name of RCU type. */
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 /* Definition for rcupdate control block. */
 static struct rcu_ctrlblk rcu_sched_ctrlblk = {
 	.donetail	= &rcu_sched_ctrlblk.rcucblist,
 	.curtail	= &rcu_sched_ctrlblk.rcucblist,
+<<<<<<< HEAD
+=======
+	RCU_TRACE(.name = "rcu_sched")
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 static struct rcu_ctrlblk rcu_bh_ctrlblk = {
 	.donetail	= &rcu_bh_ctrlblk.rcucblist,
 	.curtail	= &rcu_bh_ctrlblk.rcucblist,
+<<<<<<< HEAD
+=======
+	RCU_TRACE(.name = "rcu_bh")
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 #ifdef CONFIG_DEBUG_LOCK_ALLOC
@@ -131,6 +146,10 @@ static struct rcu_preempt_ctrlblk rcu_preempt_ctrlblk = {
 	.rcb.curtail = &rcu_preempt_ctrlblk.rcb.rcucblist,
 	.nexttail = &rcu_preempt_ctrlblk.rcb.rcucblist,
 	.blkd_tasks = LIST_HEAD_INIT(rcu_preempt_ctrlblk.blkd_tasks),
+<<<<<<< HEAD
+=======
+	RCU_TRACE(.rcb.name = "rcu_preempt")
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 static int rcu_preempted_readers_exp(void);
@@ -697,6 +716,7 @@ void call_rcu(struct rcu_head *head, void (*func)(struct rcu_head *rcu))
 }
 EXPORT_SYMBOL_GPL(call_rcu);
 
+<<<<<<< HEAD
 void rcu_barrier(void)
 {
 	struct rcu_synchronize rcu;
@@ -711,6 +731,8 @@ void rcu_barrier(void)
 }
 EXPORT_SYMBOL_GPL(rcu_barrier);
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * synchronize_rcu - wait until a grace period has elapsed.
  *

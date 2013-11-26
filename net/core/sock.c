@@ -207,7 +207,11 @@ static struct lock_class_key af_callback_keys[AF_MAX];
  * not depend upon such differences.
  */
 #define _SK_MEM_PACKETS		256
+<<<<<<< HEAD
 #define _SK_MEM_OVERHEAD	(sizeof(struct sk_buff) + 256)
+=======
+#define _SK_MEM_OVERHEAD	SKB_TRUESIZE(256)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #define SK_WMEM_MAX		(_SK_MEM_OVERHEAD * _SK_MEM_PACKETS)
 #define SK_RMEM_MAX		(_SK_MEM_OVERHEAD * _SK_MEM_PACKETS)
 
@@ -767,6 +771,23 @@ void cred_to_ucred(struct pid *pid, const struct cred *cred,
 }
 EXPORT_SYMBOL_GPL(cred_to_ucred);
 
+<<<<<<< HEAD
+=======
+void cred_real_to_ucred(struct pid *pid, const struct cred *cred,
+			struct ucred *ucred)
+{
+	ucred->pid = pid_vnr(pid);
+	ucred->uid = ucred->gid = -1;
+	if (cred) {
+		struct user_namespace *current_ns = current_user_ns();
+
+		ucred->uid = user_ns_map_uid(current_ns, cred, cred->uid);
+		ucred->gid = user_ns_map_gid(current_ns, cred, cred->gid);
+	}
+}
+EXPORT_SYMBOL_GPL(cred_real_to_ucred);
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 int sock_getsockopt(struct socket *sock, int level, int optname,
 		    char __user *optval, int __user *optlen)
 {
@@ -1013,6 +1034,7 @@ static void sock_copy(struct sock *nsk, const struct sock *osk)
 #endif
 }
 
+<<<<<<< HEAD
 /*
  * caches using SLAB_DESTROY_BY_RCU should let .next pointer from nulls nodes
  * un-modified. Special care is taken when initializing object to zero.
@@ -1025,6 +1047,8 @@ static inline void sk_prot_clear_nulls(struct sock *sk, int size)
 	       size - offsetof(struct sock, sk_node.pprev));
 }
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 void sk_prot_clear_portaddr_nulls(struct sock *sk, int size)
 {
 	unsigned long nulls1, nulls2;

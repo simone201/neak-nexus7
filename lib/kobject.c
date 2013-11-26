@@ -531,6 +531,16 @@ struct kobject *kobject_get(struct kobject *kobj)
 	return kobj;
 }
 
+<<<<<<< HEAD
+=======
+static struct kobject *kobject_get_unless_zero(struct kobject *kobj)
+{
+	if (!kref_get_unless_zero(&kobj->kref))
+		kobj = NULL;
+	return kobj;
+}
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * kobject_cleanup - free kobject resources.
  * @kobj: object to cleanup
@@ -785,7 +795,11 @@ struct kobject *kset_find_obj_hinted(struct kset *kset, const char *name,
 slow_search:
 	list_for_each_entry(k, &kset->list, entry) {
 		if (kobject_name(k) && !strcmp(kobject_name(k), name)) {
+<<<<<<< HEAD
 			ret = kobject_get(k);
+=======
+			ret = kobject_get_unless_zero(k);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			break;
 		}
 	}

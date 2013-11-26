@@ -400,11 +400,16 @@ static unsigned char asn1_octets_decode(struct asn1_ctx *ctx,
 	*len = 0;
 
 	*octets = kmalloc(eoc - ctx->pointer, GFP_ATOMIC);
+<<<<<<< HEAD
 	if (*octets == NULL) {
 		if (net_ratelimit())
 			pr_notice("OOM in bsalg (%d)\n", __LINE__);
 		return 0;
 	}
+=======
+	if (*octets == NULL)
+		return 0;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	ptr = *octets;
 	while (ctx->pointer < eoc) {
@@ -451,11 +456,16 @@ static unsigned char asn1_oid_decode(struct asn1_ctx *ctx,
 		return 0;
 
 	*oid = kmalloc(size * sizeof(unsigned long), GFP_ATOMIC);
+<<<<<<< HEAD
 	if (*oid == NULL) {
 		if (net_ratelimit())
 			pr_notice("OOM in bsalg (%d)\n", __LINE__);
 		return 0;
 	}
+=======
+	if (*oid == NULL)
+		return 0;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	optr = *oid;
 
@@ -728,8 +738,11 @@ static unsigned char snmp_object_decode(struct asn1_ctx *ctx,
 		*obj = kmalloc(sizeof(struct snmp_object) + len, GFP_ATOMIC);
 		if (*obj == NULL) {
 			kfree(id);
+<<<<<<< HEAD
 			if (net_ratelimit())
 				pr_notice("OOM in bsalg (%d)\n", __LINE__);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			return 0;
 		}
 		(*obj)->syntax.l[0] = l;
@@ -744,8 +757,11 @@ static unsigned char snmp_object_decode(struct asn1_ctx *ctx,
 		if (*obj == NULL) {
 			kfree(p);
 			kfree(id);
+<<<<<<< HEAD
 			if (net_ratelimit())
 				pr_notice("OOM in bsalg (%d)\n", __LINE__);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			return 0;
 		}
 		memcpy((*obj)->syntax.c, p, len);
@@ -759,8 +775,11 @@ static unsigned char snmp_object_decode(struct asn1_ctx *ctx,
 		*obj = kmalloc(sizeof(struct snmp_object), GFP_ATOMIC);
 		if (*obj == NULL) {
 			kfree(id);
+<<<<<<< HEAD
 			if (net_ratelimit())
 				pr_notice("OOM in bsalg (%d)\n", __LINE__);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			return 0;
 		}
 		if (!asn1_null_decode(ctx, end)) {
@@ -780,8 +799,11 @@ static unsigned char snmp_object_decode(struct asn1_ctx *ctx,
 		if (*obj == NULL) {
 			kfree(lp);
 			kfree(id);
+<<<<<<< HEAD
 			if (net_ratelimit())
 				pr_notice("OOM in bsalg (%d)\n", __LINE__);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			return 0;
 		}
 		memcpy((*obj)->syntax.ul, lp, len);
@@ -801,8 +823,11 @@ static unsigned char snmp_object_decode(struct asn1_ctx *ctx,
 		if (*obj == NULL) {
 			kfree(p);
 			kfree(id);
+<<<<<<< HEAD
 			if (net_ratelimit())
 				pr_notice("OOM in bsalg (%d)\n", __LINE__);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			return 0;
 		}
 		memcpy((*obj)->syntax.uc, p, len);
@@ -819,8 +844,11 @@ static unsigned char snmp_object_decode(struct asn1_ctx *ctx,
 		*obj = kmalloc(sizeof(struct snmp_object) + len, GFP_ATOMIC);
 		if (*obj == NULL) {
 			kfree(id);
+<<<<<<< HEAD
 			if (net_ratelimit())
 				pr_notice("OOM in bsalg (%d)\n", __LINE__);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			return 0;
 		}
 		(*obj)->syntax.ul[0] = ul;

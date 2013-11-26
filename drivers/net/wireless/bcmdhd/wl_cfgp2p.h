@@ -254,9 +254,12 @@ wl_cfgp2p_set_p2p_ps(struct wl_priv *wl, struct net_device *ndev, char* buf, int
 extern u8 *
 wl_cfgp2p_retreive_p2pattrib(void *buf, u8 element_id);
 
+<<<<<<< HEAD
 extern u8*
 wl_cfgp2p_find_attrib_in_all_p2p_Ies(u8 *parse, u32 len, u32 attrib);
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern u8 *
 wl_cfgp2p_retreive_p2p_dev_addr(wl_bss_info_t *bi, u32 bi_length);
 

@@ -27,6 +27,11 @@
 
 #define _PIPE(pipe, a, b) ((a) + (pipe)*((b)-(a)))
 
+<<<<<<< HEAD
+=======
+#define _MASKED_BIT_ENABLE(a) (((a) << 16) | (a))
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * The Bridge device's PCI config space has information about the
  * fb aperture size and the amount of pre-reserved memory.
@@ -362,6 +367,10 @@
  * the enables for writing to the corresponding low bit.
  */
 #define _3D_CHICKEN	0x02084
+<<<<<<< HEAD
+=======
+#define _3D_CHICKEN_HIZ_PLANE_DISABLE_MSAA_4X_SNB	(1 << 10)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #define _3D_CHICKEN2	0x0208c
 /* Disables pipelining of read flushes past the SF-WIZ interface.
  * Required on all Ironlake steppings according to the B-Spec, but the
@@ -372,7 +381,11 @@
 
 #define MI_MODE		0x0209c
 # define VS_TIMER_DISPATCH				(1 << 6)
+<<<<<<< HEAD
 # define MI_FLUSH_ENABLE				(1 << 11)
+=======
+# define MI_FLUSH_ENABLE				(1 << 12)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #define GFX_MODE	0x02520
 #define GFX_MODE_GEN7	0x0229c
@@ -2748,6 +2761,11 @@
 #define _PFA_CTL_1               0x68080
 #define _PFB_CTL_1               0x68880
 #define  PF_ENABLE              (1<<31)
+<<<<<<< HEAD
+=======
+#define  PF_PIPE_SEL_MASK_IVB	(3<<29)
+#define  PF_PIPE_SEL_IVB(pipe)	((pipe)<<29)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #define  PF_FILTER_MASK		(3<<23)
 #define  PF_FILTER_PROGRAMMED	(0<<23)
 #define  PF_FILTER_MED_3x3	(1<<23)

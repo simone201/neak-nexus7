@@ -63,6 +63,10 @@ EXPORT_SYMBOL(jiffies_64);
 #define TVR_SIZE (1 << TVR_BITS)
 #define TVN_MASK (TVN_SIZE - 1)
 #define TVR_MASK (TVR_SIZE - 1)
+<<<<<<< HEAD
+=======
+#define MAX_TVAL ((unsigned long)((1ULL << (TVR_BITS + 4*TVN_BITS)) - 1))
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 struct tvec {
 	struct list_head vec[TVN_SIZE];
@@ -356,11 +360,20 @@ static void internal_add_timer(struct tvec_base *base, struct timer_list *timer)
 		vec = base->tv1.vec + (base->timer_jiffies & TVR_MASK);
 	} else {
 		int i;
+<<<<<<< HEAD
 		/* If the timeout is larger than 0xffffffff on 64-bit
 		 * architectures then we use the maximum timeout:
 		 */
 		if (idx > 0xffffffffUL) {
 			idx = 0xffffffffUL;
+=======
+		/* If the timeout is larger than MAX_TVAL (on 64-bit
+		 * architectures or with CONFIG_BASE_SMALL=1) then we
+		 * use the maximum timeout.
+		 */
+		if (idx > MAX_TVAL) {
+			idx = MAX_TVAL;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			expires = idx + base->timer_jiffies;
 		}
 		i = (expires >> (TVR_BITS + 3 * TVN_BITS)) & TVN_MASK;
@@ -1628,12 +1641,19 @@ static int __cpuinit init_timers_cpu(int cpu)
 			boot_done = 1;
 			base = &boot_tvec_bases;
 		}
+<<<<<<< HEAD
+=======
+		spin_lock_init(&base->lock);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		tvec_base_done[cpu] = 1;
 	} else {
 		base = per_cpu(tvec_bases, cpu);
 	}
 
+<<<<<<< HEAD
 	spin_lock_init(&base->lock);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	for (j = 0; j < TVN_SIZE; j++) {
 		INIT_LIST_HEAD(base->tv5.vec + j);

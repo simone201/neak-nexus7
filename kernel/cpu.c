@@ -125,6 +125,30 @@ static void cpu_hotplug_done(void)
 	mutex_unlock(&cpu_hotplug.lock);
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * Wait for currently running CPU hotplug operations to complete (if any) and
+ * disable future CPU hotplug (from sysfs). The 'cpu_add_remove_lock' protects
+ * the 'cpu_hotplug_disabled' flag. The same lock is also acquired by the
+ * hotplug path before performing hotplug operations. So acquiring that lock
+ * guarantees mutual exclusion from any currently running hotplug operations.
+ */
+void cpu_hotplug_disable(void)
+{
+	cpu_maps_update_begin();
+	cpu_hotplug_disabled = 1;
+	cpu_maps_update_done();
+}
+
+void cpu_hotplug_enable(void)
+{
+	cpu_maps_update_begin();
+	cpu_hotplug_disabled = 0;
+	cpu_maps_update_done();
+}
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #else /* #if CONFIG_HOTPLUG_CPU */
 static void cpu_hotplug_begin(void) {}
 static void cpu_hotplug_done(void) {}
@@ -486,6 +510,7 @@ static int alloc_frozen_cpus(void)
 core_initcall(alloc_frozen_cpus);
 
 /*
+<<<<<<< HEAD
  * Prevent regular CPU hotplug from racing with the freezer, by disabling CPU
  * hotplug when tasks are about to be frozen. Also, don't allow the freezer
  * to continue until any currently running CPU hotplug operation gets
@@ -516,6 +541,8 @@ void cpu_hotplug_enable_after_thaw(void)
 }
 
 /*
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  * When callbacks for CPU hotplug notifications are being executed, we must
  * ensure that the state of the system with respect to the tasks being frozen
  * or not, as reported by the notification, remains unchanged *throughout the
@@ -534,12 +561,20 @@ cpu_hotplug_pm_callback(struct notifier_block *nb,
 
 	case PM_SUSPEND_PREPARE:
 	case PM_HIBERNATION_PREPARE:
+<<<<<<< HEAD
 		cpu_hotplug_disable_before_freeze();
+=======
+		cpu_hotplug_disable();
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		break;
 
 	case PM_POST_SUSPEND:
 	case PM_POST_HIBERNATION:
+<<<<<<< HEAD
 		cpu_hotplug_enable_after_thaw();
+=======
+		cpu_hotplug_enable();
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		break;
 
 	default:

@@ -80,6 +80,7 @@ static int try_one_irq(int irq, struct irq_desc *desc, bool force)
 
 	/*
 	 * All handlers must agree on IRQF_SHARED, so we test just the
+<<<<<<< HEAD
 	 * first. Check for action->next as well.
 	 */
 	action = desc->action;
@@ -87,6 +88,13 @@ static int try_one_irq(int irq, struct irq_desc *desc, bool force)
 	    (action->flags & __IRQF_TIMER) ||
 	    (action->handler(irq, action->dev_id) == IRQ_HANDLED) ||
 	    !action->next)
+=======
+	 * first.
+	 */
+	action = desc->action;
+	if (!action || !(action->flags & IRQF_SHARED) ||
+	    (action->flags & __IRQF_TIMER))
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto out;
 
 	/* Already running on another processor */
@@ -104,6 +112,10 @@ static int try_one_irq(int irq, struct irq_desc *desc, bool force)
 	do {
 		if (handle_irq_event(desc) == IRQ_HANDLED)
 			ret = IRQ_HANDLED;
+<<<<<<< HEAD
+=======
+		/* Make sure that there is still a valid action */
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		action = desc->action;
 	} while ((desc->istate & IRQS_PENDING) && action);
 	desc->istate &= ~IRQS_POLL_INPROGRESS;

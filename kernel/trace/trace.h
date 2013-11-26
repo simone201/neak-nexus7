@@ -271,10 +271,20 @@ struct tracer {
 	enum print_line_t	(*print_line)(struct trace_iterator *iter);
 	/* If you handled the flag setting, return 0 */
 	int			(*set_flag)(u32 old_flags, u32 bit, int set);
+<<<<<<< HEAD
+=======
+	/* Return 0 if OK with change, else return non-zero */
+	int			(*flag_changed)(struct tracer *tracer,
+						u32 mask, int set);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct tracer		*next;
 	struct tracer_flags	*flags;
 	int			print_max;
 	int			use_max_tr;
+<<<<<<< HEAD
+=======
+	bool			enabled;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 
@@ -579,11 +589,19 @@ static inline int ftrace_trace_task(struct task_struct *task)
 
 	return test_tsk_trace_trace(task);
 }
+<<<<<<< HEAD
+=======
+extern int ftrace_is_dead(void);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #else
 static inline int ftrace_trace_task(struct task_struct *task)
 {
 	return 1;
 }
+<<<<<<< HEAD
+=======
+static inline int ftrace_is_dead(void) { return 0; }
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #endif
 
 /*
@@ -819,6 +837,12 @@ extern struct list_head ftrace_events;
 extern const char *__start___trace_bprintk_fmt[];
 extern const char *__stop___trace_bprintk_fmt[];
 
+<<<<<<< HEAD
+=======
+int trace_keep_overwrite(struct tracer *tracer, u32 mask, int set);
+int set_tracer_flag(unsigned int mask, int enabled);
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #undef FTRACE_ENTRY
 #define FTRACE_ENTRY(call, struct_name, id, tstruct, print)		\
 	extern struct ftrace_event_call					\

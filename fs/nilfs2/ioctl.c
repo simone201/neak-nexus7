@@ -661,8 +661,16 @@ static int nilfs_ioctl_clean_segments(struct inode *inode, struct file *filp,
 	if (ret < 0)
 		printk(KERN_ERR "NILFS: GC failed during preparation: "
 			"cannot read source blocks: err=%d\n", ret);
+<<<<<<< HEAD
 	else
 		ret = nilfs_clean_segments(inode->i_sb, argv, kbufs);
+=======
+	else {
+		if (nilfs_sb_need_update(nilfs))
+			set_nilfs_discontinued(nilfs);
+		ret = nilfs_clean_segments(inode->i_sb, argv, kbufs);
+	}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	nilfs_remove_all_gcinodes(nilfs);
 	clear_nilfs_gc_running(nilfs);

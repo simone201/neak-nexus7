@@ -334,7 +334,10 @@ void tcp_retransmit_timer(struct sock *sk)
 		 * connection. If the socket is an orphan, time it out,
 		 * we cannot allow such beasts to hang infinitely.
 		 */
+<<<<<<< HEAD
 #ifdef TCP_DEBUG
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		struct inet_sock *inet = inet_sk(sk);
 		if (sk->sk_family == AF_INET) {
 			LIMIT_NETDEBUG(KERN_DEBUG "TCP: Peer %pI4:%u/%u unexpectedly shrunk window %u:%u (repaired)\n",
@@ -349,7 +352,10 @@ void tcp_retransmit_timer(struct sock *sk)
 			       inet->inet_num, tp->snd_una, tp->snd_nxt);
 		}
 #endif
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (tcp_time_stamp - tp->rcv_tstamp > TCP_RTO_MAX) {
 			tcp_write_err(sk);
 			goto out;

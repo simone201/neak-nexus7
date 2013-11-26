@@ -961,13 +961,21 @@ link_dev_buffers(struct page *page, struct buffer_head *head)
 /*
  * Initialise the state of a blockdev page's buffers.
  */ 
+<<<<<<< HEAD
 static void
+=======
+static sector_t
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 init_page_buffers(struct page *page, struct block_device *bdev,
 			sector_t block, int size)
 {
 	struct buffer_head *head = page_buffers(page);
 	struct buffer_head *bh = head;
 	int uptodate = PageUptodate(page);
+<<<<<<< HEAD
+=======
+	sector_t end_block = blkdev_max_block(I_BDEV(bdev->bd_inode));
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	do {
 		if (!buffer_mapped(bh)) {
@@ -976,38 +984,74 @@ init_page_buffers(struct page *page, struct block_device *bdev,
 			bh->b_blocknr = block;
 			if (uptodate)
 				set_buffer_uptodate(bh);
+<<<<<<< HEAD
 			set_buffer_mapped(bh);
+=======
+			if (block < end_block)
+				set_buffer_mapped(bh);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		}
 		block++;
 		bh = bh->b_this_page;
 	} while (bh != head);
+<<<<<<< HEAD
+=======
+
+	/*
+	 * Caller needs to validate requested block against end of device.
+	 */
+	return end_block;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /*
  * Create the page-cache page that contains the requested block.
  *
+<<<<<<< HEAD
  * This is user purely for blockdev mappings.
  */
 static struct page *
 grow_dev_page(struct block_device *bdev, sector_t block,
 		pgoff_t index, int size)
+=======
+ * This is used purely for blockdev mappings.
+ */
+static int
+grow_dev_page(struct block_device *bdev, sector_t block,
+		pgoff_t index, int size, int sizebits)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	struct inode *inode = bdev->bd_inode;
 	struct page *page;
 	struct buffer_head *bh;
+<<<<<<< HEAD
+=======
+	sector_t end_block;
+	int ret = 0;		/* Will call free_more_memory() */
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	page = find_or_create_page(inode->i_mapping, index,
 		(mapping_gfp_mask(inode->i_mapping) & ~__GFP_FS)|__GFP_MOVABLE);
 	if (!page)
+<<<<<<< HEAD
 		return NULL;
+=======
+		return ret;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	BUG_ON(!PageLocked(page));
 
 	if (page_has_buffers(page)) {
 		bh = page_buffers(page);
 		if (bh->b_size == size) {
+<<<<<<< HEAD
 			init_page_buffers(page, bdev, block, size);
 			return page;
+=======
+			end_block = init_page_buffers(page, bdev,
+						index << sizebits, size);
+			goto done;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		}
 		if (!try_to_free_buffers(page))
 			goto failed;
@@ -1027,6 +1071,7 @@ grow_dev_page(struct block_device *bdev, sector_t block,
 	 */
 	spin_lock(&inode->i_mapping->private_lock);
 	link_dev_buffers(page, bh);
+<<<<<<< HEAD
 	init_page_buffers(page, bdev, block, size);
 	spin_unlock(&inode->i_mapping->private_lock);
 	return page;
@@ -1036,6 +1081,16 @@ failed:
 	unlock_page(page);
 	page_cache_release(page);
 	return NULL;
+=======
+	end_block = init_page_buffers(page, bdev, index << sizebits, size);
+	spin_unlock(&inode->i_mapping->private_lock);
+done:
+	ret = (block < end_block) ? 1 : -ENXIO;
+failed:
+	unlock_page(page);
+	page_cache_release(page);
+	return ret;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /*
@@ -1045,7 +1100,10 @@ failed:
 static int
 grow_buffers(struct block_device *bdev, sector_t block, int size)
 {
+<<<<<<< HEAD
 	struct page *page;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	pgoff_t index;
 	int sizebits;
 
@@ -1069,6 +1127,7 @@ grow_buffers(struct block_device *bdev, sector_t block, int size)
 			bdevname(bdev, b));
 		return -EIO;
 	}
+<<<<<<< HEAD
 	block = index << sizebits;
 	/* Create a page with the proper size buffers.. */
 	page = grow_dev_page(bdev, block, index, size);
@@ -1077,6 +1136,11 @@ grow_buffers(struct block_device *bdev, sector_t block, int size)
 	unlock_page(page);
 	page_cache_release(page);
 	return 1;
+=======
+
+	/* Create a page with the proper size buffers.. */
+	return grow_dev_page(bdev, block, index, size, sizebits);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static struct buffer_head *
@@ -1095,7 +1159,11 @@ __getblk_slow(struct block_device *bdev, sector_t block, int size)
 	}
 
 	for (;;) {
+<<<<<<< HEAD
 		struct buffer_head * bh;
+=======
+		struct buffer_head *bh;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		int ret;
 
 		bh = __find_get_block(bdev, block, size);
@@ -1363,10 +1431,13 @@ EXPORT_SYMBOL(__find_get_block);
  * which corresponds to the passed block_device, block and size. The
  * returned buffer has its reference count incremented.
  *
+<<<<<<< HEAD
  * __getblk() cannot fail - it just keeps trying.  If you pass it an
  * illegal block number, __getblk() will happily return a buffer_head
  * which represents the non-existent block.  Very weird.
  *
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  * __getblk() will lock up the machine if grow_dev_page's try_to_free_buffers()
  * attempt is failing.  FIXME, perhaps?
  */

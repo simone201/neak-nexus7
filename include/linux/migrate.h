@@ -11,7 +11,11 @@ typedef struct page *new_page_t(struct page *, unsigned long private, int **);
 
 extern void putback_lru_pages(struct list_head *l);
 extern int migrate_page(struct address_space *,
+<<<<<<< HEAD
 			struct page *, struct page *);
+=======
+			struct page *, struct page *, bool);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern int migrate_pages(struct list_head *l, new_page_t x,
 			unsigned long private, bool offlining,
 			bool sync);

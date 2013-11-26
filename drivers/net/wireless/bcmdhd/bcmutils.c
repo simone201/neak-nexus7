@@ -982,6 +982,11 @@ pktsetprio(void *pkt, bool update_vtag)
 		rc |= PKTPRIO_DSCP;
 	}
 
+<<<<<<< HEAD
+=======
+	/* workaround for broken AC video queue on BCM4330:
+	 * downgrade video priority to best effort */
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (priority == 4 || priority == 5)
 		priority = 3;
 

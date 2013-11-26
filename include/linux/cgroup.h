@@ -32,7 +32,10 @@ extern int cgroup_lock_is_held(void);
 extern bool cgroup_lock_live_group(struct cgroup *cgrp);
 extern void cgroup_unlock(void);
 extern void cgroup_fork(struct task_struct *p);
+<<<<<<< HEAD
 extern void cgroup_fork_callbacks(struct task_struct *p);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern void cgroup_post_fork(struct task_struct *p);
 extern void cgroup_exit(struct task_struct *p, int run_callbacks);
 extern int cgroupstats_build(struct cgroupstats *stats,

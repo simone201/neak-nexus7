@@ -68,6 +68,11 @@ static int no_vsync;
 static struct timeval t_suspend;
 #define grouper_lvds_shutdown		110
 
+<<<<<<< HEAD
+=======
+static struct tegra_dc_mode override_disp_mode[3];
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static void _tegra_dc_controller_disable(struct tegra_dc *dc);
 
 module_param_named(no_vsync, no_vsync, int, S_IRUGO | S_IWUSR);
@@ -949,11 +954,14 @@ static unsigned long tegra_dc_calc_win_bandwidth(struct tegra_dc *dc,
 	ret = dc->mode.pclk / 1000UL * bpp / 8 * (win_use_v_filter(w) ? 2 : 1)
 		* dfixed_trunc(w->w) / w->out_w *
 		(WIN_IS_TILED(w) ? tiled_windows_bw_multiplier : 1);
+<<<<<<< HEAD
 	/*
 	 * Assuming ~35% efficiency: i.e. if we calculate we need 70MBps, we
 	 * will request 200MBps from EMC.
 	 */
 	ret = ret * 29 / 10;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return ret;
 }
@@ -1956,11 +1964,35 @@ void tegra_dc_set_out_pin_polars(struct tegra_dc *dc,
 	tegra_dc_writel(dc, pol3, DC_COM_PIN_OUTPUT_POLARITY3);
 }
 
+<<<<<<< HEAD
 static void tegra_dc_set_out(struct tegra_dc *dc, struct tegra_dc_out *out)
 {
 	dc->out = out;
 
 	if (out->n_modes > 0)
+=======
+static struct tegra_dc_mode *tegra_dc_get_override_mode(struct tegra_dc *dc)
+{
+	if (dc->out->type == TEGRA_DC_OUT_RGB ||
+		dc->out->type == TEGRA_DC_OUT_HDMI ||
+		dc->out->type == TEGRA_DC_OUT_DSI)
+		return override_disp_mode[dc->out->type].pclk ?
+			&override_disp_mode[dc->out->type] : NULL;
+	else
+		return NULL;
+}
+
+static void tegra_dc_set_out(struct tegra_dc *dc, struct tegra_dc_out *out)
+{
+	struct tegra_dc_mode *mode;
+
+	dc->out = out;
+	mode = tegra_dc_get_override_mode(dc);
+
+	if (mode)
+		tegra_dc_set_mode(dc, mode);
+	else if (out->n_modes > 0)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		tegra_dc_set_mode(dc, &dc->out->modes[0]);
 
 	switch (out->type) {
@@ -2877,6 +2909,10 @@ static ssize_t switch_modeset_print_mode(struct switch_dev *sdev, char *buf)
 static int tegra_dc_probe(struct nvhost_device *ndev)
 {
 	struct tegra_dc *dc;
+<<<<<<< HEAD
+=======
+	struct tegra_dc_mode *mode;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct clk *clk;
 	struct clk *emc_clk;
 	struct clk *min_emc_clk;
@@ -3057,6 +3093,15 @@ static int tegra_dc_probe(struct nvhost_device *ndev)
 				tegra_dc_fmt_bpp(fmt);
 		}
 
+<<<<<<< HEAD
+=======
+		mode = tegra_dc_get_override_mode(dc);
+		if (mode) {
+			dc->pdata->fb->xres = mode->h_active;
+			dc->pdata->fb->yres = mode->v_active;
+		}
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		dc->fb = tegra_fb_register(ndev, dc, dc->pdata->fb, fb_mem);
 		if (IS_ERR_OR_NULL(dc->fb))
 			dc->fb = NULL;
@@ -3223,6 +3268,77 @@ struct nvhost_driver tegra_dc_driver = {
 #endif
 };
 
+<<<<<<< HEAD
+=======
+#ifndef MODULE
+static int __init parse_disp_params(char *options, struct tegra_dc_mode *mode)
+{
+	int i, params[11];
+	char *p;
+
+	for (i = 0; i < ARRAY_SIZE(params); i++) {
+		if ((p = strsep(&options, ",")) != NULL) {
+			if (*p)
+				params[i] = simple_strtoul(p, &p, 10);
+		} else
+			return -EINVAL;
+	}
+
+	if ((mode->pclk = params[0]) == 0)
+		return -EINVAL;
+
+	mode->h_active      = params[1];
+	mode->v_active      = params[2];
+	mode->h_ref_to_sync = params[3];
+	mode->v_ref_to_sync = params[4];
+	mode->h_sync_width  = params[5];
+	mode->v_sync_width  = params[6];
+	mode->h_back_porch  = params[7];
+	mode->v_back_porch  = params[8];
+	mode->h_front_porch = params[9];
+	mode->v_front_porch = params[10];
+
+	return 0;
+}
+
+static int __init tegra_dc_mode_override(char *str)
+{
+	char *p = str, *options;
+
+	if (!p || !*p)
+		return -EINVAL;
+
+	p = strstr(str, "hdmi:");
+	if (p) {
+		p += 5;
+		options = strsep(&p, ";");
+		if (parse_disp_params(options, &override_disp_mode[TEGRA_DC_OUT_HDMI]))
+			return -EINVAL;
+	}
+
+	p = strstr(str, "rgb:");
+	if (p) {
+		p += 4;
+		options = strsep(&p, ";");
+		if (parse_disp_params(options, &override_disp_mode[TEGRA_DC_OUT_RGB]))
+			return -EINVAL;
+	}
+
+	p = strstr(str, "dsi:");
+	if (p) {
+		p += 4;
+		options = strsep(&p, ";");
+		if (parse_disp_params(options, &override_disp_mode[TEGRA_DC_OUT_DSI]))
+			return -EINVAL;
+	}
+
+	return 0;
+}
+
+__setup("disp_params=", tegra_dc_mode_override);
+#endif
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static int __init tegra_dc_module_init(void)
 {
 	int ret = tegra_dc_ext_module_init();

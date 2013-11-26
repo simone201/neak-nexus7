@@ -579,6 +579,10 @@ __rt_mutex_slowlock(struct rt_mutex *lock, int state,
 		    struct rt_mutex_waiter *waiter)
 {
 	int ret = 0;
+<<<<<<< HEAD
+=======
+	int was_disabled;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	for (;;) {
 		/* Try to acquire the lock: */
@@ -601,10 +605,23 @@ __rt_mutex_slowlock(struct rt_mutex *lock, int state,
 
 		raw_spin_unlock(&lock->wait_lock);
 
+<<<<<<< HEAD
+=======
+		was_disabled = irqs_disabled();
+		if (was_disabled)
+			local_irq_enable();
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		debug_rt_mutex_print_deadlock(waiter);
 
 		schedule_rt_mutex(lock);
 
+<<<<<<< HEAD
+=======
+		if (was_disabled)
+			local_irq_disable();
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		raw_spin_lock(&lock->wait_lock);
 		set_current_state(state);
 	}

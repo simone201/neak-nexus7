@@ -11,6 +11,10 @@
 #include <linux/kernel.h>
 #include <linux/netdevice.h>
 #include <linux/if_vlan.h>
+<<<<<<< HEAD
+=======
+#include <linux/module.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/net_namespace.h>
 #include <net/netlink.h>
 #include <net/rtnetlink.h>

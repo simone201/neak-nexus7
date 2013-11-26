@@ -500,6 +500,11 @@ int vcc_recvmsg(struct kiocb *iocb, struct socket *sock, struct msghdr *msg,
 	struct sk_buff *skb;
 	int copied, error = -EINVAL;
 
+<<<<<<< HEAD
+=======
+	msg->msg_namelen = 0;
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (sock->state != SS_CONNECTED)
 		return -ENOTCONN;
 	if (flags & ~MSG_DONTWAIT)		/* only handle MSG_DONTWAIT */

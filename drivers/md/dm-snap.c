@@ -1117,6 +1117,10 @@ static int snapshot_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 	s->pending_pool = mempool_create_slab_pool(MIN_IOS, pending_cache);
 	if (!s->pending_pool) {
 		ti->error = "Could not allocate mempool for pending exceptions";
+<<<<<<< HEAD
+=======
+		r = -ENOMEM;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto bad_pending_pool;
 	}
 

@@ -137,8 +137,11 @@ static int esp_output(struct xfrm_state *x, struct sk_buff *skb)
 
 	/* skb is pure payload to encrypt */
 
+<<<<<<< HEAD
 	err = -ENOMEM;
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	esp = x->data;
 	aead = esp->aead;
 	alen = crypto_aead_authsize(aead);
@@ -174,8 +177,15 @@ static int esp_output(struct xfrm_state *x, struct sk_buff *skb)
 	}
 
 	tmp = esp_alloc_tmp(aead, nfrags + sglists, seqhilen);
+<<<<<<< HEAD
 	if (!tmp)
 		goto error;
+=======
+	if (!tmp) {
+		err = -ENOMEM;
+		goto error;
+	}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	seqhi = esp_tmp_seqhi(tmp);
 	iv = esp_tmp_iv(aead, tmp, seqhilen);
@@ -457,6 +467,7 @@ static u32 esp4_get_mtu(struct xfrm_state *x, int mtu)
 	struct esp_data *esp = x->data;
 	u32 blksize = ALIGN(crypto_aead_blocksize(esp->aead), 4);
 	u32 align = max_t(u32, blksize, esp->padlen);
+<<<<<<< HEAD
 	u32 rem;
 
 	mtu -= x->props.header_len + crypto_aead_authsize(esp->aead);
@@ -479,6 +490,24 @@ static u32 esp4_get_mtu(struct xfrm_state *x, int mtu)
 	}
 
 	return mtu - 2;
+=======
+	unsigned int net_adj;
+
+	switch (x->props.mode) {
+	case XFRM_MODE_TRANSPORT:
+	case XFRM_MODE_BEET:
+		net_adj = sizeof(struct iphdr);
+		break;
+	case XFRM_MODE_TUNNEL:
+		net_adj = 0;
+		break;
+	default:
+		BUG();
+	}
+
+	return ((mtu - x->props.header_len - crypto_aead_authsize(esp->aead) -
+		 net_adj) & ~(align - 1)) + (net_adj - 2);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static void esp4_err(struct sk_buff *skb, u32 info)

@@ -973,7 +973,11 @@ out_bad:
 	while (!list_empty(res)) {
 		data = list_entry(res->next, struct nfs_write_data, list);
 		list_del(&data->list);
+<<<<<<< HEAD
 		nfs_writedata_free(data);
+=======
+		nfs_writedata_release(data);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 	nfs_redirty_request(req);
 	return -ENOMEM;
@@ -1712,7 +1716,11 @@ out_error:
 
 #ifdef CONFIG_MIGRATION
 int nfs_migrate_page(struct address_space *mapping, struct page *newpage,
+<<<<<<< HEAD
 		struct page *page)
+=======
+		struct page *page, bool sync)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	/*
 	 * If PagePrivate is set, then the page is currently associated with
@@ -1727,7 +1735,11 @@ int nfs_migrate_page(struct address_space *mapping, struct page *newpage,
 
 	nfs_fscache_release_page(page, GFP_KERNEL);
 
+<<<<<<< HEAD
 	return migrate_page(mapping, newpage, page);
+=======
+	return migrate_page(mapping, newpage, page, sync);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 #endif
 
@@ -1743,12 +1755,20 @@ int __init nfs_init_writepagecache(void)
 	nfs_wdata_mempool = mempool_create_slab_pool(MIN_POOL_WRITE,
 						     nfs_wdata_cachep);
 	if (nfs_wdata_mempool == NULL)
+<<<<<<< HEAD
 		return -ENOMEM;
+=======
+		goto out_destroy_write_cache;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	nfs_commit_mempool = mempool_create_slab_pool(MIN_POOL_COMMIT,
 						      nfs_wdata_cachep);
 	if (nfs_commit_mempool == NULL)
+<<<<<<< HEAD
 		return -ENOMEM;
+=======
+		goto out_destroy_write_mempool;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/*
 	 * NFS congestion size, scale with available memory.
@@ -1771,6 +1791,15 @@ int __init nfs_init_writepagecache(void)
 		nfs_congestion_kb = 256*1024;
 
 	return 0;
+<<<<<<< HEAD
+=======
+
+out_destroy_write_mempool:
+	mempool_destroy(nfs_wdata_mempool);
+out_destroy_write_cache:
+	kmem_cache_destroy(nfs_wdata_cachep);
+	return -ENOMEM;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 void nfs_destroy_writepagecache(void)

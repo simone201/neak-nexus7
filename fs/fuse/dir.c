@@ -858,6 +858,10 @@ int fuse_update_attributes(struct inode *inode, struct kstat *stat,
 		if (stat) {
 			generic_fillattr(inode, stat);
 			stat->mode = fi->orig_i_mode;
+<<<<<<< HEAD
+=======
+			stat->ino = fi->orig_ino;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		}
 	}
 

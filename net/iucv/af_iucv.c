@@ -1157,6 +1157,11 @@ static int iucv_sock_recvmsg(struct kiocb *iocb, struct socket *sock,
 	struct sk_buff *skb, *rskb, *cskb;
 	int err = 0;
 
+<<<<<<< HEAD
+=======
+	msg->msg_namelen = 0;
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if ((sk->sk_state == IUCV_DISCONN || sk->sk_state == IUCV_SEVERED) &&
 	    skb_queue_empty(&iucv->backlog_skb_q) &&
 	    skb_queue_empty(&sk->sk_receive_queue) &&
@@ -1600,7 +1605,11 @@ static void iucv_callback_rx(struct iucv_path *path, struct iucv_message *msg)
 		goto save_message;
 
 	len = atomic_read(&sk->sk_rmem_alloc);
+<<<<<<< HEAD
 	len += iucv_msg_length(msg) + sizeof(struct sk_buff);
+=======
+	len += SKB_TRUESIZE(iucv_msg_length(msg));
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (len > sk->sk_rcvbuf)
 		goto save_message;
 

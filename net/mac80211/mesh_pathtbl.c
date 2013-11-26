@@ -843,6 +843,11 @@ void mesh_path_expire(struct ieee80211_sub_if_data *sdata)
 void mesh_pathtbl_unregister(void)
 {
 	/* no need for locking during exit path */
+<<<<<<< HEAD
 	mesh_table_free(rcu_dereference_raw(mesh_paths), true);
 	mesh_table_free(rcu_dereference_raw(mpp_paths), true);
+=======
+	mesh_table_free(rcu_dereference_protected(mesh_paths, 1), true);
+	mesh_table_free(rcu_dereference_protected(mpp_paths, 1), true);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }

@@ -56,6 +56,10 @@
 #include <linux/mmu_notifier.h>
 #include <linux/migrate.h>
 #include <linux/hugetlb.h>
+<<<<<<< HEAD
+=======
+#include <linux/backing-dev.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #include <asm/tlbflush.h>
 
@@ -935,11 +939,16 @@ int page_mkclean(struct page *page)
 
 	if (page_mapped(page)) {
 		struct address_space *mapping = page_mapping(page);
+<<<<<<< HEAD
 		if (mapping) {
 			ret = page_mkclean_file(mapping, page);
 			if (page_test_and_clear_dirty(page_to_pfn(page), 1))
 				ret = 1;
 		}
+=======
+		if (mapping)
+			ret = page_mkclean_file(mapping, page);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 	return ret;
@@ -972,9 +981,15 @@ void page_move_anon_rmap(struct page *page,
 
 /**
  * __page_set_anon_rmap - set up new anonymous rmap
+<<<<<<< HEAD
  * @page:	Page to add to rmap
  * @vma:	VM area to add page to.
  * @address:	User virtual address of the mapping
+=======
+ * @page:	Page to add to rmap	
+ * @vma:	VM area to add page to.
+ * @address:	User virtual address of the mapping	
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  * @exclusive:	the page is exclusively owned by the current process
  */
 static void __page_set_anon_rmap(struct page *page,
@@ -1120,6 +1135,11 @@ void page_add_file_rmap(struct page *page)
  */
 void page_remove_rmap(struct page *page)
 {
+<<<<<<< HEAD
+=======
+	struct address_space *mapping = page_mapping(page);
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/* page still mapped by someone else? */
 	if (!atomic_add_negative(-1, &page->_mapcount))
 		return;
@@ -1130,8 +1150,24 @@ void page_remove_rmap(struct page *page)
 	 * this if the page is anon, so about to be freed; but perhaps
 	 * not if it's in swapcache - there might be another pte slot
 	 * containing the swap entry, but page not yet written to swap.
+<<<<<<< HEAD
 	 */
 	if ((!PageAnon(page) || PageSwapCache(page)) &&
+=======
+	 *
+	 * And we can skip it on file pages, so long as the filesystem
+	 * participates in dirty tracking; but need to catch shm and tmpfs
+	 * and ramfs pages which have been modified since creation by read
+	 * fault.
+	 *
+	 * Note that mapping must be decided above, before decrementing
+	 * mapcount (which luckily provides a barrier): once page is unmapped,
+	 * it could be truncated and page->mapping reset to NULL at any moment.
+	 * Note also that we are relying on page_mapping(page) to set mapping
+	 * to &swapper_space when PageSwapCache(page).
+	 */
+	if (mapping && !mapping_cap_account_dirty(mapping) &&
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	    page_test_and_clear_dirty(page_to_pfn(page), 1))
 		set_page_dirty(page);
 	/*

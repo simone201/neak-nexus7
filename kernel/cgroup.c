@@ -1806,9 +1806,14 @@ static int cgroup_task_migrate(struct cgroup *cgrp, struct cgroup *oldcgrp,
 	 * trading it for newcg is protected by cgroup_mutex, we're safe to drop
 	 * it here; it will be freed under RCU.
 	 */
+<<<<<<< HEAD
 	put_css_set(oldcg);
 
 	set_bit(CGRP_RELEASABLE, &oldcgrp->flags);
+=======
+	set_bit(CGRP_RELEASABLE, &oldcgrp->flags);
+	put_css_set(oldcg);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return 0;
 }
 
@@ -2032,7 +2037,11 @@ int cgroup_attach_proc(struct cgroup *cgrp, struct task_struct *leader)
 	if (!group)
 		return -ENOMEM;
 	/* pre-allocate to guarantee space while iterating in rcu read-side. */
+<<<<<<< HEAD
 	retval = flex_array_prealloc(group, 0, group_size - 1, GFP_KERNEL);
+=======
+	retval = flex_array_prealloc(group, 0, group_size, GFP_KERNEL);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (retval)
 		goto out_free_group_list;
 
@@ -2669,9 +2678,13 @@ static int cgroup_create_dir(struct cgroup *cgrp, struct dentry *dentry,
 		dentry->d_fsdata = cgrp;
 		inc_nlink(parent->d_inode);
 		rcu_assign_pointer(cgrp->dentry, dentry);
+<<<<<<< HEAD
 		dget(dentry);
 	}
 	dput(dentry);
+=======
+	}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return error;
 }
@@ -4557,6 +4570,7 @@ void cgroup_fork(struct task_struct *child)
 }
 
 /**
+<<<<<<< HEAD
  * cgroup_fork_callbacks - run fork callbacks
  * @child: the new task
  *
@@ -4592,6 +4606,21 @@ void cgroup_fork_callbacks(struct task_struct *child)
  */
 void cgroup_post_fork(struct task_struct *child)
 {
+=======
+ * cgroup_post_fork - called on a new task after adding it to the task list
+ * @child: the task in question
+ *
+ * Adds the task to the list running through its css_set if necessary and
+ * call the subsystem fork() callbacks.  Has to be after the task is
+ * visible on the task list in case we race with the first call to
+ * cgroup_iter_start() - to guarantee that the new task ends up on its
+ * list.
+ */
+void cgroup_post_fork(struct task_struct *child)
+{
+	int i;
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (use_task_css_set_links) {
 		write_lock(&css_set_lock);
 		task_lock(child);
@@ -4600,7 +4629,25 @@ void cgroup_post_fork(struct task_struct *child)
 		task_unlock(child);
 		write_unlock(&css_set_lock);
 	}
+<<<<<<< HEAD
 }
+=======
+
+	/*
+	 * Call ss->fork().  This must happen after @child is linked on
+	 * css_set; otherwise, @child might change state between ->fork()
+	 * and addition to css_set.
+	 */
+	if (need_forkexit_callback) {
+		for (i = 0; i < CGROUP_BUILTIN_SUBSYS_COUNT; i++) {
+			struct cgroup_subsys *ss = subsys[i];
+			if (ss->fork)
+				ss->fork(ss, child);
+		}
+	}
+}
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /**
  * cgroup_exit - detach cgroup from exiting task
  * @tsk: pointer to task_struct of exiting process

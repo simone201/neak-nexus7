@@ -73,8 +73,13 @@ UTS_TRUNCATE="cut -b -$UTS_LEN"
 
   echo \#define UTS_VERSION \"`echo $UTS_VERSION | $UTS_TRUNCATE`\"
 
+<<<<<<< HEAD
   echo \#define LINUX_COMPILE_BY \"oxydo\"
   echo \#define LINUX_COMPILE_HOST \"nitro\"
+=======
+  echo \#define LINUX_COMPILE_BY \"`echo Mahdi`\"
+  echo \#define LINUX_COMPILE_HOST \"`echo Nexus7`\"
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
   echo \#define LINUX_COMPILER \"`$CC -v 2>&1 | tail -n 1`\"
 ) > .tmpcompile

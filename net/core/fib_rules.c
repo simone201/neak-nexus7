@@ -12,6 +12,10 @@
 #include <linux/kernel.h>
 #include <linux/slab.h>
 #include <linux/list.h>
+<<<<<<< HEAD
+=======
+#include <linux/module.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/net_namespace.h>
 #include <net/sock.h>
 #include <net/fib_rules.h>
@@ -548,7 +552,11 @@ static int fib_nl_fill_rule(struct sk_buff *skb, struct fib_rule *rule,
 	frh->flags = rule->flags;
 
 	if (rule->action == FR_ACT_GOTO &&
+<<<<<<< HEAD
 	    rcu_dereference_raw(rule->ctarget) == NULL)
+=======
+	    rcu_access_pointer(rule->ctarget) == NULL)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		frh->flags |= FIB_RULE_UNRESOLVED;
 
 	if (rule->iifname[0]) {

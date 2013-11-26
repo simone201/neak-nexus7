@@ -867,7 +867,12 @@ static int arp_process(struct sk_buff *skb)
 			if (addr_type == RTN_UNICAST  &&
 			    (arp_fwd_proxy(in_dev, dev, rt) ||
 			     arp_fwd_pvlan(in_dev, dev, rt, sip, tip) ||
+<<<<<<< HEAD
 			     pneigh_lookup(&arp_tbl, net, &tip, dev, 0))) {
+=======
+			     (rt->dst.dev != dev &&
+			      pneigh_lookup(&arp_tbl, net, &tip, dev, 0)))) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				n = neigh_event_ns(&arp_tbl, sha, &sip, dev);
 				if (n)
 					neigh_release(n);

@@ -32,7 +32,10 @@
 #include <linux/of_platform.h>
 #include <linux/of_gpio.h>
 #include <linux/spinlock.h>
+<<<<<<< HEAD
 #include <linux/sweep2wake.h>
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 struct gpio_button_data {
 	const struct gpio_keys_button *button;
@@ -749,9 +752,12 @@ static int __devinit gpio_keys_probe(struct platform_device *pdev)
 	}
 	input_sync(input);
 
+<<<<<<< HEAD
 	sweep2wake_setdev(input);
 	printk(KERN_INFO "[sweep2wake]: set device %s\n", input->name);
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	device_init_wakeup(&pdev->dev, wakeup);
 
 	return 0;

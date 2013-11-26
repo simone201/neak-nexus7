@@ -38,6 +38,10 @@
 #include <linux/if_arp.h>
 #include <linux/delay.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/module.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #include "rds.h"
 #include "iw.h"

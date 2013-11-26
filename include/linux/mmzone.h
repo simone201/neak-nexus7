@@ -115,9 +115,12 @@ enum zone_stat_item {
 	NUMA_OTHER,		/* allocation from other node */
 #endif
 	NR_ANON_TRANSPARENT_HUGEPAGES,
+<<<<<<< HEAD
 #ifdef CONFIG_UKSM
 	NR_UKSM_ZERO_PAGES,
 #endif
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	NR_VM_ZONE_STAT_ITEMS };
 
 /*
@@ -348,7 +351,11 @@ struct zone {
 	ZONE_PADDING(_pad1_)
 
 	/* Fields commonly accessed by the page reclaim scanner */
+<<<<<<< HEAD
 	spinlock_t		lru_lock;
+=======
+	spinlock_t		lru_lock;	
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct zone_lru {
 		struct list_head list;
 	} lru[NR_LRU_LISTS];
@@ -642,7 +649,11 @@ typedef struct pglist_data {
 					     range, including holes */
 	int node_id;
 	wait_queue_head_t kswapd_wait;
+<<<<<<< HEAD
 	struct task_struct *kswapd;
+=======
+	struct task_struct *kswapd;	/* Protected by lock_memory_hotplug() */
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	int kswapd_max_order;
 	enum zone_type classzone_idx;
 } pg_data_t;
@@ -733,7 +744,11 @@ static inline int is_normal_idx(enum zone_type idx)
 }
 
 /**
+<<<<<<< HEAD
  * is_highmem - helper function to quickly check if a struct zone is a
+=======
+ * is_highmem - helper function to quickly check if a struct zone is a 
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  *              highmem zone or not.  This is an attempt to keep references
  *              to ZONE_{DMA/NORMAL/HIGHMEM/etc} in general code to a minimum.
  * @zone - pointer to struct zone variable

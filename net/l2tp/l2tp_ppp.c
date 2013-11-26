@@ -350,18 +350,32 @@ static int pppol2tp_sendmsg(struct kiocb *iocb, struct socket *sock, struct msgh
 	skb_put(skb, 2);
 
 	/* Copy user data into skb */
+<<<<<<< HEAD
 	error = memcpy_fromiovec(skb->data, m->msg_iov, total_len);
+=======
+	error = memcpy_fromiovec(skb_put(skb, total_len), m->msg_iov,
+				 total_len);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (error < 0) {
 		kfree_skb(skb);
 		goto error_put_sess_tun;
 	}
+<<<<<<< HEAD
 	skb_put(skb, total_len);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	l2tp_xmit_skb(session, skb, session->hdr_len);
 
 	sock_put(ps->tunnel_sock);
+<<<<<<< HEAD
 
 	return error;
+=======
+	sock_put(sk);
+
+	return total_len;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 error_put_sess_tun:
 	sock_put(ps->tunnel_sock);

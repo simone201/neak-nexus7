@@ -33,6 +33,10 @@
 #include <linux/kernel.h>
 #include <linux/slab.h>
 #include <linux/in.h>
+<<<<<<< HEAD
+=======
+#include <linux/module.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/tcp.h>
 
 #include "rds.h"

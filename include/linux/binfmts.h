@@ -127,6 +127,10 @@ extern int setup_arg_pages(struct linux_binprm * bprm,
 			   unsigned long stack_top,
 			   int executable_stack);
 extern int bprm_mm_init(struct linux_binprm *bprm);
+<<<<<<< HEAD
+=======
+extern int bprm_change_interp(char *interp, struct linux_binprm *bprm);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern int copy_strings_kernel(int argc, const char *const *argv,
 			       struct linux_binprm *bprm);
 extern int prepare_bprm_creds(struct linux_binprm *bprm);

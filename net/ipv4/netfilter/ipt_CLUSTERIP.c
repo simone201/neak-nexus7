@@ -395,7 +395,10 @@ static int clusterip_tg_check(const struct xt_tgchk_param *par)
 			config = clusterip_config_init(cipinfo,
 							e->ip.dst.s_addr, dev);
 			if (!config) {
+<<<<<<< HEAD
 				pr_info("cannot allocate config\n");
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				dev_put(dev);
 				return -ENOMEM;
 			}

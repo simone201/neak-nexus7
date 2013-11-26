@@ -465,7 +465,10 @@ static void ft_sess_rcu_free(struct rcu_head *rcu)
 {
 	struct ft_sess *sess = container_of(rcu, struct ft_sess, rcu);
 
+<<<<<<< HEAD
 	transport_deregister_session(sess->se_sess);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	kfree(sess);
 }
 
@@ -473,6 +476,10 @@ static void ft_sess_free(struct kref *kref)
 {
 	struct ft_sess *sess = container_of(kref, struct ft_sess, kref);
 
+<<<<<<< HEAD
+=======
+	transport_deregister_session(sess->se_sess);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	call_rcu(&sess->rcu, ft_sess_rcu_free);
 }
 

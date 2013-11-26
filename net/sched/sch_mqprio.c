@@ -14,6 +14,10 @@
 #include <linux/string.h>
 #include <linux/errno.h>
 #include <linux/skbuff.h>
+<<<<<<< HEAD
+=======
+#include <linux/module.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/netlink.h>
 #include <net/pkt_sched.h>
 #include <net/sch_generic.h>

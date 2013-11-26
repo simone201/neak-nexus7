@@ -141,7 +141,11 @@ static inline unsigned __read_seqcount_begin(const seqcount_t *s)
 	unsigned ret;
 
 repeat:
+<<<<<<< HEAD
 	ret = s->sequence;
+=======
+	ret = ACCESS_ONCE(s->sequence);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (unlikely(ret & 1)) {
 		cpu_relax();
 		goto repeat;

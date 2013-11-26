@@ -8,11 +8,19 @@ KBUILD_CFLAGS = $(subst -pg,,$(ORIG_CFLAGS))
 endif
 
 lib-y := ctype.o string.o vsprintf.o cmdline.o \
+<<<<<<< HEAD
 	 rbtree.o radix-tree.o sradix-tree.o dump_stack.o timerqueue.o\
 	 idr.o int_sqrt.o extable.o prio_tree.o \
 	 sha1.o md5.o irq_regs.o reciprocal_div.o argv_split.o \
 	 proportions.o prio_heap.o ratelimit.o show_mem.o \
 	 is_single_threaded.o plist.o decompress.o memcopy.o
+=======
+	 rbtree.o radix-tree.o dump_stack.o timerqueue.o\
+	 idr.o int_sqrt.o extable.o prio_tree.o \
+	 sha1.o md5.o irq_regs.o reciprocal_div.o argv_split.o \
+	 proportions.o prio_heap.o ratelimit.o show_mem.o \
+	 is_single_threaded.o plist.o decompress.o
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 lib-$(CONFIG_MMU) += ioremap.o
 lib-$(CONFIG_SMP) += cpumask.o
@@ -105,8 +113,11 @@ obj-$(CONFIG_DMA_API_DEBUG) += dma-debug.o
 
 obj-$(CONFIG_GENERIC_CSUM) += checksum.o
 
+<<<<<<< HEAD
 obj-$(CONFIG_FRANDOM_DEV) += frandom.o
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 obj-$(CONFIG_GENERIC_ATOMIC64) += atomic64.o
 
 obj-$(CONFIG_ATOMIC64_SELFTEST) += atomic64_test.o

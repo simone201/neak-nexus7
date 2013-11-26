@@ -432,6 +432,10 @@ static int skcipher_recvmsg(struct kiocb *unused, struct socket *sock,
 	long copied = 0;
 
 	lock_sock(sk);
+<<<<<<< HEAD
+=======
+	msg->msg_namelen = 0;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	for (iov = msg->msg_iov, iovlen = msg->msg_iovlen; iovlen > 0;
 	     iovlen--, iov++) {
 		unsigned long seglen = iov->iov_len;

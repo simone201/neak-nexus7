@@ -309,3 +309,8 @@ extern u64 hwpoison_filter_flags_mask;
 extern u64 hwpoison_filter_flags_value;
 extern u64 hwpoison_filter_memcg;
 extern u32 hwpoison_filter_enable;
+<<<<<<< HEAD
+=======
+
+extern void set_pageblock_order(void);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a

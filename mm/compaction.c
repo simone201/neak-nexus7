@@ -320,42 +320,12 @@ static isolate_migrate_t isolate_migratepages(struct zone *zone,
 		} else if (!locked)
 			spin_lock_irq(&zone->lru_lock);
 
-<<<<<<< HEAD
-=======
-		/*
-		 * migrate_pfn does not necessarily start aligned to a
-		 * pageblock. Ensure that pfn_valid is called when moving
-		 * into a new MAX_ORDER_NR_PAGES range in case of large
-		 * memory holes within the zone
-		 */
-		if ((low_pfn & (MAX_ORDER_NR_PAGES - 1)) == 0) {
-			if (!pfn_valid(low_pfn)) {
-				low_pfn += MAX_ORDER_NR_PAGES - 1;
-				continue;
-			}
-		}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (!pfn_valid_within(low_pfn))
 			continue;
 		nr_scanned++;
 
-<<<<<<< HEAD
 		/* Get the page and skip if free */
 		page = pfn_to_page(low_pfn);
-=======
-		/*
-		 * Get the page and ensure the page is within the same zone.
-		 * See the comment in isolate_freepages about overlapping
-		 * nodes. It is deliberate that the new zone lock is not taken
-		 * as memory compaction should not move pages between nodes.
-		 */
-		page = pfn_to_page(low_pfn);
-		if (page_zone(page) != zone)
-			continue;
-
-		/* Skip if free */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (PageBuddy(page))
 			continue;
 
@@ -604,16 +574,8 @@ static int compact_zone(struct zone *zone, struct compact_control *cc)
 		if (err) {
 			putback_lru_pages(&cc->migratepages);
 			cc->nr_migratepages = 0;
-<<<<<<< HEAD
 		}
 
-=======
-			if (err == -ENOMEM) {
-				ret = COMPACT_PARTIAL;
-				goto out;
-			}
-		}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 out:
@@ -693,11 +655,7 @@ unsigned long try_to_compact_pages(struct zonelist *zonelist,
 
 
 /* Compact all zones within a node */
-<<<<<<< HEAD
 static int compact_node(int nid)
-=======
-static int compact_node(int nid, bool sync)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	int zoneid;
 	pg_data_t *pgdat;
@@ -715,10 +673,6 @@ static int compact_node(int nid, bool sync)
 			.nr_freepages = 0,
 			.nr_migratepages = 0,
 			.order = -1,
-<<<<<<< HEAD
-=======
-            .sync = sync,
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		};
 
 		zone = &pgdat->node_zones[zoneid];
@@ -739,20 +693,12 @@ static int compact_node(int nid, bool sync)
 }
 
 /* Compact all nodes in the system */
-<<<<<<< HEAD
 static int compact_nodes(void)
-=======
-int compact_nodes(bool sync)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	int nid;
 
 	for_each_online_node(nid)
-<<<<<<< HEAD
 		compact_node(nid);
-=======
-		compact_node(nid, sync);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return COMPACT_COMPLETE;
 }
@@ -765,11 +711,7 @@ int sysctl_compaction_handler(struct ctl_table *table, int write,
 			void __user *buffer, size_t *length, loff_t *ppos)
 {
 	if (write)
-<<<<<<< HEAD
 		return compact_nodes();
-=======
-		return compact_nodes(true);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return 0;
 }

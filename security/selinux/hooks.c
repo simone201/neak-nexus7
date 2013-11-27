@@ -1805,7 +1805,6 @@ static inline u32 open_file_to_av(struct file *file)
 
 /* Hook functions begin here. */
 
-<<<<<<< HEAD
 static int selinux_binder_set_context_mgr(struct task_struct *mgr)
 {
 	u32 mysid = current_sid();
@@ -1862,8 +1861,6 @@ static int selinux_binder_transfer_file(struct task_struct *from, struct task_st
 			    &ad);
 }
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static int selinux_ptrace_access_check(struct task_struct *child,
 				     unsigned int mode)
 {
@@ -5517,14 +5514,11 @@ static int selinux_key_getsecurity(struct key *key, char **_buffer)
 static struct security_operations selinux_ops = {
 	.name =				"selinux",
 
-<<<<<<< HEAD
 	.binder_set_context_mgr =	selinux_binder_set_context_mgr,
 	.binder_transaction =		selinux_binder_transaction,
 	.binder_transfer_binder =	selinux_binder_transfer_binder,
 	.binder_transfer_file =		selinux_binder_transfer_file,
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.ptrace_access_check =		selinux_ptrace_access_check,
 	.ptrace_traceme =		selinux_ptrace_traceme,
 	.capget =			selinux_capget,

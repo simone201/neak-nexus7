@@ -1400,21 +1400,15 @@ generic_file_aio_read(struct kiocb *iocb, const struct iovec *iov,
 	unsigned long seg = 0;
 	size_t count;
 	loff_t *ppos = &iocb->ki_pos;
-<<<<<<< HEAD
 	struct blk_plug plug;
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	count = 0;
 	retval = generic_segment_checks(iov, &nr_segs, &count, VERIFY_WRITE);
 	if (retval)
 		return retval;
 
-<<<<<<< HEAD
 	blk_start_plug(&plug);
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/* coalesce the iovecs and go direct-to-BIO for O_DIRECT */
 	if (filp->f_flags & O_DIRECT) {
 		loff_t size;
@@ -1430,17 +1424,8 @@ generic_file_aio_read(struct kiocb *iocb, const struct iovec *iov,
 			retval = filemap_write_and_wait_range(mapping, pos,
 					pos + iov_length(iov, nr_segs) - 1);
 			if (!retval) {
-<<<<<<< HEAD
 				retval = mapping->a_ops->direct_IO(READ, iocb,
 							iov, pos, nr_segs);
-=======
-				struct blk_plug plug;
-
-				blk_start_plug(&plug);
-				retval = mapping->a_ops->direct_IO(READ, iocb,
-							iov, pos, nr_segs);
-				blk_finish_plug(&plug);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			}
 			if (retval > 0) {
 				*ppos = pos + retval;
@@ -1496,10 +1481,7 @@ generic_file_aio_read(struct kiocb *iocb, const struct iovec *iov,
 			break;
 	}
 out:
-<<<<<<< HEAD
 	blk_finish_plug(&plug);
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return retval;
 }
 EXPORT_SYMBOL(generic_file_aio_read);

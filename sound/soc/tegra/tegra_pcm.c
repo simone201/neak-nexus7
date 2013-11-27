@@ -45,12 +45,6 @@
 #define PERIOD_BYTES_MAX	(PAGE_SIZE * 2)
 #define PERIODS_MAX		64
 
-<<<<<<< HEAD
-=======
-#define PERIOD_BYTES_MAX	(PAGE_SIZE * 2)
-#define PERIODS_MAX		64
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static const struct snd_pcm_hardware tegra_pcm_hardware = {
 	.info			= SNDRV_PCM_INFO_MMAP |
 				  SNDRV_PCM_INFO_MMAP_VALID |

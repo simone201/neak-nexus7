@@ -13,10 +13,6 @@
 #include <linux/hugetlb.h>
 #include <linux/sched.h>
 #include <linux/ksm.h>
-<<<<<<< HEAD
-=======
-#include <linux/file.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 /*
  * Any behaviour which results in changes to the vma->vm_flags needs to
@@ -201,24 +197,14 @@ static long madvise_remove(struct vm_area_struct *vma,
 	struct address_space *mapping;
 	loff_t offset, endoff;
 	int error;
-<<<<<<< HEAD
-=======
-	struct file *f;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	*prev = NULL;	/* tell sys_madvise we drop mmap_sem */
 
 	if (vma->vm_flags & (VM_LOCKED|VM_NONLINEAR|VM_HUGETLB))
 		return -EINVAL;
 
-<<<<<<< HEAD
 	if (!vma->vm_file || !vma->vm_file->f_mapping
 		|| !vma->vm_file->f_mapping->host) {
-=======
-	f = vma->vm_file;
-
-	if (!f || !f->f_mapping || !f->f_mapping->host) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			return -EINVAL;
 	}
 
@@ -232,22 +218,9 @@ static long madvise_remove(struct vm_area_struct *vma,
 	endoff = (loff_t)(end - vma->vm_start - 1)
 			+ ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
 
-<<<<<<< HEAD
 	/* vmtruncate_range needs to take i_mutex */
 	up_read(&current->mm->mmap_sem);
 	error = vmtruncate_range(mapping->host, offset, endoff);
-=======
-	/*
-	 * vmtruncate_range may need to take i_mutex.  We need to
-	 * explicitly grab a reference because the vma (and hence the
-	 * vma's reference to the file) can go away as soon as we drop
-	 * mmap_sem.
-	 */
-	get_file(f);
-	up_read(&current->mm->mmap_sem);
-	error = vmtruncate_range(mapping->host, offset, endoff);
-	fput(f);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	down_read(&current->mm->mmap_sem);
 	return error;
 }

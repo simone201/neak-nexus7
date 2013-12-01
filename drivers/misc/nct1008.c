@@ -129,14 +129,10 @@ static int nct1008_get_temp(struct device *dev, long *pTemp)
 
 	/* Return max between Local and External Temp */
 	*pTemp = max(temp_local_milli, temp_ext_milli);
-<<<<<<< HEAD
 
 	/* Only log when temp is getting closer to Dynamic EDP limit */
 	if (MILLICELSIUS_TO_CELSIUS(*pTemp) > 65) 
 		pr_info("%s: ret temp=%liC \n", __func__, MILLICELSIUS_TO_CELSIUS(*pTemp));
-=======
-	printk("%s: ret temp=%dC \n", __func__, MILLICELSIUS_TO_CELSIUS(*pTemp));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return 0;
 error:
 	dev_err(&client->dev, "\n error in file=: %s %s() line=%d: "

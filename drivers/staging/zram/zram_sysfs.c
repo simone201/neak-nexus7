@@ -34,13 +34,8 @@ static struct zram *dev_to_zram(struct device *dev)
 	int i;
 	struct zram *zram = NULL;
 
-<<<<<<< HEAD
 	for (i = 0; i < num_devices; i++) {
 		zram = &devices[i];
-=======
-	for (i = 0; i < zram_get_num_devices(); i++) {
-		zram = &zram_devices[i];
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (disk_to_dev(zram->disk) == dev)
 			break;
 	}
@@ -60,38 +55,19 @@ static ssize_t disksize_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t len)
 {
 	int ret;
-<<<<<<< HEAD
 	struct zram *zram = dev_to_zram(dev);
 
 	if (zram->init_done) {
-=======
-	u64 disksize;
-	struct zram *zram = dev_to_zram(dev);
-
-	ret = kstrtoull(buf, 10, &disksize);
-	if (ret)
-		return ret;
-
-	down_write(&zram->init_lock);
-	if (zram->init_done) {
-		up_write(&zram->init_lock);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		pr_info("Cannot change disksize for initialized device\n");
 		return -EBUSY;
 	}
 
-<<<<<<< HEAD
 	ret = strict_strtoull(buf, 10, &zram->disksize);
 	if (ret)
 		return ret;
 
 	zram->disksize = PAGE_ALIGN(zram->disksize);
 	set_capacity(zram->disk, zram->disksize >> SECTOR_SHIFT);
-=======
-	zram->disksize = PAGE_ALIGN(disksize);
-	set_capacity(zram->disk, zram->disksize >> SECTOR_SHIFT);
-	up_write(&zram->init_lock);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return len;
 }
@@ -108,11 +84,7 @@ static ssize_t reset_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t len)
 {
 	int ret;
-<<<<<<< HEAD
 	unsigned long do_reset;
-=======
-	unsigned short do_reset;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct zram *zram;
 	struct block_device *bdev;
 
@@ -123,11 +95,7 @@ static ssize_t reset_store(struct device *dev,
 	if (bdev->bd_holders)
 		return -EBUSY;
 
-<<<<<<< HEAD
 	ret = strict_strtoul(buf, 10, &do_reset);
-=======
-	ret = kstrtou16(buf, 10, &do_reset);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (ret)
 		return ret;
 
@@ -138,15 +106,8 @@ static ssize_t reset_store(struct device *dev,
 	if (bdev)
 		fsync_bdev(bdev);
 
-<<<<<<< HEAD
 	if (zram->init_done)
 		zram_reset_device(zram);
-=======
-	down_write(&zram->init_lock);
-	if (zram->init_done)
-		__zram_reset_device(zram);
-	up_write(&zram->init_lock);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return len;
 }

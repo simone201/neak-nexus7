@@ -884,12 +884,8 @@ static int cap1106_suspend(struct i2c_client *client, pm_message_t mesg)
 {
     PROX_DEBUG("+\n");
     mutex_lock(&prox_mtx);
-<<<<<<< HEAD
     if (force_enable)
         cap1106_enable_sensor(client, 1);
-=======
-    cap1106_enable_sensor(client, 0);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
     mutex_unlock(&prox_mtx);
     PROX_DEBUG("-\n");
     return 0;
@@ -899,12 +895,7 @@ static int cap1106_resume(struct i2c_client *client)
 {
     PROX_DEBUG("+\n");
     mutex_lock(&prox_mtx);
-<<<<<<< HEAD
     cap1106_enable_sensor(client, 1);
-=======
-    if (force_enable)
-        cap1106_enable_sensor(client, 1);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
     mutex_unlock(&prox_mtx);
     PROX_DEBUG("-\n");
     return 0;

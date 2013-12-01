@@ -3,10 +3,6 @@
  *
  * Copyright (C) 2010 Google, Inc.
  * Copyright (C) 2009 - 2011 NVIDIA Corporation
-<<<<<<< HEAD
-=======
- * Copyright (C) 2013 Timur Mehrvarz
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -62,10 +58,6 @@
 #define USB3_PREFETCH_ID               17
 
 extern void baseband_xmm_L3_resume_check(void);
-<<<<<<< HEAD
-=======
-extern volatile int smb347_deep_sleep;  // tmtmtm: from smb347-charger.c
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static struct usb_hcd *modem_ehci_handle;
 
 struct tegra_ehci_hcd {
@@ -227,19 +219,9 @@ static irqreturn_t tegra_ehci_irq (struct usb_hcd *hcd)
 		}
 		else if (tegra->bus_suspended &&
 				tegra->port_speed > TEGRA_USB_PHY_PORT_SPEED_HIGH) {
-<<<<<<< HEAD
 			printk("%s: no device connected before suspend\n", __func__);
 			spin_unlock(&ehci->lock);
 			return 0;
-=======
-		  if(smb347_deep_sleep) {
-    	    printk("ehci-tegra %s wake-up/OTG-UNPLUG with smb347_deep_sleep: special\n", __func__);
-    	    // fix: skip default return
-    	  } else {
-			spin_unlock(&ehci->lock);
-			return 0;
-		  }
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		}
 		spin_unlock(&ehci->lock);
 	}
@@ -626,19 +608,9 @@ static int tegra_usb_resume(struct usb_hcd *hcd, bool is_dpd)
 	tegra_ehci_power_up(hcd, is_dpd);
 	set_bit(HCD_FLAG_HW_ACCESSIBLE, &hcd->flags);
 
-<<<<<<< HEAD
 	if ((tegra->port_speed > TEGRA_USB_PHY_PORT_SPEED_HIGH) || (hsic) ||
 	    (null_ulpi))
 		goto restart;
-=======
-    if(smb347_deep_sleep) {
-        printk("ehci-tegra %s wake-up/OTG-PLUG with smb347_deep_sleep: special\n", __func__);
-	} else
-	if ((tegra->port_speed > TEGRA_USB_PHY_PORT_SPEED_HIGH) || (hsic) ||
-	    (null_ulpi)) {
-		goto restart;
-	}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* Force the phy to keep data lines in suspend state */
 	tegra_ehci_phy_restore_start(tegra->phy, tegra->port_speed);
@@ -795,10 +767,6 @@ static void tegra_ehci_disable_phy_interrupt(struct usb_hcd *hcd) {
 		val = readl(hcd->regs + TEGRA_USB_SUSP_CTRL_OFFSET);
 		val &= ~TEGRA_USB_PHY_CLK_VALID_INT_ENB;
 		writel(val , (hcd->regs + TEGRA_USB_SUSP_CTRL_OFFSET));
-<<<<<<< HEAD
-=======
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		/* Wait for the interrupt handler to finish */
 		synchronize_irq(hcd->irq);
 	}

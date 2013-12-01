@@ -577,13 +577,10 @@ source "drivers/misc/lis3lv02d/Kconfig"
 source "drivers/misc/carma/Kconfig"
 source "drivers/misc/tegra-baseband/Kconfig"
 
-<<<<<<< HEAD
 config FSYNC_CONTROL
         bool "Support for FSync Control"
         default y
         help
           Say Y here to enable FSync Control
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 endif # MISC_DEVICES

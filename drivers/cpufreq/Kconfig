@@ -58,7 +58,6 @@ config CPU_FREQ_DEFAULT_GOV_PERFORMANCE
 	  the frequency statically to the highest frequency supported by
 	  the CPU.
 
-<<<<<<< HEAD
 config CPU_FREQ_DEFAULT_GOV_GAMING
 	bool "gaming"
 	select CPU_FREQ_GOV_GAMING
@@ -72,8 +71,6 @@ config CPU_FREQ_DEFAULT_GOV_SMARTMAX
 	help
 	  Makes smartmax the default governor. 
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 config CPU_FREQ_DEFAULT_GOV_POWERSAVE
 	bool "powersave"
 	depends on EXPERT
@@ -83,7 +80,6 @@ config CPU_FREQ_DEFAULT_GOV_POWERSAVE
 	  the frequency statically to the lowest frequency supported by
 	  the CPU.
 
-<<<<<<< HEAD
 config CPU_FREQ_DEFAULT_GOV_LAZY
 	bool "LAZY"
 	select CPU_FREQ_GOV_LAZY
@@ -95,8 +91,6 @@ config CPU_FREQ_DEFAULT_GOV_SMARTASS2
 	select CPU_FREQ_GOV_SMARTASS2
 	help
 		Use the CPUFreq governor 'smartassV2' as default.
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 config CPU_FREQ_DEFAULT_GOV_USERSPACE
 	bool "userspace"
 	select CPU_FREQ_GOV_USERSPACE
@@ -152,7 +146,6 @@ config CPU_FREQ_GOV_PERFORMANCE
 
 	  If in doubt, say Y.
 
-<<<<<<< HEAD
 config CPU_FREQ_GOV_GAMING
 	tristate "'gaming' governor"
 	help
@@ -173,8 +166,6 @@ config CPU_FREQ_GOV_SMARTMAX
 
 	  If in doubt, say Y.
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 config CPU_FREQ_GOV_POWERSAVE
 	tristate "'powersave' governor"
 	help
@@ -186,7 +177,6 @@ config CPU_FREQ_GOV_POWERSAVE
 
 	  If in doubt, say Y.
 
-<<<<<<< HEAD
 config CPU_FREQ_GOV_LAZY
 	tristate "'lazy' governor"
 	help
@@ -204,8 +194,6 @@ config CPU_FREQ_GOV_SMARTASS2
 		'smartassV2' - a "smart" governor
 		If in doubt, say N.
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 config CPU_FREQ_GOV_USERSPACE
 	tristate "'userspace' governor for userspace frequency scaling"
 	help

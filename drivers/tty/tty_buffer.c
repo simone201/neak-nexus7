@@ -114,22 +114,11 @@ static void __tty_buffer_flush(struct tty_struct *tty)
 {
 	struct tty_buffer *thead;
 
-<<<<<<< HEAD
 	while ((thead = tty->buf.head) != NULL) {
 		tty->buf.head = thead->next;
 		tty_buffer_free(tty, thead);
 	}
 	tty->buf.tail = NULL;
-=======
-	if (tty->buf.head == NULL)
-		return;
-	while ((thead = tty->buf.head->next) != NULL) {
-		tty_buffer_free(tty, tty->buf.head);
-		tty->buf.head = thead;
-	}
-	WARN_ON(tty->buf.head != tty->buf.tail);
-	tty->buf.head->read = tty->buf.head->commit;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /**

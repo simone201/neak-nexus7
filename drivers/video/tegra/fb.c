@@ -411,15 +411,11 @@ static int tegra_fb_ioctl(struct fb_info *info, unsigned int cmd, unsigned long 
 	return 0;
 }
 
-<<<<<<< HEAD
 int tegra_fb_get_mode(struct tegra_dc *dc)
 {
 	if (!dc->fb->info->mode)
 		return -1;
 
-=======
-int tegra_fb_get_mode(struct tegra_dc *dc) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return dc->fb->info->mode->refresh;
 }
 

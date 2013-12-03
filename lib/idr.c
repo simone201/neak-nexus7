@@ -39,17 +39,6 @@
 static struct kmem_cache *idr_layer_cache;
 static DEFINE_SPINLOCK(simple_ida_lock);
 
-<<<<<<< HEAD
-=======
-/* the maximum ID which can be allocated given idr->layers */
-static int idr_max(int layers)
-{
-	int bits = min_t(int, layers * IDR_BITS, MAX_ID_SHIFT);
-
-	return (1 << bits) - 1;
-}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static struct idr_layer *get_from_free_list(struct idr *idp)
 {
 	struct idr_layer *p;
@@ -234,11 +223,7 @@ build_up:
 	 * Add a new layer to the top of the tree if the requested
 	 * id is larger than the currently allocated space.
 	 */
-<<<<<<< HEAD
 	while ((layers < (MAX_LEVEL - 1)) && (id >= (1 << (layers*IDR_BITS)))) {
-=======
-	while (id > idr_max(layers)) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		layers++;
 		if (!p->count) {
 			/* special case: if the tree is currently empty,
@@ -280,11 +265,7 @@ build_up:
 
 static int idr_get_new_above_int(struct idr *idp, void *ptr, int starting_id)
 {
-<<<<<<< HEAD
 	struct idr_layer *pa[MAX_LEVEL];
-=======
-	struct idr_layer *pa[MAX_LEVEL + 1];
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	int id;
 
 	id = idr_get_empty_slot(idp, starting_id, pa);
@@ -376,11 +357,7 @@ static void idr_remove_warning(int id)
 static void sub_remove(struct idr *idp, int shift, int id)
 {
 	struct idr_layer *p = idp->top;
-<<<<<<< HEAD
 	struct idr_layer **pa[MAX_LEVEL];
-=======
-	struct idr_layer **pa[MAX_LEVEL + 1];
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct idr_layer ***paa = &pa[0];
 	struct idr_layer *to_free;
 	int n;
@@ -474,27 +451,16 @@ void idr_remove_all(struct idr *idp)
 	int n, id, max;
 	int bt_mask;
 	struct idr_layer *p;
-<<<<<<< HEAD
 	struct idr_layer *pa[MAX_LEVEL];
-=======
-	struct idr_layer *pa[MAX_LEVEL + 1];
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct idr_layer **paa = &pa[0];
 
 	n = idp->layers * IDR_BITS;
 	p = idp->top;
 	rcu_assign_pointer(idp->top, NULL);
-<<<<<<< HEAD
 	max = 1 << n;
 
 	id = 0;
 	while (id < max) {
-=======
-	max = idr_max(idp->layers);
-
-	id = 0;
-	while (id >= 0 && id <= max) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		while (n > IDR_BITS && p) {
 			n -= IDR_BITS;
 			*paa++ = p;
@@ -553,11 +519,7 @@ void *idr_find(struct idr *idp, int id)
 	/* Mask off upper bits we don't use for the search. */
 	id &= MAX_ID_MASK;
 
-<<<<<<< HEAD
 	if (id >= (1 << n))
-=======
-	if (id > idr_max(p->layer + 1))
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		return NULL;
 	BUG_ON(n == 0);
 
@@ -593,26 +555,15 @@ int idr_for_each(struct idr *idp,
 {
 	int n, id, max, error = 0;
 	struct idr_layer *p;
-<<<<<<< HEAD
 	struct idr_layer *pa[MAX_LEVEL];
-=======
-	struct idr_layer *pa[MAX_LEVEL + 1];
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct idr_layer **paa = &pa[0];
 
 	n = idp->layers * IDR_BITS;
 	p = rcu_dereference_raw(idp->top);
-<<<<<<< HEAD
 	max = 1 << n;
 
 	id = 0;
 	while (id < max) {
-=======
-	max = idr_max(idp->layers);
-
-	id = 0;
-	while (id >= 0 && id <= max) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		while (n > 0 && p) {
 			n -= IDR_BITS;
 			*paa++ = p;
@@ -644,27 +595,16 @@ EXPORT_SYMBOL(idr_for_each);
  * Returns pointer to registered object with id, which is next number to
  * given id. After being looked up, *@nextidp will be updated for the next
  * iteration.
-<<<<<<< HEAD
  */
 
 void *idr_get_next(struct idr *idp, int *nextidp)
 {
 	struct idr_layer *p, *pa[MAX_LEVEL];
-=======
- *
- * This function can be called under rcu_read_lock(), given that the leaf
- * pointers lifetimes are correctly managed.
- */
-void *idr_get_next(struct idr *idp, int *nextidp)
-{
-	struct idr_layer *p, *pa[MAX_LEVEL + 1];
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct idr_layer **paa = &pa[0];
 	int id = *nextidp;
 	int n, max;
 
 	/* find first ent */
-<<<<<<< HEAD
 	n = idp->layers * IDR_BITS;
 	max = 1 << n;
 	p = rcu_dereference_raw(idp->top);
@@ -672,15 +612,6 @@ void *idr_get_next(struct idr *idp, int *nextidp)
 		return NULL;
 
 	while (id < max) {
-=======
-	p = rcu_dereference_raw(idp->top);
-	if (!p)
-		return NULL;
-	n = (p->layer + 1) * IDR_BITS;
-	max = idr_max(p->layer + 1);
-
-	while (id >= 0 && id <= max) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		while (n > 0 && p) {
 			n -= IDR_BITS;
 			*paa++ = p;
@@ -692,18 +623,7 @@ void *idr_get_next(struct idr *idp, int *nextidp)
 			return p;
 		}
 
-<<<<<<< HEAD
 		id += 1 << n;
-=======
-		/*
-		 * Proceed to the next layer at the current level.  Unlike
-		 * idr_for_each(), @id isn't guaranteed to be aligned to
-		 * layer boundary at this point and adding 1 << n may
-		 * incorrectly skip IDs.  Make sure we jump to the
-		 * beginning of the next layer using round_up().
-		 */
-		id = round_up(id + 1, 1 << n);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		while (n < fls(id)) {
 			n += IDR_BITS;
 			p = *--paa;
@@ -858,11 +778,7 @@ EXPORT_SYMBOL(ida_pre_get);
  */
 int ida_get_new_above(struct ida *ida, int starting_id, int *p_id)
 {
-<<<<<<< HEAD
 	struct idr_layer *pa[MAX_LEVEL];
-=======
-	struct idr_layer *pa[MAX_LEVEL + 1];
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct ida_bitmap *bitmap;
 	unsigned long flags;
 	int idr_id = starting_id / IDA_BITMAP_BITS;

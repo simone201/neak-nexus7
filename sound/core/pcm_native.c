@@ -3185,7 +3185,6 @@ static int snd_pcm_default_mmap(struct snd_pcm_substream *substream,
 int snd_pcm_lib_mmap_iomem(struct snd_pcm_substream *substream,
 			   struct vm_area_struct *area)
 {
-<<<<<<< HEAD
 	long size;
 	unsigned long offset;
 
@@ -3198,12 +3197,6 @@ int snd_pcm_lib_mmap_iomem(struct snd_pcm_substream *substream,
 				size, area->vm_page_prot))
 		return -EAGAIN;
 	return 0;
-=======
-	struct snd_pcm_runtime *runtime = substream->runtime;;
-
-	area->vm_page_prot = pgprot_noncached(area->vm_page_prot);
-	return vm_iomap_memory(area, runtime->dma_addr, runtime->dma_bytes);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 EXPORT_SYMBOL(snd_pcm_lib_mmap_iomem);

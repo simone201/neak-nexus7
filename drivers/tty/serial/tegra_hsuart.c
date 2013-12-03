@@ -1401,11 +1401,7 @@ static struct uart_driver tegra_uart_driver = {
 	.nr		= 5,
 };
 
-<<<<<<< HEAD
 static int __init tegra_uart_probe(struct platform_device *pdev)
-=======
-static int tegra_uart_probe(struct platform_device *pdev)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	struct tegra_uart_port *t;
 	struct uart_port *u;

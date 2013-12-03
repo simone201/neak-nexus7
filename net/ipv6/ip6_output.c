@@ -1212,11 +1212,7 @@ int ip6_append_data(struct sock *sk, int getfrag(void *from, char *to,
 			if (WARN_ON(np->cork.opt))
 				return -EINVAL;
 
-<<<<<<< HEAD
 			np->cork.opt = kmalloc(opt->tot_len, sk->sk_allocation);
-=======
-			np->cork.opt = kzalloc(opt->tot_len, sk->sk_allocation);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			if (unlikely(np->cork.opt == NULL))
 				return -ENOBUFS;
 

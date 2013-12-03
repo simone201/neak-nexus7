@@ -265,14 +265,6 @@ drm_do_probe_ddc_edid(struct i2c_adapter *adapter, unsigned char *buf,
 			}
 		};
 		ret = i2c_transfer(adapter, msgs, 2);
-<<<<<<< HEAD
-=======
-		if (ret == -ENXIO) {
-			DRM_DEBUG_KMS("drm: skipping non-existent adapter %s\n",
-					adapter->name);
-			break;
-		}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	} while (ret != 2 && --retries);
 
 	return ret == 2 ? 0 : -1;

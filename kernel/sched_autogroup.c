@@ -160,21 +160,15 @@ autogroup_move_group(struct task_struct *p, struct autogroup *ag)
 
 	p->signal->autogroup = autogroup_kref_get(ag);
 
-<<<<<<< HEAD
 	if (!ACCESS_ONCE(sysctl_sched_autogroup_enabled))
 		goto out;
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	t = p;
 	do {
 		sched_move_task(t);
 	} while_each_thread(p, t);
 
-<<<<<<< HEAD
 out:
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	unlock_task_sighand(p, &flags);
 	autogroup_kref_put(prev);
 }

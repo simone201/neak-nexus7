@@ -47,10 +47,6 @@
 #include <linux/mutex.h>
 #include <linux/usb/audio.h>
 #include <linux/usb/audio-v2.h>
-<<<<<<< HEAD
-=======
-#include <linux/time.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #include <sound/control.h>
 #include <sound/core.h>
@@ -58,11 +54,6 @@
 #include <sound/pcm.h>
 #include <sound/pcm_params.h>
 #include <sound/initval.h>
-<<<<<<< HEAD
-=======
-#include <linux/time.h>  // tmtmtm
-#include <linux/timer.h>  // tmtmtm
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #include "usbaudio.h"
 #include "card.h"
@@ -83,16 +74,6 @@ MODULE_DESCRIPTION("USB Audio");
 MODULE_LICENSE("GPL");
 MODULE_SUPPORTED_DEVICE("{{Generic,USB Audio}}");
 
-<<<<<<< HEAD
-=======
-// tmtmtm
-extern int usbhost_hotplug_on_boot;
-struct timer_list my_timer;
-struct usb_device *postpone_usb_snd_dev = NULL;
-struct device_driver *postpone_usb_snd_drv = NULL;
-extern struct device_driver *current_drv; // from base/dd.c
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 static int index[SNDRV_CARDS] = SNDRV_DEFAULT_IDX;	/* Index 0-MAX */
 static char *id[SNDRV_CARDS] = SNDRV_DEFAULT_STR;	/* ID for this card */
@@ -442,27 +423,6 @@ static int snd_usb_audio_create(struct usb_device *dev, int idx,
 	return 0;
 }
 
-<<<<<<< HEAD
-=======
-//tmtmtm
-static void mykthread(void *unused)
-{
-	printk("##### sound/usb/card.c mykthread driver_attach\n");
-	if(postpone_usb_snd_drv!=NULL)
-    	driver_attach(postpone_usb_snd_drv); // drives/base/dd.c
-}
-static void delayed_func(unsigned long unused)
-{
-	printk("##### sound/usb/card.c delayed_func driver_attach\n");
-
-    // Must offload to another thread, in order to prevent "BUG: scheduling while atomic"
-    // "calling block IO api(generic_make_request) from a soft irq thread (read callback) is a bad idea"
-    int ret = kernel_thread(mykthread, NULL, CLONE_FS | CLONE_FILES | CLONE_SIGHAND | SIGCHLD);
-	printk("##### sound/usb/card.c delayed_func ret=%d\n",ret);
-}
-
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * probe the active usb device
  *
@@ -485,10 +445,6 @@ snd_usb_audio_probe(struct usb_device *dev,
 	int ifnum;
 	u32 id;
 
-<<<<<<< HEAD
-=======
-	printk("##### sound/usb/card.c snd_usb_audio_probe\n");
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	alts = &intf->altsetting[0];
 	ifnum = get_iface_desc(alts)->bInterfaceNumber;
 	id = USB_ID(le16_to_cpu(dev->descriptor.idVendor),
@@ -496,37 +452,6 @@ snd_usb_audio_probe(struct usb_device *dev,
 	if (quirk && quirk->ifnum >= 0 && ifnum != quirk->ifnum)
 		goto __err_val;
 
-<<<<<<< HEAD
-=======
-	// tmtmtm
-	// we may not want the USB DAC, connected at boot time, to become 
-	// the primary sound card, rather for it to become available as 
-	// an *overlay* primary sound card, so we postpone device probe
-	if(usbhost_hotplug_on_boot) {
-		struct timespec tp; ktime_get_ts(&tp);
-	   	if (tp.tv_sec<8 && postpone_usb_snd_dev==NULL) {
-			printk("##### sound/usb/card.c DON'T REGISTER EARLY tv_sec=%d ++++++++++++++++++++\n",tp.tv_sec);
-			
-			// it would be good if the delayed call to driver_attach() (which will result in UEVENT ALSA_ID)
-			// would not be done by time (20 sec), but by ???
-			// the current strategy may prove to be not 100% reliable
-			
-		    postpone_usb_snd_dev = dev;
-		    postpone_usb_snd_drv = current_drv;       
-		    init_timer(&my_timer);
-		    my_timer.expires = jiffies + 18*HZ; // n*HZ = delay in number of seconds
-		    my_timer.function = delayed_func;
-		    add_timer(&my_timer);
-			printk("##### sound/usb/card.c delayed call to driver_attach initiated\n");
-			goto __err_val;
-		}
-	   	printk("##### sound/usb/card.c REGISTER tv_sec=%d ++++++++++++++++++++++++\n",tp.tv_sec);
-	} else {
-	   	printk("##### sound/usb/card.c REGISTER !hotplug_on_boot\n");
-	}
-
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (snd_usb_apply_boot_quirk(dev, intf, quirk) < 0)
 		goto __err_val;
 
@@ -602,10 +527,6 @@ snd_usb_audio_probe(struct usb_device *dev,
 	chip->num_interfaces++;
 	chip->probing = 0;
 	mutex_unlock(&register_mutex);
-<<<<<<< HEAD
-=======
-	printk("##### sound/usb/card.c snd_usb_audio_probe done OK\n");
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return chip;
 
  __error:

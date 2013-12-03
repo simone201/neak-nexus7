@@ -331,13 +331,10 @@ static void __set_pmd_pte(pmd_t *pmd, unsigned long address, pte_t *pte)
 
 	cpa_debug("__set_pmd_pte %x %x %x\n", pmd, pte, *pte);
 
-<<<<<<< HEAD
 	/* enforce pte entry stores ordering to avoid pmd writes
 	* bypassing pte stores.
 	*/
 	dsb();
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/* change init_mm */
 	pmd_populate_kernel(&init_mm, pmd, pte);
 
@@ -349,14 +346,10 @@ static void __set_pmd_pte(pmd_t *pmd, unsigned long address, pte_t *pte)
 			pgd_index(address), address);
 		pmd_populate_kernel(NULL, pmd, pte);
 	}
-<<<<<<< HEAD
 	/* enforce pmd entry stores ordering to avoid tlb flush bypassing
 	* pmd entry stores.
 	*/
 	dsb();
-=======
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static int

@@ -279,7 +279,6 @@ config CORDIC
 config LLIST
 	bool
 
-<<<<<<< HEAD
 config FRANDOM_DEV
 	tristate "Fast pseudo-random generator."
 	help
@@ -287,6 +286,4 @@ config FRANDOM_DEV
 	  faster than urandom using far less of the entropy pool than 
 	  urandom.
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 endmenu

@@ -198,11 +198,7 @@ struct cpu_vfs_cap_data {
 /* Allow modification of routing tables */
 /* Allow setting arbitrary process / process group ownership on
    sockets */
-<<<<<<< HEAD
 /* Allow binding to any address for transparent proxying */
-=======
-/* Allow binding to any address for transparent proxying (also via NET_RAW) */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /* Allow setting TOS (type of service) */
 /* Allow setting promiscuous mode */
 /* Allow clearing driver statistics */
@@ -214,10 +210,6 @@ struct cpu_vfs_cap_data {
 
 /* Allow use of RAW sockets */
 /* Allow use of PACKET sockets */
-<<<<<<< HEAD
-=======
-/* Allow binding to any address for transparent proxying (also via NET_ADMIN) */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #define CAP_NET_RAW          13
 

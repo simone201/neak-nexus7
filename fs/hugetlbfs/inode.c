@@ -576,12 +576,7 @@ static int hugetlbfs_set_page_dirty(struct page *page)
 }
 
 static int hugetlbfs_migrate_page(struct address_space *mapping,
-<<<<<<< HEAD
 				struct page *newpage, struct page *page)
-=======
-				struct page *newpage, struct page *page,
-				bool sync)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	int rc;
 
@@ -604,21 +599,9 @@ static int hugetlbfs_statfs(struct dentry *dentry, struct kstatfs *buf)
 		spin_lock(&sbinfo->stat_lock);
 		/* If no limits set, just report 0 for max/free/used
 		 * blocks, like simple_statfs() */
-<<<<<<< HEAD
 		if (sbinfo->max_blocks >= 0) {
 			buf->f_blocks = sbinfo->max_blocks;
 			buf->f_bavail = buf->f_bfree = sbinfo->free_blocks;
-=======
-		if (sbinfo->spool) {
-			long free_pages;
-
-			spin_lock(&sbinfo->spool->lock);
-			buf->f_blocks = sbinfo->spool->max_hpages;
-			free_pages = sbinfo->spool->max_hpages
-				- sbinfo->spool->used_hpages;
-			buf->f_bavail = buf->f_bfree = free_pages;
-			spin_unlock(&sbinfo->spool->lock);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			buf->f_files = sbinfo->max_inodes;
 			buf->f_ffree = sbinfo->free_inodes;
 		}
@@ -634,13 +617,6 @@ static void hugetlbfs_put_super(struct super_block *sb)
 
 	if (sbi) {
 		sb->s_fs_info = NULL;
-<<<<<<< HEAD
-=======
-
-		if (sbi->spool)
-			hugepage_put_subpool(sbi->spool);
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		kfree(sbi);
 	}
 }
@@ -872,21 +848,10 @@ hugetlbfs_fill_super(struct super_block *sb, void *data, int silent)
 	sb->s_fs_info = sbinfo;
 	sbinfo->hstate = config.hstate;
 	spin_lock_init(&sbinfo->stat_lock);
-<<<<<<< HEAD
 	sbinfo->max_blocks = config.nr_blocks;
 	sbinfo->free_blocks = config.nr_blocks;
 	sbinfo->max_inodes = config.nr_inodes;
 	sbinfo->free_inodes = config.nr_inodes;
-=======
-	sbinfo->max_inodes = config.nr_inodes;
-	sbinfo->free_inodes = config.nr_inodes;
-	sbinfo->spool = NULL;
-	if (config.nr_blocks != -1) {
-		sbinfo->spool = hugepage_new_subpool(config.nr_blocks);
-		if (!sbinfo->spool)
-			goto out_free;
-	}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	sb->s_maxbytes = MAX_LFS_FILESIZE;
 	sb->s_blocksize = huge_page_size(config.hstate);
 	sb->s_blocksize_bits = huge_page_shift(config.hstate);
@@ -906,16 +871,10 @@ hugetlbfs_fill_super(struct super_block *sb, void *data, int silent)
 	sb->s_root = root;
 	return 0;
 out_free:
-<<<<<<< HEAD
-=======
-	if (sbinfo->spool)
-		kfree(sbinfo->spool);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	kfree(sbinfo);
 	return -ENOMEM;
 }
 
-<<<<<<< HEAD
 int hugetlb_get_quota(struct address_space *mapping, long delta)
 {
 	int ret = 0;
@@ -944,8 +903,6 @@ void hugetlb_put_quota(struct address_space *mapping, long delta)
 	}
 }
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static struct dentry *hugetlbfs_mount(struct file_system_type *fs_type,
 	int flags, const char *dev_name, void *data)
 {

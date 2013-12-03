@@ -20,22 +20,15 @@
 #include <linux/profile.h>
 #include <linux/sched.h>
 #include <linux/module.h>
-<<<<<<< HEAD
 #include <linux/rq_stats.h>
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #include <asm/irq_regs.h>
 
 #include "tick-internal.h"
 
-<<<<<<< HEAD
 struct rq_data rq_info;
 struct workqueue_struct *rq_wq;
 spinlock_t rq_lock;
-=======
-const int softirq_stop_idle_mask = (~(1 << RCU_SOFTIRQ));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 /*
  * Per cpu nohz control structure
@@ -318,12 +311,7 @@ void tick_nohz_stop_sched_tick(int inidle)
 	if (unlikely(local_softirq_pending() && cpu_online(cpu))) {
 		static int ratelimit;
 
-<<<<<<< HEAD
 		if (ratelimit < 10) {
-=======
-		if (ratelimit < 10 &&
-		    (local_softirq_pending() & softirq_stop_idle_mask)) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			printk(KERN_ERR "NOHZ: local_softirq_pending %02x\n",
 			       (unsigned int) local_softirq_pending());
 			ratelimit++;
@@ -728,7 +716,6 @@ void tick_check_idle(int cpu)
  * High resolution timer specific code
  */
 #ifdef CONFIG_HIGH_RES_TIMERS
-<<<<<<< HEAD
 static void update_rq_stats(void)
 {
 	unsigned long jiffy_gap = 0;
@@ -773,8 +760,6 @@ static void wakeup_user(void)
 		queue_work(rq_wq, &rq_info.def_timer_work);
 	}
 }
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * We rearm the timer until we get disabled by the idle code.
  * Called with interrupts disabled and timer->base->cpu_base->lock held.
@@ -822,7 +807,6 @@ static enum hrtimer_restart tick_sched_timer(struct hrtimer *timer)
 		}
 		update_process_times(user_mode(regs));
 		profile_tick(CPU_PROFILING);
-<<<<<<< HEAD
         
         if ((rq_info.init == 1) && (tick_do_timer_cpu == cpu)) {
             
@@ -836,8 +820,6 @@ static enum hrtimer_restart tick_sched_timer(struct hrtimer *timer)
 			 */
 			wakeup_user();
 		}
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 	hrtimer_forward(timer, now, tick_period);
@@ -891,11 +873,7 @@ void tick_cancel_sched_timer(int cpu)
 		hrtimer_cancel(&ts->sched_timer);
 # endif
 
-<<<<<<< HEAD
 	ts->nohz_mode = NOHZ_MODE_INACTIVE;
-=======
-	memset(ts, 0, sizeof(*ts));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 #endif
 
@@ -947,7 +925,4 @@ int tick_check_oneshot_change(int allow_nohz)
 	tick_nohz_switch_to_nohz();
 	return 0;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a

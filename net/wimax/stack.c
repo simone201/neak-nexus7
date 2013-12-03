@@ -55,10 +55,6 @@
 #include <net/genetlink.h>
 #include <linux/netdevice.h>
 #include <linux/wimax.h>
-<<<<<<< HEAD
-=======
-#include <linux/module.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include "wimax-internal.h"
 
 

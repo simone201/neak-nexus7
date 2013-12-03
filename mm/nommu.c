@@ -805,11 +805,7 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
 	struct vm_area_struct *vma;
 
 	/* check the cache first */
-<<<<<<< HEAD
 	vma = mm->mmap_cache;
-=======
-	vma = ACCESS_ONCE(mm->mmap_cache);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (vma && vma->vm_start <= addr && vma->vm_end > addr)
 		return vma;
 

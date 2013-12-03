@@ -201,7 +201,6 @@ static struct dvfs cpu_dvfs_table[] = {
 
 	CPU_DVFS("cpu_g", 13, 3, MHZ, 550, 550, 770, 770,  910,  910,  910, 1150, 1230, 1230, 1280, 1330, 1370, 1400, 1470, 1500, 1500, 1540, 1540, 1700),
 	CPU_DVFS("cpu_g", 13, 4, MHZ, 550, 550, 770, 770,  940,  940,  940, 1160, 1240, 1240, 1280, 1360, 1390, 1470, 1500, 1520, 1520, 1590, 1700),
-
 	/*
 	 * "Safe entry" to be used when no match for chip speedo, process
 	 *  corner is found (just to boot at low rate); must be the last one
@@ -1161,3 +1160,4 @@ static int __init tegra_dvfs_init_core_cap(void)
 	return 0;
 }
 late_initcall(tegra_dvfs_init_core_cap);
+

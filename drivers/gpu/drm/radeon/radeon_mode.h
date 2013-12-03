@@ -210,11 +210,6 @@ enum radeon_connector_table {
 	CT_RN50_POWER,
 	CT_MAC_X800,
 	CT_MAC_G5_9600,
-<<<<<<< HEAD
-=======
-	CT_SAM440EP,
-	CT_MAC_G4_SILVER
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 enum radeon_dvo_chip {

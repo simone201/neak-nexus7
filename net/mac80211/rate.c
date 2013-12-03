@@ -11,10 +11,6 @@
 #include <linux/kernel.h>
 #include <linux/rtnetlink.h>
 #include <linux/slab.h>
-<<<<<<< HEAD
-=======
-#include <linux/module.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include "rate.h"
 #include "ieee80211_i.h"
 #include "debugfs.h"

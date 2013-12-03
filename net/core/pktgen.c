@@ -1803,20 +1803,10 @@ static ssize_t pktgen_thread_write(struct file *file,
 			return -EFAULT;
 		i += len;
 		mutex_lock(&pktgen_thread_lock);
-<<<<<<< HEAD
 		pktgen_add_device(t, f);
 		mutex_unlock(&pktgen_thread_lock);
 		ret = count;
 		sprintf(pg_result, "OK: add_device=%s", f);
-=======
-		ret = pktgen_add_device(t, f);
-		mutex_unlock(&pktgen_thread_lock);
-		if (!ret) {
-			ret = count;
-			sprintf(pg_result, "OK: add_device=%s", f);
-		} else
-			sprintf(pg_result, "ERROR: can not add device %s", f);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto out;
 	}
 

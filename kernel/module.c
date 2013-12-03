@@ -2193,26 +2193,15 @@ static void layout_symtab(struct module *mod, struct load_info *info)
 
 	src = (void *)info->hdr + symsect->sh_offset;
 	nsrc = symsect->sh_size / sizeof(*src);
-<<<<<<< HEAD
 	for (ndst = i = 1; i < nsrc; ++i, ++src)
 		if (is_core_symbol(src, info->sechdrs, info->hdr->e_shnum)) {
 			unsigned int j = src->st_name;
-=======
-	for (ndst = i = 0; i < nsrc; i++) {
-		if (i == 0 ||
-		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum)) {
-			unsigned int j = src[i].st_name;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 			while (!__test_and_set_bit(j, info->strmap)
 			       && info->strtab[j])
 				++j;
 			++ndst;
 		}
-<<<<<<< HEAD
-=======
-	}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* Append room for core symbols at end of core part. */
 	info->symoffs = ALIGN(mod->core_size, symsect->sh_addralign ?: 1);
@@ -2249,7 +2238,6 @@ static void add_kallsyms(struct module *mod, const struct load_info *info)
 
 	mod->core_symtab = dst = mod->module_core + info->symoffs;
 	src = mod->symtab;
-<<<<<<< HEAD
 	*dst = *src;
 	for (ndst = i = 1; i < mod->num_symtab; ++i, ++src) {
 		if (!is_core_symbol(src, info->sechdrs, info->hdr->e_shnum))
@@ -2258,16 +2246,6 @@ static void add_kallsyms(struct module *mod, const struct load_info *info)
 		dst[ndst].st_name = bitmap_weight(info->strmap,
 						  dst[ndst].st_name);
 		++ndst;
-=======
-	for (ndst = i = 0; i < mod->num_symtab; i++) {
-		if (i == 0 ||
-		    is_core_symbol(src+i, info->sechdrs, info->hdr->e_shnum)) {
-			dst[ndst] = src[i];
-			dst[ndst].st_name = bitmap_weight(info->strmap,
-							  dst[ndst].st_name);
-			++ndst;
-		}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 	mod->core_num_syms = ndst;
 
@@ -2363,12 +2341,8 @@ static int copy_and_check(struct load_info *info,
 		return -ENOEXEC;
 
 	/* Suck in entire file: we'll want most of it. */
-<<<<<<< HEAD
 	/* vmalloc barfs on "unusual" numbers.  Check here */
 	if (len > 64 * 1024 * 1024 || (hdr = vmalloc(len)) == NULL)
-=======
-	if ((hdr = vmalloc(len)) == NULL)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		return -ENOMEM;
 
 	if (copy_from_user(hdr, umod, len) != 0) {

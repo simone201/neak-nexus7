@@ -293,11 +293,6 @@ int map_private_extent_buffer(struct extent_buffer *eb, unsigned long offset,
 		      unsigned long *map_len);
 int extent_range_uptodate(struct extent_io_tree *tree,
 			  u64 start, u64 end);
-<<<<<<< HEAD
-=======
-int extent_range_clear_dirty_for_io(struct inode *inode, u64 start, u64 end);
-int extent_range_redirty_for_io(struct inode *inode, u64 start, u64 end);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 int extent_clear_unlock_delalloc(struct inode *inode,
 				struct extent_io_tree *tree,
 				u64 start, u64 end, struct page *locked_page,

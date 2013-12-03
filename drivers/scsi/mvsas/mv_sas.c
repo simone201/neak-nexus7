@@ -1676,11 +1676,7 @@ int mvs_abort_task(struct sas_task *task)
 			mv_dprintk("mvs_abort_task() mvi=%p task=%p "
 				   "slot=%p slot_idx=x%x\n",
 				   mvi, task, slot, slot_idx);
-<<<<<<< HEAD
 			mvs_tmf_timedout((unsigned long)task);
-=======
-			task->task_state_flags |= SAS_TASK_STATE_ABORTED;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			mvs_slot_task_free(mvi, task, slot, slot_idx);
 			rc = TMF_RESP_FUNC_COMPLETE;
 			goto out;

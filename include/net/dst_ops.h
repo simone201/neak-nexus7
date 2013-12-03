@@ -17,11 +17,7 @@ struct dst_ops {
 	int			(*gc)(struct dst_ops *ops);
 	struct dst_entry *	(*check)(struct dst_entry *, __u32 cookie);
 	unsigned int		(*default_advmss)(const struct dst_entry *);
-<<<<<<< HEAD
 	unsigned int		(*default_mtu)(const struct dst_entry *);
-=======
-	unsigned int		(*mtu)(const struct dst_entry *);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	u32 *			(*cow_metrics)(struct dst_entry *, unsigned long);
 	void			(*destroy)(struct dst_entry *);
 	void			(*ifdown)(struct dst_entry *,

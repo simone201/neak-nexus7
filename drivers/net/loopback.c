@@ -78,14 +78,6 @@ static netdev_tx_t loopback_xmit(struct sk_buff *skb,
 
 	skb_orphan(skb);
 
-<<<<<<< HEAD
-=======
-	/* Before queueing this packet to netif_rx(),
-	 * make sure dst is refcounted.
-	 */
-	skb_dst_force(skb);
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	skb->protocol = eth_type_trans(skb, dev);
 
 	/* it's OK to use per_cpu_ptr() because BHs are off */

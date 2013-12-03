@@ -261,14 +261,11 @@ static inline const struct nfs_rpc_ops *NFS_PROTO(const struct inode *inode)
 	return NFS_SERVER(inode)->nfs_client->rpc_ops;
 }
 
-<<<<<<< HEAD
 static inline __be32 *NFS_COOKIEVERF(const struct inode *inode)
 {
 	return NFS_I(inode)->cookieverf;
 }
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static inline unsigned NFS_MINATTRTIMEO(const struct inode *inode)
 {
 	struct nfs_server *nfss = NFS_SERVER(inode);

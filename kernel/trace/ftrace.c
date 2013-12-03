@@ -553,11 +553,7 @@ int ftrace_profile_pages_init(struct ftrace_profile_stat *stat)
 
 	pages = DIV_ROUND_UP(functions, PROFILES_PER_PAGE);
 
-<<<<<<< HEAD
 	for (i = 0; i < pages; i++) {
-=======
-	for (i = 1; i < pages; i++) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		pg->next = (void *)get_zeroed_page(GFP_KERNEL);
 		if (!pg->next)
 			goto out_free;
@@ -575,10 +571,7 @@ int ftrace_profile_pages_init(struct ftrace_profile_stat *stat)
 		free_page(tmp);
 	}
 
-<<<<<<< HEAD
 	free_page((unsigned long)stat->pages);
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	stat->pages = NULL;
 	stat->start = NULL;
 
@@ -936,22 +929,6 @@ static __init void ftrace_profile_debugfs(struct dentry *d_tracer)
 
 static struct pid * const ftrace_swapper_pid = &init_struct_pid;
 
-<<<<<<< HEAD
-=======
-static loff_t
-ftrace_filter_lseek(struct file *file, loff_t offset, int whence)
-{
-	loff_t ret;
-
-	if (file->f_mode & FMODE_READ)
-		ret = seq_lseek(file, offset, whence);
-	else
-		file->f_pos = ret = 1;
-
-	return ret;
-}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #ifdef CONFIG_DYNAMIC_FTRACE
 
 #ifndef CONFIG_FTRACE_MCOUNT_RECORD
@@ -2094,11 +2071,7 @@ static void reset_iter_read(struct ftrace_iterator *iter)
 {
 	iter->pos = 0;
 	iter->func_pos = 0;
-<<<<<<< HEAD
 	iter->flags &= ~(FTRACE_ITER_PRINTALL & FTRACE_ITER_HASH);
-=======
-	iter->flags &= ~(FTRACE_ITER_PRINTALL | FTRACE_ITER_HASH);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static void *t_start(struct seq_file *m, loff_t *pos)
@@ -2340,7 +2313,6 @@ ftrace_notrace_open(struct inode *inode, struct file *file)
 				 inode, file);
 }
 
-<<<<<<< HEAD
 static loff_t
 ftrace_regex_lseek(struct file *file, loff_t offset, int origin)
 {
@@ -2354,8 +2326,6 @@ ftrace_regex_lseek(struct file *file, loff_t offset, int origin)
 	return ret;
 }
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static int ftrace_match(char *str, char *regex, int len, int type)
 {
 	int matched = 0;
@@ -2752,13 +2722,8 @@ __unregister_ftrace_function_probe(char *glob, struct ftrace_probe_ops *ops,
 					continue;
 			}
 
-<<<<<<< HEAD
 			hlist_del(&entry->node);
 			call_rcu(&entry->rcu, ftrace_free_entry_rcu);
-=======
-			hlist_del_rcu(&entry->node);
-			call_rcu_sched(&entry->rcu, ftrace_free_entry_rcu);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		}
 	}
 	__disable_ftrace_function_probe();
@@ -3167,11 +3132,7 @@ static const struct file_operations ftrace_filter_fops = {
 	.open = ftrace_filter_open,
 	.read = seq_read,
 	.write = ftrace_filter_write,
-<<<<<<< HEAD
 	.llseek = ftrace_regex_lseek,
-=======
-	.llseek = ftrace_filter_lseek,
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.release = ftrace_regex_release,
 };
 
@@ -3179,11 +3140,7 @@ static const struct file_operations ftrace_notrace_fops = {
 	.open = ftrace_notrace_open,
 	.read = seq_read,
 	.write = ftrace_notrace_write,
-<<<<<<< HEAD
 	.llseek = ftrace_regex_lseek,
-=======
-	.llseek = ftrace_filter_lseek,
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.release = ftrace_regex_release,
 };
 
@@ -3344,12 +3301,7 @@ out:
 	if (fail)
 		return -EINVAL;
 
-<<<<<<< HEAD
 	ftrace_graph_filter_enabled = 1;
-=======
-	ftrace_graph_filter_enabled = !!(*idx);
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return 0;
 }
 
@@ -3396,13 +3348,8 @@ static const struct file_operations ftrace_graph_fops = {
 	.open		= ftrace_graph_open,
 	.read		= seq_read,
 	.write		= ftrace_graph_write,
-<<<<<<< HEAD
 	.release	= ftrace_graph_release,
 	.llseek		= seq_lseek,
-=======
-	.llseek		= ftrace_filter_lseek,
-	.release	= ftrace_graph_release,
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 #endif /* CONFIG_FUNCTION_GRAPH_TRACER */
 
@@ -3532,11 +3479,7 @@ static int ftrace_module_notify(struct notifier_block *self,
 
 struct notifier_block ftrace_module_nb = {
 	.notifier_call = ftrace_module_notify,
-<<<<<<< HEAD
 	.priority = 0,
-=======
-	.priority = INT_MAX,	/* Run before anything that can use kprobes */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 extern unsigned long __start_mcount_loc[];
@@ -3880,11 +3823,7 @@ static const struct file_operations ftrace_pid_fops = {
 	.open		= ftrace_pid_open,
 	.write		= ftrace_pid_write,
 	.read		= seq_read,
-<<<<<<< HEAD
 	.llseek		= seq_lseek,
-=======
-	.llseek		= ftrace_filter_lseek,
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.release	= ftrace_pid_release,
 };
 
@@ -3922,17 +3861,6 @@ void ftrace_kill(void)
 }
 
 /**
-<<<<<<< HEAD
-=======
- * Test if ftrace is dead or not.
- */
-int ftrace_is_dead(void)
-{
-	return ftrace_disabled;
-}
-
-/**
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  * register_ftrace_function - register a function for profiling
  * @ops - ops structure that holds the function for profiling.
  *
@@ -4007,17 +3935,12 @@ ftrace_enable_sysctl(struct ctl_table *table, int write,
 		ftrace_startup_sysctl();
 
 		/* we are starting ftrace again */
-<<<<<<< HEAD
 		if (ftrace_ops_list != &ftrace_list_end) {
 			if (ftrace_ops_list->next == &ftrace_list_end)
 				ftrace_trace_function = ftrace_ops_list->func;
 			else
 				ftrace_trace_function = ftrace_ops_list_func;
 		}
-=======
-		if (ftrace_ops_list != &ftrace_list_end)
-			update_ftrace_function();
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	} else {
 		/* stopping ftrace calls (just send to ftrace_stub) */

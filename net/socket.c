@@ -791,15 +791,9 @@ static ssize_t sock_sendpage(struct file *file, struct page *page,
 
 	sock = file->private_data;
 
-<<<<<<< HEAD
 	flags = !(file->f_flags & O_NONBLOCK) ? 0 : MSG_DONTWAIT;
 	if (more)
 		flags |= MSG_MORE;
-=======
-	flags = (file->f_flags & O_NONBLOCK) ? MSG_DONTWAIT : 0;
-	/* more is a combination of MSG_MORE and MSG_SENDPAGE_NOTLAST */
-	flags |= more;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return kernel_sendpage(sock, page, offset, size, flags);
 }
@@ -1882,15 +1876,9 @@ struct used_address {
 	unsigned int name_len;
 };
 
-<<<<<<< HEAD
 static int __sys_sendmsg(struct socket *sock, struct msghdr __user *msg,
 			 struct msghdr *msg_sys, unsigned flags,
 			 struct used_address *used_address)
-=======
-static int ___sys_sendmsg(struct socket *sock, struct msghdr __user *msg,
-			  struct msghdr *msg_sys, unsigned flags,
-			  struct used_address *used_address)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	struct compat_msghdr __user *msg_compat =
 	    (struct compat_msghdr __user *)msg;
@@ -2010,7 +1998,6 @@ out:
  *	BSD sendmsg interface
  */
 
-<<<<<<< HEAD
 SYSCALL_DEFINE3(sendmsg, int, fd, struct msghdr __user *, msg, unsigned, flags)
 {
 	int fput_needed, err;
@@ -2021,35 +2008,12 @@ SYSCALL_DEFINE3(sendmsg, int, fd, struct msghdr __user *, msg, unsigned, flags)
 		goto out;
 
 	err = __sys_sendmsg(sock, msg, &msg_sys, flags, NULL);
-=======
-long __sys_sendmsg(int fd, struct msghdr __user *msg, unsigned flags)
-{
-	int fput_needed, err;
-	struct msghdr msg_sys;
-	struct socket *sock;
-
-	sock = sockfd_lookup_light(fd, &err, &fput_needed);
-	if (!sock)
-		goto out;
-
-	err = ___sys_sendmsg(sock, msg, &msg_sys, flags, NULL);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	fput_light(sock->file, fput_needed);
 out:
 	return err;
 }
 
-<<<<<<< HEAD
-=======
-SYSCALL_DEFINE3(sendmsg, int, fd, struct msghdr __user *, msg, unsigned int, flags)
-{
-	if (flags & MSG_CMSG_COMPAT)
-		return -EINVAL;
-	return __sys_sendmsg(fd, msg, flags);
-}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  *	Linux sendmmsg interface
  */
@@ -2080,26 +2044,15 @@ int __sys_sendmmsg(int fd, struct mmsghdr __user *mmsg, unsigned int vlen,
 
 	while (datagrams < vlen) {
 		if (MSG_CMSG_COMPAT & flags) {
-<<<<<<< HEAD
 			err = __sys_sendmsg(sock, (struct msghdr __user *)compat_entry,
 					    &msg_sys, flags, &used_address);
-=======
-			err = ___sys_sendmsg(sock, (struct msghdr __user *)compat_entry,
-					     &msg_sys, flags, &used_address);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			if (err < 0)
 				break;
 			err = __put_user(err, &compat_entry->msg_len);
 			++compat_entry;
 		} else {
-<<<<<<< HEAD
 			err = __sys_sendmsg(sock, (struct msghdr __user *)entry,
 					    &msg_sys, flags, &used_address);
-=======
-			err = ___sys_sendmsg(sock,
-					     (struct msghdr __user *)entry,
-					     &msg_sys, flags, &used_address);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			if (err < 0)
 				break;
 			err = put_user(err, &entry->msg_len);
@@ -2123,21 +2076,11 @@ int __sys_sendmmsg(int fd, struct mmsghdr __user *mmsg, unsigned int vlen,
 SYSCALL_DEFINE4(sendmmsg, int, fd, struct mmsghdr __user *, mmsg,
 		unsigned int, vlen, unsigned int, flags)
 {
-<<<<<<< HEAD
 	return __sys_sendmmsg(fd, mmsg, vlen, flags);
 }
 
 static int __sys_recvmsg(struct socket *sock, struct msghdr __user *msg,
 			 struct msghdr *msg_sys, unsigned flags, int nosec)
-=======
-	if (flags & MSG_CMSG_COMPAT)
-		return -EINVAL;
-	return __sys_sendmmsg(fd, mmsg, vlen, flags);
-}
-
-static int ___sys_recvmsg(struct socket *sock, struct msghdr __user *msg,
-			  struct msghdr *msg_sys, unsigned flags, int nosec)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	struct compat_msghdr __user *msg_compat =
 	    (struct compat_msghdr __user *)msg;
@@ -2234,7 +2177,6 @@ out:
  *	BSD recvmsg interface
  */
 
-<<<<<<< HEAD
 SYSCALL_DEFINE3(recvmsg, int, fd, struct msghdr __user *, msg,
 		unsigned int, flags)
 {
@@ -2246,36 +2188,12 @@ SYSCALL_DEFINE3(recvmsg, int, fd, struct msghdr __user *, msg,
 		goto out;
 
 	err = __sys_recvmsg(sock, msg, &msg_sys, flags, 0);
-=======
-long __sys_recvmsg(int fd, struct msghdr __user *msg, unsigned flags)
-{
-	int fput_needed, err;
-	struct msghdr msg_sys;
-	struct socket *sock;
-
-	sock = sockfd_lookup_light(fd, &err, &fput_needed);
-	if (!sock)
-		goto out;
-
-	err = ___sys_recvmsg(sock, msg, &msg_sys, flags, 0);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	fput_light(sock->file, fput_needed);
 out:
 	return err;
 }
 
-<<<<<<< HEAD
-=======
-SYSCALL_DEFINE3(recvmsg, int, fd, struct msghdr __user *, msg,
-		unsigned int, flags)
-{
-	if (flags & MSG_CMSG_COMPAT)
-		return -EINVAL;
-	return __sys_recvmsg(fd, msg, flags);
-}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  *     Linux recvmmsg interface
  */
@@ -2313,30 +2231,17 @@ int __sys_recvmmsg(int fd, struct mmsghdr __user *mmsg, unsigned int vlen,
 		 * No need to ask LSM for more than the first datagram.
 		 */
 		if (MSG_CMSG_COMPAT & flags) {
-<<<<<<< HEAD
 			err = __sys_recvmsg(sock, (struct msghdr __user *)compat_entry,
 					    &msg_sys, flags & ~MSG_WAITFORONE,
 					    datagrams);
-=======
-			err = ___sys_recvmsg(sock, (struct msghdr __user *)compat_entry,
-					     &msg_sys, flags & ~MSG_WAITFORONE,
-					     datagrams);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			if (err < 0)
 				break;
 			err = __put_user(err, &compat_entry->msg_len);
 			++compat_entry;
 		} else {
-<<<<<<< HEAD
 			err = __sys_recvmsg(sock, (struct msghdr __user *)entry,
 					    &msg_sys, flags & ~MSG_WAITFORONE,
 					    datagrams);
-=======
-			err = ___sys_recvmsg(sock,
-					     (struct msghdr __user *)entry,
-					     &msg_sys, flags & ~MSG_WAITFORONE,
-					     datagrams);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			if (err < 0)
 				break;
 			err = put_user(err, &entry->msg_len);
@@ -2403,12 +2308,6 @@ SYSCALL_DEFINE5(recvmmsg, int, fd, struct mmsghdr __user *, mmsg,
 	int datagrams;
 	struct timespec timeout_sys;
 
-<<<<<<< HEAD
-=======
-	if (flags & MSG_CMSG_COMPAT)
-		return -EINVAL;
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (!timeout)
 		return __sys_recvmmsg(fd, mmsg, vlen, flags, NULL);
 

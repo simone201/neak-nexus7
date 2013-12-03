@@ -282,10 +282,6 @@ static const struct pci_device_id pciidlist[] = {		/* aka */
 	INTEL_VGA_DEVICE(0x0152, &intel_ivybridge_d_info), /* GT1 desktop */
 	INTEL_VGA_DEVICE(0x0162, &intel_ivybridge_d_info), /* GT2 desktop */
 	INTEL_VGA_DEVICE(0x015a, &intel_ivybridge_d_info), /* GT1 server */
-<<<<<<< HEAD
-=======
-	INTEL_VGA_DEVICE(0x016a, &intel_ivybridge_d_info), /* GT2 server */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	{0, 0, 0}
 };
 

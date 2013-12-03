@@ -177,16 +177,10 @@ char *pp_tag_stat(struct tag_stat *ts)
 char *pp_iface_stat(struct iface_stat *is)
 {
 	char *res;
-<<<<<<< HEAD
 	if (!is) {
 		res = kasprintf(GFP_ATOMIC, "iface_stat@null{}");
 	} else {
 		struct data_counters *cnts = &is->totals_via_skb;
-=======
-	if (!is)
-		res = kasprintf(GFP_ATOMIC, "iface_stat@null{}");
-	else
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		res = kasprintf(GFP_ATOMIC, "iface_stat@%p{"
 				"list=list_head{...}, "
 				"ifname=%s, "
@@ -213,17 +207,10 @@ char *pp_iface_stat(struct iface_stat *is)
 				is->totals_via_dev[IFS_RX].packets,
 				is->totals_via_dev[IFS_TX].bytes,
 				is->totals_via_dev[IFS_TX].packets,
-<<<<<<< HEAD
 				dc_sum_bytes(cnts, 0, IFS_RX),
 				dc_sum_packets(cnts, 0, IFS_RX),
 				dc_sum_bytes(cnts, 0, IFS_TX),
 				dc_sum_packets(cnts, 0, IFS_TX),
-=======
-				is->totals_via_skb[IFS_RX].bytes,
-				is->totals_via_skb[IFS_RX].packets,
-				is->totals_via_skb[IFS_TX].bytes,
-				is->totals_via_skb[IFS_TX].packets,
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				is->last_known_valid,
 				is->last_known[IFS_RX].bytes,
 				is->last_known[IFS_RX].packets,
@@ -232,10 +219,7 @@ char *pp_iface_stat(struct iface_stat *is)
 				is->active,
 				is->net_dev,
 				is->proc_ptr);
-<<<<<<< HEAD
 	}
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	_bug_on_err_or_null(res);
 	return res;
 }

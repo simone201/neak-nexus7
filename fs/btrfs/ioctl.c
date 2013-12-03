@@ -1542,15 +1542,7 @@ static noinline int copy_to_sk(struct btrfs_root *root,
 		item_off = btrfs_item_ptr_offset(leaf, i);
 		item_len = btrfs_item_size_nr(leaf, i);
 
-<<<<<<< HEAD
 		if (item_len > BTRFS_SEARCH_ARGS_BUFSIZE)
-=======
-		btrfs_item_key_to_cpu(leaf, key, i);
-		if (!key_in_sk(key, sk))
-			continue;
-
-		if (sizeof(sh) + item_len > BTRFS_SEARCH_ARGS_BUFSIZE)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			item_len = 0;
 
 		if (sizeof(sh) + item_len + *sk_offset >
@@ -1559,13 +1551,10 @@ static noinline int copy_to_sk(struct btrfs_root *root,
 			goto overflow;
 		}
 
-<<<<<<< HEAD
 		btrfs_item_key_to_cpu(leaf, key, i);
 		if (!key_in_sk(key, sk))
 			continue;
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		sh.objectid = key->objectid;
 		sh.offset = key->offset;
 		sh.type = key->type;

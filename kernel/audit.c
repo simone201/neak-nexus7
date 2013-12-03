@@ -1167,11 +1167,7 @@ struct audit_buffer *audit_log_start(struct audit_context *ctx, gfp_t gfp_mask,
 
 			/* Wait for auditd to drain the queue a little */
 			DECLARE_WAITQUEUE(wait, current);
-<<<<<<< HEAD
 			set_current_state(TASK_INTERRUPTIBLE);
-=======
-			set_current_state(TASK_UNINTERRUPTIBLE);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			add_wait_queue(&audit_backlog_wait, &wait);
 
 			if (audit_backlog_limit &&

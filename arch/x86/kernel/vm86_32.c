@@ -172,10 +172,6 @@ static void mark_screen_rdonly(struct mm_struct *mm)
 	spinlock_t *ptl;
 	int i;
 
-<<<<<<< HEAD
-=======
-	down_write(&mm->mmap_sem);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	pgd = pgd_offset(mm, 0xA0000);
 	if (pgd_none_or_clear_bad(pgd))
 		goto out;
@@ -194,10 +190,6 @@ static void mark_screen_rdonly(struct mm_struct *mm)
 	}
 	pte_unmap_unlock(pte, ptl);
 out:
-<<<<<<< HEAD
-=======
-	up_write(&mm->mmap_sem);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	flush_tlb();
 }
 

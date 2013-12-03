@@ -56,6 +56,7 @@
 #include <mach/thermal.h>
 #include <mach/board-grouper-misc.h>
 #include <mach/tegra_fiq_debugger.h>
+
 #include "board.h"
 #include "clock.h"
 #include "board-grouper.h"

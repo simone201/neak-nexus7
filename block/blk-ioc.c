@@ -5,10 +5,6 @@
 #include <linux/module.h>
 #include <linux/init.h>
 #include <linux/bio.h>
-<<<<<<< HEAD
-=======
-#include <linux/bitmap.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <linux/blkdev.h>
 #include <linux/bootmem.h>	/* for max_pfn/max_low_pfn */
 #include <linux/slab.h>
@@ -20,7 +16,6 @@
  */
 static struct kmem_cache *iocontext_cachep;
 
-<<<<<<< HEAD
 static void cfq_dtor(struct io_context *ioc)
 {
 	if (!hlist_empty(&ioc->cic_list)) {
@@ -28,14 +23,6 @@ static void cfq_dtor(struct io_context *ioc)
 
 		cic = hlist_entry(ioc->cic_list.first, struct cfq_io_context,
 								cic_list);
-=======
-static void hlist_sched_dtor(struct io_context *ioc, struct hlist_head *list)
-{
-	if (!hlist_empty(list)) {
-		struct cfq_io_context *cic;
-
-		cic = hlist_entry(list->first, struct cfq_io_context, cic_list);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		cic->dtor(ioc);
 	}
 }
@@ -53,13 +40,7 @@ int put_io_context(struct io_context *ioc)
 
 	if (atomic_long_dec_and_test(&ioc->refcount)) {
 		rcu_read_lock();
-<<<<<<< HEAD
 		cfq_dtor(ioc);
-=======
-
-		hlist_sched_dtor(ioc, &ioc->cic_list);
-		hlist_sched_dtor(ioc, &ioc->bfq_cic_list);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		rcu_read_unlock();
 
 		kmem_cache_free(iocontext_cachep, ioc);
@@ -69,7 +50,6 @@ int put_io_context(struct io_context *ioc)
 }
 EXPORT_SYMBOL(put_io_context);
 
-<<<<<<< HEAD
 static void cfq_exit(struct io_context *ioc)
 {
 	rcu_read_lock();
@@ -79,16 +59,6 @@ static void cfq_exit(struct io_context *ioc)
 
 		cic = hlist_entry(ioc->cic_list.first, struct cfq_io_context,
 								cic_list);
-=======
-static void hlist_sched_exit(struct io_context *ioc, struct hlist_head *list)
-{
-	rcu_read_lock();
-
-	if (!hlist_empty(list)) {
-		struct cfq_io_context *cic;
-
-		cic = hlist_entry(list->first, struct cfq_io_context, cic_list);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		cic->exit(ioc);
 	}
 	rcu_read_unlock();
@@ -104,16 +74,9 @@ void exit_io_context(struct task_struct *task)
 	task->io_context = NULL;
 	task_unlock(task);
 
-<<<<<<< HEAD
 	if (atomic_dec_and_test(&ioc->nr_tasks))
 		cfq_exit(ioc);
 
-=======
-	if (atomic_dec_and_test(&ioc->nr_tasks)) {
-		hlist_sched_exit(ioc, &ioc->cic_list);
-		hlist_sched_exit(ioc, &ioc->bfq_cic_list);
-	}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	put_io_context(ioc);
 }
 
@@ -126,21 +89,12 @@ struct io_context *alloc_io_context(gfp_t gfp_flags, int node)
 		atomic_long_set(&ioc->refcount, 1);
 		atomic_set(&ioc->nr_tasks, 1);
 		spin_lock_init(&ioc->lock);
-<<<<<<< HEAD
 		ioc->ioprio_changed = 0;
-=======
-		bitmap_zero(ioc->ioprio_changed, IOC_IOPRIO_CHANGED_BITS);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		ioc->ioprio = 0;
 		ioc->last_waited = 0; /* doesn't matter... */
 		ioc->nr_batch_requests = 0; /* because this is 0 */
 		INIT_RADIX_TREE(&ioc->radix_root, GFP_ATOMIC | __GFP_HIGH);
 		INIT_HLIST_HEAD(&ioc->cic_list);
-<<<<<<< HEAD
-=======
-		INIT_RADIX_TREE(&ioc->bfq_radix_root, GFP_ATOMIC | __GFP_HIGH);
-		INIT_HLIST_HEAD(&ioc->bfq_cic_list);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		ioc->ioc_data = NULL;
 #if defined(CONFIG_BLK_CGROUP) || defined(CONFIG_BLK_CGROUP_MODULE)
 		ioc->cgroup_changed = 0;

@@ -562,15 +562,6 @@ int btrfs_close_devices(struct btrfs_fs_devices *fs_devices)
 		__btrfs_close_devices(fs_devices);
 		free_fs_devices(fs_devices);
 	}
-<<<<<<< HEAD
-=======
-	/*
-	 * Wait for rcu kworkers under __btrfs_close_devices
-	 * to finish all blkdev_puts so device is really
-	 * free when umount is done.
-	 */
-	rcu_barrier();
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return ret;
 }
 

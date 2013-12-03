@@ -405,11 +405,7 @@ void VFP_bounce(u32 trigger, u32 fpexc, struct pt_regs *regs)
 	 * If there isn't a second FP instruction, exit now. Note that
 	 * the FPEXC.FP2V bit is valid only if FPEXC.EX is 1.
 	 */
-<<<<<<< HEAD
 	if (fpexc ^ (FPEXC_EX | FPEXC_FP2V))
-=======
-	if ((fpexc & (FPEXC_EX | FPEXC_FP2V)) != (FPEXC_EX | FPEXC_FP2V))
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto exit;
 
 	/*
@@ -578,12 +574,9 @@ static int __init vfp_init(void)
 	unsigned int vfpsid;
 	unsigned int cpu_arch = cpu_architecture();
 
-<<<<<<< HEAD
 #ifdef CONFIG_SMP
 	preempt_disable();
 #endif
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (cpu_arch >= CPU_ARCH_ARMv6)
 		vfp_enable(NULL);
 
@@ -597,12 +590,9 @@ static int __init vfp_init(void)
 	vfpsid = fmrx(FPSID);
 	barrier();
 	vfp_vector = vfp_null_entry;
-<<<<<<< HEAD
 #ifdef CONFIG_SMP
 	preempt_enable();
 #endif
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	printk(KERN_INFO "VFP support v0.3: ");
 	if (VFP_arch)
@@ -612,11 +602,7 @@ static int __init vfp_init(void)
 	} else {
 		hotcpu_notifier(vfp_hotplug, 0);
 
-<<<<<<< HEAD
 		on_each_cpu(vfp_enable, NULL, 1);
-=======
-		smp_call_function(vfp_enable, NULL, 1);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		VFP_arch = (vfpsid & FPSID_ARCH_MASK) >> FPSID_ARCH_BIT;  /* Extract the architecture version */
 		printk("implementor %02x architecture %d part %02x variant %x rev %x\n",

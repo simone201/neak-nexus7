@@ -137,10 +137,6 @@ enum {
 	IFLA_AF_SPEC,
 	IFLA_GROUP,		/* Group the device belongs to */
 	IFLA_NET_NS_FD,
-<<<<<<< HEAD
-=======
-	IFLA_EXT_MASK,		/* Extended info mask, VFs, etc */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	__IFLA_MAX
 };
 
@@ -283,10 +279,6 @@ enum {
 	IFLA_VF_MAC,		/* Hardware queue specific attributes */
 	IFLA_VF_VLAN,
 	IFLA_VF_TX_RATE,	/* TX Bandwidth Allocation */
-<<<<<<< HEAD
-=======
-	IFLA_VF_SPOOFCHK,	/* Spoof Checking on/off switch */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	__IFLA_VF_MAX,
 };
 
@@ -308,29 +300,13 @@ struct ifla_vf_tx_rate {
 	__u32 rate; /* Max TX bandwidth in Mbps, 0 disables throttling */
 };
 
-<<<<<<< HEAD
-=======
-struct ifla_vf_spoofchk {
-	__u32 vf;
-	__u32 setting;
-};
-#ifdef __KERNEL__
-
-/* We don't want this structure exposed to user space */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 struct ifla_vf_info {
 	__u32 vf;
 	__u8 mac[32];
 	__u32 vlan;
 	__u32 qos;
 	__u32 tx_rate;
-<<<<<<< HEAD
 };
-=======
-	__u32 spoofchk;
-};
-#endif
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 /* VF ports management section
  *

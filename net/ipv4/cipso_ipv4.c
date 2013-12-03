@@ -476,11 +476,7 @@ int cipso_v4_doi_add(struct cipso_v4_doi *doi_def,
 	doi = doi_def->doi;
 	doi_type = doi_def->type;
 
-<<<<<<< HEAD
 	if (doi_def == NULL || doi_def->doi == CIPSO_V4_DOI_UNKNOWN)
-=======
-	if (doi_def->doi == CIPSO_V4_DOI_UNKNOWN)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto doi_add_return;
 	for (iter = 0; iter < CIPSO_V4_TAG_MAXCNT; iter++) {
 		switch (doi_def->tags[iter]) {
@@ -1729,15 +1725,8 @@ int cipso_v4_validate(const struct sk_buff *skb, unsigned char **option)
 		case CIPSO_V4_TAG_LOCAL:
 			/* This is a non-standard tag that we only allow for
 			 * local connections, so if the incoming interface is
-<<<<<<< HEAD
 			 * not the loopback device drop the packet. */
 			if (!(skb->dev->flags & IFF_LOOPBACK)) {
-=======
-			 * not the loopback device drop the packet. Further,
-			 * there is no legitimate reason for setting this from
-			 * userspace so reject it if skb is NULL. */
-			if (skb == NULL || !(skb->dev->flags & IFF_LOOPBACK)) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				err_offset = opt_iter;
 				goto validate_return_locked;
 			}

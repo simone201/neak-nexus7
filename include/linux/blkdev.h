@@ -1149,11 +1149,6 @@ static inline void put_dev_sector(Sector p)
 
 struct work_struct;
 int kblockd_schedule_work(struct request_queue *q, struct work_struct *work);
-<<<<<<< HEAD
-=======
-int kblockd_schedule_delayed_work(struct request_queue *q,
-			struct delayed_work *dwork, unsigned long delay);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #ifdef CONFIG_BLK_CGROUP
 /*

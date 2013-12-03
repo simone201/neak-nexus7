@@ -12,10 +12,6 @@
 #include <linux/etherdevice.h>
 #include <linux/llc.h>
 #include <linux/slab.h>
-<<<<<<< HEAD
-=======
-#include <linux/module.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/llc.h>
 #include <net/llc_pdu.h>
 #include <net/stp.h>

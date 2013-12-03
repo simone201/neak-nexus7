@@ -452,11 +452,7 @@ static int stop_machine_cpu_stop(void *data)
 		is_active = cpu == cpumask_first(cpu_online_mask);
 	else
 		is_active = cpumask_test_cpu(cpu, smdata->active_cpus);
-<<<<<<< HEAD
 	pr_debug("stop_machine_cpu_stop smp=%u\n",cpu);
-=======
-	printk("stop_machine_cpu_stop smp=%u\n",cpu);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/* Simple state machine */
 	do {
 		/* Chill out and ensure we re-read stopmachine_state. */

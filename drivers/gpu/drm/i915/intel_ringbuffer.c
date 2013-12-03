@@ -287,11 +287,8 @@ static int init_render_ring(struct intel_ring_buffer *ring)
 
 	if (INTEL_INFO(dev)->gen > 3) {
 		int mode = VS_TIMER_DISPATCH << 16 | VS_TIMER_DISPATCH;
-<<<<<<< HEAD
 		if (IS_GEN6(dev) || IS_GEN7(dev))
 			mode |= MI_FLUSH_ENABLE << 16 | MI_FLUSH_ENABLE;
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		I915_WRITE(MI_MODE, mode);
 		if (IS_GEN7(dev))
 			I915_WRITE(GFX_MODE_GEN7,

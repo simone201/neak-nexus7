@@ -467,11 +467,7 @@ static void __init build_mem_type_table(void)
 	}
 
 	for (i = 0; i < 16; i++) {
-<<<<<<< HEAD
 		unsigned long v = pgprot_val(protection_map[i]);
-=======
-		pteval_t v = pgprot_val(protection_map[i]);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		protection_map[i] = __pgprot(v | user_pgprot);
 	}
 

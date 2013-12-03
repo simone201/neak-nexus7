@@ -23,23 +23,6 @@ struct input_mt_slot {
 	int abs[ABS_MT_LAST - ABS_MT_FIRST + 1];
 };
 
-<<<<<<< HEAD
-=======
-/**
- * struct input_mt - state of tracked contacts
- * @trkid: stores MT tracking ID for the next contact
- * @num_slots: number of MT slots the device uses
- * @slot: MT slot currently being transmitted
- * @slots: array of slots holding current values of tracked contacts
- */
-struct input_mt {
-	int trkid;
-	int num_slots;
-	int slot;
-	struct input_mt_slot slots[];
-};
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static inline void input_mt_set_value(struct input_mt_slot *slot,
 				      unsigned code, int value)
 {
@@ -55,15 +38,9 @@ static inline int input_mt_get_value(const struct input_mt_slot *slot,
 int input_mt_init_slots(struct input_dev *dev, unsigned int num_slots);
 void input_mt_destroy_slots(struct input_dev *dev);
 
-<<<<<<< HEAD
 static inline int input_mt_new_trkid(struct input_dev *dev)
 {
 	return dev->trkid++ & TRKID_MAX;
-=======
-static inline int input_mt_new_trkid(struct input_mt *mt)
-{
-	return mt->trkid++ & TRKID_MAX;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static inline void input_mt_slot(struct input_dev *dev, int slot)
@@ -71,21 +48,10 @@ static inline void input_mt_slot(struct input_dev *dev, int slot)
 	input_event(dev, EV_ABS, ABS_MT_SLOT, slot);
 }
 
-<<<<<<< HEAD
 static inline bool input_is_mt_axis(int axis)
 {
 	return axis == ABS_MT_SLOT ||
 		(axis >= ABS_MT_FIRST && axis <= ABS_MT_LAST);
-=======
-static inline bool input_is_mt_value(int axis)
-{
-	return axis >= ABS_MT_FIRST && axis <= ABS_MT_LAST;
-}
-
-static inline bool input_is_mt_axis(int axis)
-{
-	return axis == ABS_MT_SLOT || input_is_mt_value(axis);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 void input_mt_report_slot_state(struct input_dev *dev,

@@ -23,10 +23,7 @@
 #include <linux/string.h>
 #include <linux/ctype.h>
 #include <linux/module.h>
-<<<<<<< HEAD
 #include <linux/memcopy.h>
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #ifndef __HAVE_ARCH_STRNICMP
 /**
@@ -600,20 +597,12 @@ EXPORT_SYMBOL(memset);
  */
 void *memcpy(void *dest, const void *src, size_t count)
 {
-<<<<<<< HEAD
 	unsigned long dstp = (unsigned long)dest;
 	unsigned long srcp = (unsigned long)src;
 
 	/* Copy from the beginning to the end */
 	mem_copy_fwd(dstp, srcp, count);
 
-=======
-	char *tmp = dest;
-	const char *s = src;
-
-	while (count--)
-		*tmp++ = *s++;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return dest;
 }
 EXPORT_SYMBOL(memcpy);
@@ -630,7 +619,6 @@ EXPORT_SYMBOL(memcpy);
  */
 void *memmove(void *dest, const void *src, size_t count)
 {
-<<<<<<< HEAD
 	unsigned long dstp = (unsigned long)dest;
     unsigned long srcp = (unsigned long)src;
 	
@@ -640,23 +628,6 @@ void *memmove(void *dest, const void *src, size_t count)
 	} else {
 		/* Copy from the end to the beginning */
     	mem_copy_bwd(dstp, srcp, count);
-=======
-	char *tmp;
-	const char *s;
-
-	if (dest <= src) {
-		tmp = dest;
-		s = src;
-		while (count--)
-			*tmp++ = *s++;
-	} else {
-		tmp = dest;
-		tmp += count;
-		s = src;
-		s += count;
-		while (count--)
-			*--tmp = *--s;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 	return dest;
 }

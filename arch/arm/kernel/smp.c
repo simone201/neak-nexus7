@@ -215,7 +215,6 @@ void __cpu_die(unsigned int cpu)
 		pr_err("CPU%u: cpu didn't die\n", cpu);
 		return;
 	}
-
 	pr_debug(KERN_NOTICE "CPU%u: shutdown\n", cpu);
 
 	if (!platform_cpu_kill(cpu))
@@ -281,11 +280,7 @@ asmlinkage void __cpuinit secondary_start_kernel(void)
 	struct mm_struct *mm = &init_mm;
 	unsigned int cpu = smp_processor_id();
 
-<<<<<<< HEAD
 	pr_debug("CPU%u: Booted secondary processor\n", cpu);
-=======
-	printk("CPU%u: Booted secondary processor\n", cpu);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/*
 	 * All kernel threads share the same mm context; grab a
@@ -563,11 +558,7 @@ static void ipi_cpu_stop(unsigned int cpu)
 		spin_unlock(&stop_lock);
 	}
 
-<<<<<<< HEAD
 	set_cpu_online(cpu, false);
-=======
-	set_cpu_active(cpu, false);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	local_fiq_disable();
 	local_irq_disable();
@@ -696,17 +687,10 @@ void smp_send_stop(void)
 
 	/* Wait up to one second for other CPUs to stop */
 	timeout = USEC_PER_SEC;
-<<<<<<< HEAD
 	while (num_online_cpus() > 1 && timeout--)
 		udelay(1);
 
 	if (num_online_cpus() > 1)
-=======
-	while (num_active_cpus() > 1 && timeout--)
-		udelay(1);
-
-	if (num_active_cpus() > 1)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		pr_warning("SMP: failed to stop secondary CPUs\n");
 }
 

@@ -50,14 +50,6 @@
 # define inline		inline		__attribute__((always_inline))
 # define __inline__	__inline__	__attribute__((always_inline))
 # define __inline	__inline	__attribute__((always_inline))
-<<<<<<< HEAD
-=======
-#else
-/* A lot of inline functions can cause havoc with function tracing */
-# define inline		inline		notrace
-# define __inline__	__inline__	notrace
-# define __inline	__inline	notrace
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #endif
 
 #define __deprecated			__attribute__((deprecated))

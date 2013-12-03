@@ -1235,12 +1235,6 @@ struct task_struct {
 	const struct sched_class *sched_class;
 	struct sched_entity se;
 	struct sched_rt_entity rt;
-<<<<<<< HEAD
-=======
-#ifdef CONFIG_CGROUP_SCHED
-	struct task_group *sched_task_group;
-#endif
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #ifdef CONFIG_PREEMPT_NOTIFIERS
 	/* list of struct preempt_notifier: */
@@ -1988,11 +1982,8 @@ extern void wake_up_idle_cpu(int cpu);
 static inline void wake_up_idle_cpu(int cpu) { }
 #endif
 
-<<<<<<< HEAD
 extern void force_cpu_resched(int cpu);
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern unsigned int sysctl_sched_latency;
 extern unsigned int sysctl_sched_min_granularity;
 extern unsigned int sysctl_sched_wakeup_granularity;
@@ -2591,20 +2582,7 @@ static inline void thread_group_cputime_init(struct signal_struct *sig)
 extern void recalc_sigpending_and_wake(struct task_struct *t);
 extern void recalc_sigpending(void);
 
-<<<<<<< HEAD
 extern void signal_wake_up(struct task_struct *t, int resume_stopped);
-=======
-extern void signal_wake_up_state(struct task_struct *t, unsigned int state);
-
-static inline void signal_wake_up(struct task_struct *t, bool resume)
-{
-	signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
-}
-static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
-{
-	signal_wake_up_state(t, resume ? __TASK_TRACED : 0);
-}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 /*
  * Wrappers for p->thread_info->cpu access. No-op on UP.
@@ -2656,11 +2634,7 @@ extern int sched_group_set_rt_period(struct task_group *tg,
 extern long sched_group_rt_period(struct task_group *tg);
 extern int sched_rt_can_attach(struct task_group *tg, struct task_struct *tsk);
 #endif
-<<<<<<< HEAD
 #endif
-=======
-#endif /* CONFIG_CGROUP_SCHED */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 extern int task_can_switch_user(struct user_struct *up,
 					struct task_struct *tsk);
@@ -2742,7 +2716,6 @@ static inline unsigned long rlimit_max(unsigned int limit)
 	return task_rlimit_max(current, limit);
 }
 
-<<<<<<< HEAD
 #ifdef CONFIG_CGROUP_TIMER_SLACK
 extern unsigned long task_get_effective_timer_slack(struct task_struct *tsk);
 #else
@@ -2753,8 +2726,6 @@ static inline unsigned long task_get_effective_timer_slack(
 }
 #endif
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #endif /* __KERNEL__ */
 
 #endif

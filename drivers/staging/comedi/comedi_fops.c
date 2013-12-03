@@ -138,12 +138,6 @@ static long comedi_unlocked_ioctl(struct file *file, unsigned int cmd,
 	if (cmd == COMEDI_DEVCONFIG) {
 		rc = do_devconfig_ioctl(dev,
 					(struct comedi_devconfig __user *)arg);
-<<<<<<< HEAD
-=======
-		if (rc == 0)
-			/* Evade comedi_auto_unconfig(). */
-			dev_file_info->hardware_device = NULL;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto done;
 	}
 

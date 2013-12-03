@@ -10,7 +10,6 @@
 #include <linux/linkage.h>
 #include <linux/list.h>
 
-<<<<<<< HEAD
 /* cannot include rcupdate.h here, so open-code this */
 
 #if defined(CONFIG_JRCU)
@@ -35,31 +34,21 @@
 } while (0)
 #endif
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #if defined(CONFIG_DEBUG_PREEMPT) || defined(CONFIG_PREEMPT_TRACER)
   extern void add_preempt_count(int val);
   extern void sub_preempt_count(int val);
 #else
-<<<<<<< HEAD
 # define add_preempt_count(val)	__add_preempt_count(val)
 # define sub_preempt_count(val)	__sub_preempt_count(val)
-=======
-# define add_preempt_count(val)	do { preempt_count() += (val); } while (0)
-# define sub_preempt_count(val)	do { preempt_count() -= (val); } while (0)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #endif
 
 #define inc_preempt_count() add_preempt_count(1)
 #define dec_preempt_count() sub_preempt_count(1)
 
 #define preempt_count()	(current_thread_info()->preempt_count)
-<<<<<<< HEAD
 #ifdef CONFIG_PREEMPT_COUNT_CPU
 extern int preempt_count_cpu(int cpu);
 #endif
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #ifdef CONFIG_PREEMPT
 
@@ -129,7 +118,6 @@ do { \
 
 #else /* !CONFIG_PREEMPT_COUNT */
 
-<<<<<<< HEAD
 #define preempt_disable()		do { } while (0)
 #define preempt_enable_no_resched()	do { } while (0)
 #define preempt_enable()		do { } while (0)
@@ -137,21 +125,6 @@ do { \
 #define preempt_disable_notrace()		do { } while (0)
 #define preempt_enable_no_resched_notrace()	do { } while (0)
 #define preempt_enable_notrace()		do { } while (0)
-=======
-/*
- * Even if we don't have any preemption, we need preempt disable/enable
- * to be barriers, so that we don't have things like get_user/put_user
- * that can cause faults and scheduling migrate into our preempt-protected
- * region.
- */
-#define preempt_disable()		barrier()
-#define preempt_enable_no_resched()	barrier()
-#define preempt_enable()		barrier()
-
-#define preempt_disable_notrace()		barrier()
-#define preempt_enable_no_resched_notrace()	barrier()
-#define preempt_enable_notrace()		barrier()
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #endif /* CONFIG_PREEMPT_COUNT */
 

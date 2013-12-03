@@ -27,17 +27,6 @@
 #include <linux/delay.h>
 #include <linux/stop_machine.h>
 
-<<<<<<< HEAD
-=======
-#define RCU_KTHREAD_PRIO 1
-
-#ifdef CONFIG_RCU_BOOST
-#define RCU_BOOST_PRIO CONFIG_RCU_BOOST_PRIO
-#else
-#define RCU_BOOST_PRIO RCU_KTHREAD_PRIO
-#endif
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * Check the RCU kernel configuration parameters and print informative
  * messages about anything out of the ordinary.  If you like #ifdef, you
@@ -75,11 +64,7 @@ static void __init rcu_bootup_announce_oddness(void)
 
 #ifdef CONFIG_TREE_PREEMPT_RCU
 
-<<<<<<< HEAD
 struct rcu_state rcu_preempt_state = RCU_STATE_INITIALIZER(rcu_preempt_state);
-=======
-struct rcu_state rcu_preempt_state = RCU_STATE_INITIALIZER(rcu_preempt);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 DEFINE_PER_CPU(struct rcu_data, rcu_preempt_data);
 static struct rcu_state *rcu_state = &rcu_preempt_state;
 
@@ -137,17 +122,9 @@ static void rcu_preempt_qs(int cpu)
 {
 	struct rcu_data *rdp = &per_cpu(rcu_preempt_data, cpu);
 
-<<<<<<< HEAD
 	rdp->passed_quiesc_completed = rdp->gpnum - 1;
 	barrier();
 	rdp->passed_quiesc = 1;
-=======
-	rdp->passed_quiesce_gpnum = rdp->gpnum;
-	barrier();
-	if (rdp->passed_quiesce == 0)
-		trace_rcu_grace_period("rcu_preempt", rdp->gpnum, "cpuqs");
-	rdp->passed_quiesce = 1;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	current->rcu_read_unlock_special &= ~RCU_READ_UNLOCK_NEED_QS;
 }
 
@@ -213,14 +190,6 @@ static void rcu_preempt_note_context_switch(int cpu)
 			if (rnp->qsmask & rdp->grpmask)
 				rnp->gp_tasks = &t->rcu_node_entry;
 		}
-<<<<<<< HEAD
-=======
-		trace_rcu_preempt_task(rdp->rsp->name,
-				       t->pid,
-				       (rnp->qsmask & rdp->grpmask)
-				       ? rnp->gpnum
-				       : rnp->gpnum + 1);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		raw_spin_unlock_irqrestore(&rnp->lock, flags);
 	} else if (t->rcu_read_lock_nesting < 0 &&
 		   t->rcu_read_unlock_special) {
@@ -375,11 +344,6 @@ static noinline void rcu_read_unlock_special(struct task_struct *t)
 		smp_mb(); /* ensure expedited fastpath sees end of RCU c-s. */
 		np = rcu_next_node_entry(t, rnp);
 		list_del_init(&t->rcu_node_entry);
-<<<<<<< HEAD
-=======
-		trace_rcu_unlock_preempted_task("rcu_preempt",
-						rnp->gpnum, t->pid);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (&t->rcu_node_entry == rnp->gp_tasks)
 			rnp->gp_tasks = np;
 		if (&t->rcu_node_entry == rnp->exp_tasks)
@@ -400,24 +364,10 @@ static noinline void rcu_read_unlock_special(struct task_struct *t)
 		 * we aren't waiting on any CPUs, report the quiescent state.
 		 * Note that rcu_report_unblock_qs_rnp() releases rnp->lock.
 		 */
-<<<<<<< HEAD
 		if (empty)
 			raw_spin_unlock_irqrestore(&rnp->lock, flags);
 		else
 			rcu_report_unblock_qs_rnp(rnp, flags);
-=======
-		if (!empty && !rcu_preempt_blocked_readers_cgp(rnp)) {
-			trace_rcu_quiescent_state_report("preempt_rcu",
-							 rnp->gpnum,
-							 0, rnp->qsmask,
-							 rnp->level,
-							 rnp->grplo,
-							 rnp->grphi,
-							 !!rnp->gp_tasks);
-			rcu_report_unblock_qs_rnp(rnp, flags);
-		} else
-			raw_spin_unlock_irqrestore(&rnp->lock, flags);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #ifdef CONFIG_RCU_BOOST
 		/* Unboost if we were boosted. */
@@ -449,17 +399,10 @@ void __rcu_read_unlock(void)
 {
 	struct task_struct *t = current;
 
-<<<<<<< HEAD
 	barrier();  /* needed if we ever invoke rcu_read_unlock in rcutree.c */
 	if (t->rcu_read_lock_nesting != 1)
 		--t->rcu_read_lock_nesting;
 	else {
-=======
-	if (t->rcu_read_lock_nesting != 1)
-		--t->rcu_read_lock_nesting;
-	else {
-		barrier();  /* critical section before exit code. */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		t->rcu_read_lock_nesting = INT_MIN;
 		barrier();  /* assign before ->rcu_read_unlock_special load */
 		if (unlikely(ACCESS_ONCE(t->rcu_read_unlock_special)))
@@ -523,7 +466,6 @@ static void rcu_print_detail_task_stall(struct rcu_state *rsp)
  * Scan the current list of tasks blocked within RCU read-side critical
  * sections, printing out the tid of each.
  */
-<<<<<<< HEAD
 static void rcu_print_task_stall(struct rcu_node *rnp)
 {
 	struct task_struct *t;
@@ -534,22 +476,6 @@ static void rcu_print_task_stall(struct rcu_node *rnp)
 		       struct task_struct, rcu_node_entry);
 	list_for_each_entry_continue(t, &rnp->blkd_tasks, rcu_node_entry)
 		printk(" P%d", t->pid);
-=======
-static int rcu_print_task_stall(struct rcu_node *rnp)
-{
-	struct task_struct *t;
-	int ndetected = 0;
-
-	if (!rcu_preempt_blocked_readers_cgp(rnp))
-		return 0;
-	t = list_entry(rnp->gp_tasks,
-		       struct task_struct, rcu_node_entry);
-	list_for_each_entry_continue(t, &rnp->blkd_tasks, rcu_node_entry) {
-		printk(" P%d", t->pid);
-		ndetected++;
-	}
-	return ndetected;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /*
@@ -730,7 +656,6 @@ EXPORT_SYMBOL_GPL(call_rcu);
  */
 void synchronize_rcu(void)
 {
-<<<<<<< HEAD
 	struct rcu_synchronize rcu;
 
 	if (!rcu_scheduler_active)
@@ -743,11 +668,6 @@ void synchronize_rcu(void)
 	/* Wait for it. */
 	wait_for_completion(&rcu.completion);
 	destroy_rcu_head_on_stack(&rcu.head);
-=======
-	if (!rcu_scheduler_active)
-		return;
-	wait_rcu_gp(call_rcu);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 EXPORT_SYMBOL_GPL(synchronize_rcu);
 
@@ -1048,14 +968,8 @@ static void rcu_print_detail_task_stall(struct rcu_state *rsp)
  * Because preemptible RCU does not exist, we never have to check for
  * tasks blocked within RCU read-side critical sections.
  */
-<<<<<<< HEAD
 static void rcu_print_task_stall(struct rcu_node *rnp)
 {
-=======
-static int rcu_print_task_stall(struct rcu_node *rnp)
-{
-	return 0;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /*
@@ -1222,11 +1136,6 @@ static void rcu_initiate_boost_trace(struct rcu_node *rnp)
 
 #endif /* #else #ifdef CONFIG_RCU_TRACE */
 
-<<<<<<< HEAD
-=======
-static struct lock_class_key rcu_boost_class;
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * Carry out RCU priority boosting on the task indicated by ->exp_tasks
  * or ->boost_tasks, advancing the pointer to the next task in the
@@ -1289,12 +1198,6 @@ static int rcu_boost(struct rcu_node *rnp)
 	 */
 	t = container_of(tb, struct task_struct, rcu_node_entry);
 	rt_mutex_init_proxy_locked(&mtx, t);
-<<<<<<< HEAD
-=======
-	/* Avoid lockdep false positives.  This rt_mutex is its own thing. */
-	lockdep_set_class_and_name(&mtx.wait_lock, &rcu_boost_class,
-				   "rcu_boost_mutex");
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	t->rcu_boost_mutex = &mtx;
 	t->rcu_boosted = 1;
 	raw_spin_unlock_irqrestore(&rnp->lock, flags);
@@ -1325,18 +1228,9 @@ static int rcu_boost_kthread(void *arg)
 	int spincnt = 0;
 	int more2boost;
 
-<<<<<<< HEAD
 	for (;;) {
 		rnp->boost_kthread_status = RCU_KTHREAD_WAITING;
 		rcu_wait(rnp->boost_tasks || rnp->exp_tasks);
-=======
-	trace_rcu_utilization("Start boost kthread@init");
-	for (;;) {
-		rnp->boost_kthread_status = RCU_KTHREAD_WAITING;
-		trace_rcu_utilization("End boost kthread@rcu_wait");
-		rcu_wait(rnp->boost_tasks || rnp->exp_tasks);
-		trace_rcu_utilization("Start boost kthread@rcu_wait");
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		rnp->boost_kthread_status = RCU_KTHREAD_RUNNING;
 		more2boost = rcu_boost(rnp);
 		if (more2boost)
@@ -1344,21 +1238,11 @@ static int rcu_boost_kthread(void *arg)
 		else
 			spincnt = 0;
 		if (spincnt > 10) {
-<<<<<<< HEAD
 			rcu_yield(rcu_boost_kthread_timer, (unsigned long)rnp);
-=======
-			trace_rcu_utilization("End boost kthread@rcu_yield");
-			rcu_yield(rcu_boost_kthread_timer, (unsigned long)rnp);
-			trace_rcu_utilization("Start boost kthread@rcu_yield");
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			spincnt = 0;
 		}
 	}
 	/* NOTREACHED */
-<<<<<<< HEAD
-=======
-	trace_rcu_utilization("End boost kthread@notreached");
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return 0;
 }
 
@@ -1459,21 +1343,13 @@ static int __cpuinit rcu_spawn_one_boost_kthread(struct rcu_state *rsp,
 	if (rnp->boost_kthread_task != NULL)
 		return 0;
 	t = kthread_create(rcu_boost_kthread, (void *)rnp,
-<<<<<<< HEAD
 			   "rcub%d", rnp_index);
-=======
-			   "rcub/%d", rnp_index);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (IS_ERR(t))
 		return PTR_ERR(t);
 	raw_spin_lock_irqsave(&rnp->lock, flags);
 	rnp->boost_kthread_task = t;
 	raw_spin_unlock_irqrestore(&rnp->lock, flags);
-<<<<<<< HEAD
 	sp.sched_priority = RCU_KTHREAD_PRIO;
-=======
-	sp.sched_priority = RCU_BOOST_PRIO;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	sched_setscheduler_nocheck(t, SCHED_FIFO, &sp);
 	wake_up_process(t); /* get to TASK_INTERRUPTIBLE quickly. */
 	return 0;
@@ -1568,10 +1444,6 @@ static void rcu_yield(void (*f)(unsigned long), unsigned long arg)
 {
 	struct sched_param sp;
 	struct timer_list yield_timer;
-<<<<<<< HEAD
-=======
-	int prio = current->rt_priority;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	setup_timer_on_stack(&yield_timer, f, arg);
 	mod_timer(&yield_timer, jiffies + 2);
@@ -1579,12 +1451,7 @@ static void rcu_yield(void (*f)(unsigned long), unsigned long arg)
 	sched_setscheduler_nocheck(current, SCHED_NORMAL, &sp);
 	set_user_nice(current, 19);
 	schedule();
-<<<<<<< HEAD
 	sp.sched_priority = RCU_KTHREAD_PRIO;
-=======
-	set_user_nice(current, 0);
-	sp.sched_priority = prio;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	sched_setscheduler_nocheck(current, SCHED_FIFO, &sp);
 	del_timer(&yield_timer);
 }
@@ -1622,12 +1489,7 @@ static int rcu_cpu_kthread_should_stop(int cpu)
 
 /*
  * Per-CPU kernel thread that invokes RCU callbacks.  This replaces the
-<<<<<<< HEAD
  * earlier RCU softirq.
-=======
- * RCU softirq used in flavors and configurations of RCU that do not
- * support RCU priority boosting.
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  */
 static int rcu_cpu_kthread(void *arg)
 {
@@ -1638,18 +1500,9 @@ static int rcu_cpu_kthread(void *arg)
 	char work;
 	char *workp = &per_cpu(rcu_cpu_has_work, cpu);
 
-<<<<<<< HEAD
 	for (;;) {
 		*statusp = RCU_KTHREAD_WAITING;
 		rcu_wait(*workp != 0 || kthread_should_stop());
-=======
-	trace_rcu_utilization("Start CPU kthread@init");
-	for (;;) {
-		*statusp = RCU_KTHREAD_WAITING;
-		trace_rcu_utilization("End CPU kthread@rcu_wait");
-		rcu_wait(*workp != 0 || kthread_should_stop());
-		trace_rcu_utilization("Start CPU kthread@rcu_wait");
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		local_bh_disable();
 		if (rcu_cpu_kthread_should_stop(cpu)) {
 			local_bh_enable();
@@ -1670,21 +1523,11 @@ static int rcu_cpu_kthread(void *arg)
 			spincnt = 0;
 		if (spincnt > 10) {
 			*statusp = RCU_KTHREAD_YIELDING;
-<<<<<<< HEAD
 			rcu_yield(rcu_cpu_kthread_timer, (unsigned long)cpu);
-=======
-			trace_rcu_utilization("End CPU kthread@rcu_yield");
-			rcu_yield(rcu_cpu_kthread_timer, (unsigned long)cpu);
-			trace_rcu_utilization("Start CPU kthread@rcu_yield");
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			spincnt = 0;
 		}
 	}
 	*statusp = RCU_KTHREAD_STOPPED;
-<<<<<<< HEAD
-=======
-	trace_rcu_utilization("End CPU kthread@term");
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return 0;
 }
 
@@ -1717,14 +1560,7 @@ static int __cpuinit rcu_spawn_one_cpu_kthread(int cpu)
 	if (!rcu_scheduler_fully_active ||
 	    per_cpu(rcu_cpu_kthread_task, cpu) != NULL)
 		return 0;
-<<<<<<< HEAD
 	t = kthread_create(rcu_cpu_kthread, (void *)(long)cpu, "rcuc%d", cpu);
-=======
-	t = kthread_create_on_node(rcu_cpu_kthread,
-				   (void *)(long)cpu,
-				   cpu_to_node(cpu),
-				   "rcuc/%d", cpu);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (IS_ERR(t))
 		return PTR_ERR(t);
 	if (cpu_online(cpu))
@@ -1833,11 +1669,7 @@ static int __cpuinit rcu_spawn_one_node_kthread(struct rcu_state *rsp,
 		return 0;
 	if (rnp->node_kthread_task == NULL) {
 		t = kthread_create(rcu_node_kthread, (void *)rnp,
-<<<<<<< HEAD
 				   "rcun%d", rnp_index);
-=======
-				   "rcun/%d", rnp_index);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (IS_ERR(t))
 			return PTR_ERR(t);
 		raw_spin_lock_irqsave(&rnp->lock, flags);
@@ -2075,7 +1907,6 @@ int rcu_needs_cpu(int cpu)
 	return rcu_needs_cpu_quick_check(cpu);
 }
 
-<<<<<<< HEAD
 /*
  * Check to see if we need to continue a callback-flush operations to
  * allow the last CPU to enter dyntick-idle mode.  But fast dyntick-idle
@@ -2085,8 +1916,6 @@ static void rcu_needs_cpu_flush(void)
 {
 }
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #else /* #if !defined(CONFIG_RCU_FAST_NO_HZ) */
 
 #define RCU_NEEDS_CPU_FLUSHES 5
@@ -2162,7 +1991,6 @@ int rcu_needs_cpu(int cpu)
 	return c;
 }
 
-<<<<<<< HEAD
 /*
  * Check to see if we need to continue a callback-flush operations to
  * allow the last CPU to enter dyntick-idle mode.
@@ -2179,6 +2007,4 @@ static void rcu_needs_cpu_flush(void)
 	local_irq_restore(flags);
 }
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #endif /* #else #if !defined(CONFIG_RCU_FAST_NO_HZ) */

@@ -206,16 +206,12 @@ dst_feature(const struct dst_entry *dst, u32 feature)
 
 static inline u32 dst_mtu(const struct dst_entry *dst)
 {
-<<<<<<< HEAD
 	u32 mtu = dst_metric_raw(dst, RTAX_MTU);
 
 	if (!mtu)
 		mtu = dst->ops->default_mtu(dst);
 
 	return mtu;
-=======
-	return dst->ops->mtu(dst);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /* RTT metrics are stored in milliseconds for user ABI, but used as jiffies */

@@ -234,10 +234,6 @@
 #define PCI_DEVICE_ID_INTEL_IVYBRIDGE_M_GT2_IG		0x0166
 #define PCI_DEVICE_ID_INTEL_IVYBRIDGE_S_HB		0x0158  /* Server */
 #define PCI_DEVICE_ID_INTEL_IVYBRIDGE_S_GT1_IG		0x015A
-<<<<<<< HEAD
-=======
-#define PCI_DEVICE_ID_INTEL_IVYBRIDGE_S_GT2_IG		0x016A
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 int intel_gmch_probe(struct pci_dev *pdev,
 			       struct agp_bridge_data *bridge);

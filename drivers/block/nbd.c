@@ -445,17 +445,6 @@ static void nbd_clear_que(struct nbd_device *lo)
 		req->errors++;
 		nbd_end_request(req);
 	}
-<<<<<<< HEAD
-=======
-
-	while (!list_empty(&lo->waiting_queue)) {
-		req = list_entry(lo->waiting_queue.next, struct request,
-				 queuelist);
-		list_del_init(&req->queuelist);
-		req->errors++;
-		nbd_end_request(req);
-	}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 
@@ -606,10 +595,6 @@ static int __nbd_ioctl(struct block_device *bdev, struct nbd_device *lo,
 		lo->file = NULL;
 		nbd_clear_que(lo);
 		BUG_ON(!list_empty(&lo->queue_head));
-<<<<<<< HEAD
-=======
-		BUG_ON(!list_empty(&lo->waiting_queue));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (file)
 			fput(file);
 		return 0;

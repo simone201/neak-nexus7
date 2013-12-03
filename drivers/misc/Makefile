@@ -59,8 +59,5 @@ obj-$(CONFIG_BCM4330_RFKILL)	+= bcm4330_rfkill.o
 obj-$(CONFIG_TEGRA_CRYPTO_DEV)	+= tegra-cryptodev.o
 obj-$(CONFIG_TEGRA_BB_SUPPORT)	+= tegra-baseband/
 obj-$(CONFIG_MAX1749_VIBRATOR)	+= max1749.o
-<<<<<<< HEAD
 obj-$(CONFIG_FSYNC_CONTROL) 	+= fsync_control.o
 obj-y				+= tegra_hotplug_control.o
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a

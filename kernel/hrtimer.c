@@ -61,10 +61,6 @@
 DEFINE_PER_CPU(struct hrtimer_cpu_base, hrtimer_bases) =
 {
 
-<<<<<<< HEAD
-=======
-	.lock = __RAW_SPIN_LOCK_UNLOCKED(hrtimer_bases.lock),
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.clock_base =
 	{
 		{
@@ -301,13 +297,6 @@ ktime_t ktime_sub_ns(const ktime_t kt, u64 nsec)
 	} else {
 		unsigned long rem = do_div(nsec, NSEC_PER_SEC);
 
-<<<<<<< HEAD
-=======
-		/* Make sure nsec fits into long */
-		if (unlikely(nsec > KTIME_SEC_MAX))
-			return (ktime_t){ .tv64 = KTIME_MAX };
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		tmp = ktime_set((long)nsec, rem);
 	}
 
@@ -1309,11 +1298,6 @@ retry:
 
 				expires = ktime_sub(hrtimer_get_expires(timer),
 						    base->offset);
-<<<<<<< HEAD
-=======
-				if (expires.tv64 < 0)
-					expires.tv64 = KTIME_MAX;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				if (expires.tv64 < expires_next.tv64)
 					expires_next = expires;
 				break;
@@ -1580,11 +1564,7 @@ long hrtimer_nanosleep(struct timespec *rqtp, struct timespec __user *rmtp,
 	int ret = 0;
 	unsigned long slack;
 
-<<<<<<< HEAD
 	slack = task_get_effective_timer_slack(current);
-=======
-	slack = current->timer_slack_ns;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (rt_task(current))
 		slack = 0;
 
@@ -1639,11 +1619,8 @@ static void __cpuinit init_hrtimers_cpu(int cpu)
 	struct hrtimer_cpu_base *cpu_base = &per_cpu(hrtimer_bases, cpu);
 	int i;
 
-<<<<<<< HEAD
 	raw_spin_lock_init(&cpu_base->lock);
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	for (i = 0; i < HRTIMER_MAX_CLOCK_BASES; i++) {
 		cpu_base->clock_base[i].cpu_base = cpu_base;
 		timerqueue_init_head(&cpu_base->clock_base[i].active);

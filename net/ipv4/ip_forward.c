@@ -84,11 +84,7 @@ int ip_forward(struct sk_buff *skb)
 
 	rt = skb_rtable(skb);
 
-<<<<<<< HEAD
 	if (opt->is_strictroute && ip_hdr(skb)->daddr != rt->rt_gateway)
-=======
-	if (opt->is_strictroute && opt->nexthop != rt->rt_gateway)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto sr_failed;
 
 	if (unlikely(skb->len > dst_mtu(&rt->dst) && !skb_is_gso(skb) &&

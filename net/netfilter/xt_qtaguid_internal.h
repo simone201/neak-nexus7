@@ -179,7 +179,6 @@ struct data_counters {
 	struct byte_packet_counters bpc[IFS_MAX_COUNTER_SETS][IFS_MAX_DIRECTIONS][IFS_MAX_PROTOS];
 };
 
-<<<<<<< HEAD
 static inline uint64_t dc_sum_bytes(struct data_counters *counters,
 				    int set,
 				    enum ifs_tx_rx direction)
@@ -199,8 +198,6 @@ static inline uint64_t dc_sum_packets(struct data_counters *counters,
 }
 
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /* Generic X based nodes used as a base for rb_tree ops */
 struct tag_node {
 	struct rb_node node;
@@ -225,11 +222,7 @@ struct iface_stat {
 	struct net_device *net_dev;
 
 	struct byte_packet_counters totals_via_dev[IFS_MAX_DIRECTIONS];
-<<<<<<< HEAD
 	struct data_counters totals_via_skb;
-=======
-	struct byte_packet_counters totals_via_skb[IFS_MAX_DIRECTIONS];
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/*
 	 * We keep the last_known, because some devices reset their counters
 	 * just before NETDEV_UP, while some will reset just before

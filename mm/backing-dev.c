@@ -316,11 +316,7 @@ static void wakeup_timer_fn(unsigned long data)
 	if (bdi->wb.task) {
 		trace_writeback_wake_thread(bdi);
 		wake_up_process(bdi->wb.task);
-<<<<<<< HEAD
 	} else {
-=======
-	} else if (bdi->dev) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		/*
 		 * When bdi tasks are inactive for long time, they are killed.
 		 * In this case we have to wake-up the forker thread which
@@ -586,11 +582,6 @@ EXPORT_SYMBOL(bdi_register_dev);
  */
 static void bdi_wb_shutdown(struct backing_dev_info *bdi)
 {
-<<<<<<< HEAD
-=======
-	struct task_struct *task;
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (!bdi_cap_writeback_dirty(bdi))
 		return;
 
@@ -611,20 +602,9 @@ static void bdi_wb_shutdown(struct backing_dev_info *bdi)
 	 * unfreeze of the thread before calling kthread_stop(), otherwise
 	 * it would never exet if it is currently stuck in the refrigerator.
 	 */
-<<<<<<< HEAD
 	if (bdi->wb.task) {
 		thaw_process(bdi->wb.task);
 		kthread_stop(bdi->wb.task);
-=======
-	spin_lock_bh(&bdi->wb_lock);
-	task = bdi->wb.task;
-	bdi->wb.task = NULL;
-	spin_unlock_bh(&bdi->wb_lock);
-
-	if (task) {
-		thaw_process(task);
-		kthread_stop(task);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 }
 
@@ -645,13 +625,7 @@ static void bdi_prune_sb(struct backing_dev_info *bdi)
 
 void bdi_unregister(struct backing_dev_info *bdi)
 {
-<<<<<<< HEAD
 	if (bdi->dev) {
-=======
-	struct device *dev = bdi->dev;
-
-	if (dev) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		bdi_set_min_ratio(bdi, 0);
 		trace_writeback_bdi_unregister(bdi);
 		bdi_prune_sb(bdi);
@@ -660,17 +634,8 @@ void bdi_unregister(struct backing_dev_info *bdi)
 		if (!bdi_cap_flush_forker(bdi))
 			bdi_wb_shutdown(bdi);
 		bdi_debug_unregister(bdi);
-<<<<<<< HEAD
 		device_unregister(bdi->dev);
 		bdi->dev = NULL;
-=======
-
-		spin_lock_bh(&bdi->wb_lock);
-		bdi->dev = NULL;
-		spin_unlock_bh(&bdi->wb_lock);
-
-		device_unregister(dev);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 }
 EXPORT_SYMBOL(bdi_unregister);

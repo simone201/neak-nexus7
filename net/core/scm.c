@@ -173,11 +173,7 @@ int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *p)
 			if (err)
 				goto error;
 
-<<<<<<< HEAD
 			if (pid_vnr(p->pid) != p->creds.pid) {
-=======
-			if (!p->pid || pid_vnr(p->pid) != p->creds.pid) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				struct pid *pid;
 				err = -ESRCH;
 				pid = find_get_pid(p->creds.pid);
@@ -187,14 +183,8 @@ int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *p)
 				p->pid = pid;
 			}
 
-<<<<<<< HEAD
 			if ((p->cred->euid != p->creds.uid) ||
 				(p->cred->egid != p->creds.gid)) {
-=======
-			if (!p->cred ||
-			    (p->cred->euid != p->creds.uid) ||
-			    (p->cred->egid != p->creds.gid)) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				struct cred *cred;
 				err = -ENOMEM;
 				cred = prepare_creds();
@@ -203,12 +193,7 @@ int __scm_send(struct socket *sock, struct msghdr *msg, struct scm_cookie *p)
 
 				cred->uid = cred->euid = p->creds.uid;
 				cred->gid = cred->egid = p->creds.gid;
-<<<<<<< HEAD
 				put_cred(p->cred);
-=======
-				if (p->cred)
-					put_cred(p->cred);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				p->cred = cred;
 			}
 			break;

@@ -42,13 +42,8 @@ struct ipc_namespace {
 
 	size_t		shm_ctlmax;
 	size_t		shm_ctlall;
-<<<<<<< HEAD
 	int		shm_ctlmni;
 	int		shm_tot;
-=======
-	unsigned long	shm_tot;
-	int		shm_ctlmni;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/*
 	 * Defines whether IPC_RMID is forced for _all_ shm segments regardless
 	 * of shmctl()

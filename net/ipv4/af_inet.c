@@ -239,17 +239,8 @@ EXPORT_SYMBOL(inet_listen);
 u32 inet_ehash_secret __read_mostly;
 EXPORT_SYMBOL(inet_ehash_secret);
 
-<<<<<<< HEAD
 /*
  * inet_ehash_secret must be set exactly once
-=======
-u32 ipv6_hash_secret __read_mostly;
-EXPORT_SYMBOL(ipv6_hash_secret);
-
-/*
- * inet_ehash_secret must be set exactly once, and to a non nul value
- * ipv6_hash_secret must be set exactly once.
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  */
 void build_ehash_secret(void)
 {
@@ -259,12 +250,7 @@ void build_ehash_secret(void)
 		get_random_bytes(&rnd, sizeof(rnd));
 	} while (rnd == 0);
 
-<<<<<<< HEAD
 	cmpxchg(&inet_ehash_secret, 0, rnd);
-=======
-	if (cmpxchg(&inet_ehash_secret, 0, rnd) == 0)
-		get_random_bytes(&ipv6_hash_secret, sizeof(ipv6_hash_secret));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 EXPORT_SYMBOL(build_ehash_secret);
 
@@ -925,11 +911,7 @@ int inet_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg)
 EXPORT_SYMBOL(inet_ioctl);
 
 #ifdef CONFIG_COMPAT
-<<<<<<< HEAD
 int inet_compat_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg)
-=======
-static int inet_compat_ioctl(struct socket *sock, unsigned int cmd, unsigned long arg)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	struct sock *sk = sock->sk;
 	int err = -ENOIOCTLCMD;
@@ -1577,11 +1559,7 @@ static const struct net_protocol udp_protocol = {
 
 static const struct net_protocol icmp_protocol = {
 	.handler =	icmp_rcv,
-<<<<<<< HEAD
 	.err_handler =	ping_v4_err,
-=======
-	.err_handler =	ping_err,
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.no_policy =	1,
 	.netns_ok =	1,
 };

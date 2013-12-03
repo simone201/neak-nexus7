@@ -175,14 +175,7 @@ static int load_misc_binary(struct linux_binprm *bprm, struct pt_regs *regs)
 		goto _error;
 	bprm->argc ++;
 
-<<<<<<< HEAD
 	bprm->interp = iname;	/* for binfmt_script */
-=======
-	/* Update interp in case binfmt_script needs it. */
-	retval = bprm_change_interp(iname, bprm);
-	if (retval < 0)
-		goto _error;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	interp_file = open_exec (iname);
 	retval = PTR_ERR (interp_file);

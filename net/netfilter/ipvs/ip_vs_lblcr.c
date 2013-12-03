@@ -112,15 +112,10 @@ ip_vs_dest_set_insert(struct ip_vs_dest_set *set, struct ip_vs_dest *dest)
 	}
 
 	e = kmalloc(sizeof(*e), GFP_ATOMIC);
-<<<<<<< HEAD
 	if (e == NULL) {
 		pr_err("%s(): no memory\n", __func__);
 		return NULL;
 	}
-=======
-	if (e == NULL)
-		return NULL;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	atomic_inc(&dest->refcnt);
 	e->dest = dest;
@@ -378,15 +373,10 @@ ip_vs_lblcr_new(struct ip_vs_lblcr_table *tbl, const union nf_inet_addr *daddr,
 	en = ip_vs_lblcr_get(dest->af, tbl, daddr);
 	if (!en) {
 		en = kmalloc(sizeof(*en), GFP_ATOMIC);
-<<<<<<< HEAD
 		if (!en) {
 			pr_err("%s(): no memory\n", __func__);
 			return NULL;
 		}
-=======
-		if (!en)
-			return NULL;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		en->af = dest->af;
 		ip_vs_addr_copy(dest->af, &en->addr, daddr);
@@ -526,16 +516,10 @@ static int ip_vs_lblcr_init_svc(struct ip_vs_service *svc)
 	 *    Allocate the ip_vs_lblcr_table for this service
 	 */
 	tbl = kmalloc(sizeof(*tbl), GFP_ATOMIC);
-<<<<<<< HEAD
 	if (tbl == NULL) {
 		pr_err("%s(): no memory\n", __func__);
 		return -ENOMEM;
 	}
-=======
-	if (tbl == NULL)
-		return -ENOMEM;
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	svc->sched_data = tbl;
 	IP_VS_DBG(6, "LBLCR hash table (memory=%Zdbytes) allocated for "
 		  "current service\n", sizeof(*tbl));

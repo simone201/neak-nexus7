@@ -1280,14 +1280,8 @@ static int rcutorture_booster_init(int cpu)
 	/* Don't allow time recalculation while creating a new task. */
 	mutex_lock(&boost_mutex);
 	VERBOSE_PRINTK_STRING("Creating rcu_torture_boost task");
-<<<<<<< HEAD
 	boost_tasks[cpu] = kthread_create(rcu_torture_boost, NULL,
 					  "rcu_torture_boost");
-=======
-	boost_tasks[cpu] = kthread_create_on_node(rcu_torture_boost, NULL,
-						  cpu_to_node(cpu),
-						  "rcu_torture_boost");
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (IS_ERR(boost_tasks[cpu])) {
 		retval = PTR_ERR(boost_tasks[cpu]);
 		VERBOSE_PRINTK_STRING("rcu_torture_boost task create failed");

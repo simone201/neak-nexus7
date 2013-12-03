@@ -162,20 +162,14 @@ static int idletimer_tg_create(struct idletimer_tg_info *info)
 
 	info->timer = kmalloc(sizeof(*info->timer), GFP_KERNEL);
 	if (!info->timer) {
-<<<<<<< HEAD
 		pr_debug("couldn't alloc timer\n");
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		ret = -ENOMEM;
 		goto out;
 	}
 
 	info->timer->attr.attr.name = kstrdup(info->label, GFP_KERNEL);
 	if (!info->timer->attr.attr.name) {
-<<<<<<< HEAD
 		pr_debug("couldn't alloc attribute name\n");
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		ret = -ENOMEM;
 		goto out_free_timer;
 	}

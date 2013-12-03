@@ -134,10 +134,6 @@ static inline void make_migration_entry_read(swp_entry_t *entry)
 
 extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
 					unsigned long address);
-<<<<<<< HEAD
-=======
-extern void migration_entry_wait_huge(struct mm_struct *mm, pte_t *pte);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #else
 
 #define make_migration_entry(page, write) swp_entry(0, 0)
@@ -149,11 +145,6 @@ static inline int is_migration_entry(swp_entry_t swp)
 static inline void make_migration_entry_read(swp_entry_t *entryp) { }
 static inline void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
 					 unsigned long address) { }
-<<<<<<< HEAD
-=======
-static inline void migration_entry_wait_huge(struct mm_struct *mm,
-					pte_t *pte) { }
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static inline int is_write_migration_entry(swp_entry_t entry)
 {
 	return 0;

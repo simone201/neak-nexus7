@@ -1386,11 +1386,6 @@ static int irda_recvmsg_dgram(struct kiocb *iocb, struct socket *sock,
 
 	IRDA_DEBUG(4, "%s()\n", __func__);
 
-<<<<<<< HEAD
-=======
-	msg->msg_namelen = 0;
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	skb = skb_recv_datagram(sk, flags & ~MSG_DONTWAIT,
 				flags & MSG_DONTWAIT, &err);
 	if (!skb)

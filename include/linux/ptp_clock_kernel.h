@@ -50,12 +50,7 @@ struct ptp_clock_request {
  * clock operations
  *
  * @adjfreq:  Adjusts the frequency of the hardware clock.
-<<<<<<< HEAD
  *            parameter delta: Desired period change in parts per billion.
-=======
- *            parameter delta: Desired frequency offset from nominal frequency
- *            in parts per billion
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  *
  * @adjtime:  Shifts the time of the hardware clock.
  *            parameter delta: Desired change in nanoseconds.

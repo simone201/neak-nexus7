@@ -54,11 +54,7 @@ static struct dentry *proc_ns_instantiate(struct inode *dir,
 	ei->ns_ops    = ns_ops;
 	ei->ns	      = ns;
 
-<<<<<<< HEAD
 	dentry->d_op = &pid_dentry_operations;
-=======
-	d_set_d_op(dentry, &pid_dentry_operations);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	d_add(dentry, inode);
 	/* Close the race of the process dying before we return the dentry */
 	if (pid_revalidate(dentry, NULL))

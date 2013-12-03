@@ -74,16 +74,10 @@ register_ip_vs_proto_netns(struct net *net, struct ip_vs_protocol *pp)
 	struct ip_vs_proto_data *pd =
 			kzalloc(sizeof(struct ip_vs_proto_data), GFP_ATOMIC);
 
-<<<<<<< HEAD
 	if (!pd) {
 		pr_err("%s(): no memory.\n", __func__);
 		return -ENOMEM;
 	}
-=======
-	if (!pd)
-		return -ENOMEM;
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	pd->pp = pp;	/* For speed issues */
 	pd->next = ipvs->proto_data_table[hash];
 	ipvs->proto_data_table[hash] = pd;

@@ -1012,42 +1012,6 @@ int unlock_extent(struct extent_io_tree *tree, u64 start, u64 end, gfp_t mask)
 				mask);
 }
 
-<<<<<<< HEAD
-=======
-int extent_range_clear_dirty_for_io(struct inode *inode, u64 start, u64 end)
-{
-	unsigned long index = start >> PAGE_CACHE_SHIFT;
-	unsigned long end_index = end >> PAGE_CACHE_SHIFT;
-	struct page *page;
-
-	while (index <= end_index) {
-		page = find_get_page(inode->i_mapping, index);
-		BUG_ON(!page); /* Pages should be in the extent_io_tree */
-		clear_page_dirty_for_io(page);
-		page_cache_release(page);
-		index++;
-	}
-	return 0;
-}
-
-int extent_range_redirty_for_io(struct inode *inode, u64 start, u64 end)
-{
-	unsigned long index = start >> PAGE_CACHE_SHIFT;
-	unsigned long end_index = end >> PAGE_CACHE_SHIFT;
-	struct page *page;
-
-	while (index <= end_index) {
-		page = find_get_page(inode->i_mapping, index);
-		BUG_ON(!page); /* Pages should be in the extent_io_tree */
-		account_page_redirty(page);
-		__set_page_dirty_nobuffers(page);
-		page_cache_release(page);
-		index++;
-	}
-	return 0;
-}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * helper function to set both pages and extents in the tree writeback
  */

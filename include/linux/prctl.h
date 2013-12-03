@@ -102,13 +102,10 @@
 
 #define PR_MCE_KILL_GET 34
 
-<<<<<<< HEAD
 /*
  * Get effective timerslack value for the process.
  * It can be higher than PR_GET_TIMERSLACK.
  */
 #define PR_GET_EFFECTIVE_TIMERSLACK 35
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #endif /* _LINUX_PRCTL_H */

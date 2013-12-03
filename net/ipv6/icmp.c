@@ -55,10 +55,7 @@
 
 #include <net/ipv6.h>
 #include <net/ip6_checksum.h>
-<<<<<<< HEAD
 #include <net/ping.h>
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/protocol.h>
 #include <net/raw.h>
 #include <net/rawv6.h>
@@ -84,7 +81,6 @@ static inline struct sock *icmpv6_sk(struct net *net)
 	return net->ipv6.icmp_sk[smp_processor_id()];
 }
 
-<<<<<<< HEAD
 static void icmpv6_err(struct sk_buff *skb, struct inet6_skb_parm *opt,
 		       u8 type, u8 code, int offset, __be32 info)
 {
@@ -96,16 +92,11 @@ static void icmpv6_err(struct sk_buff *skb, struct inet6_skb_parm *opt,
 			ping_err(skb, offset, info);
 }
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static int icmpv6_rcv(struct sk_buff *skb);
 
 static const struct inet6_protocol icmpv6_protocol = {
 	.handler	=	icmpv6_rcv,
-<<<<<<< HEAD
 	.err_handler	=	icmpv6_err,
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	.flags		=	INET6_PROTO_NOPOLICY|INET6_PROTO_FINAL,
 };
 
@@ -239,12 +230,8 @@ static __inline__ int opt_unrec(struct sk_buff *skb, __u32 offset)
 	return (*op & 0xC0) == 0x80;
 }
 
-<<<<<<< HEAD
 int icmpv6_push_pending_frames(struct sock *sk, struct flowi6 *fl6,
 			       struct icmp6hdr *thdr, int len)
-=======
-static int icmpv6_push_pending_frames(struct sock *sk, struct flowi6 *fl6, struct icmp6hdr *thdr, int len)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	struct sk_buff *skb;
 	struct icmp6hdr *icmp6h;
@@ -327,13 +314,8 @@ static void mip6_addr_swap(struct sk_buff *skb)
 static inline void mip6_addr_swap(struct sk_buff *skb) {}
 #endif
 
-<<<<<<< HEAD
 struct dst_entry *icmpv6_route_lookup(struct net *net, struct sk_buff *skb,
 				      struct sock *sk, struct flowi6 *fl6)
-=======
-static struct dst_entry *icmpv6_route_lookup(struct net *net, struct sk_buff *skb,
-					     struct sock *sk, struct flowi6 *fl6)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	struct dst_entry *dst, *dst2;
 	struct flowi6 fl2;
@@ -627,11 +609,7 @@ out:
 	icmpv6_xmit_unlock(sk);
 }
 
-<<<<<<< HEAD
 void icmpv6_notify(struct sk_buff *skb, u8 type, u8 code, __be32 info)
-=======
-static void icmpv6_notify(struct sk_buff *skb, u8 type, u8 code, __be32 info)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	const struct inet6_protocol *ipprot;
 	int inner_offset;
@@ -722,12 +700,8 @@ static int icmpv6_rcv(struct sk_buff *skb)
 		skb->csum = ~csum_unfold(csum_ipv6_magic(saddr, daddr, skb->len,
 					     IPPROTO_ICMPV6, 0));
 		if (__skb_checksum_complete(skb)) {
-<<<<<<< HEAD
 			LIMIT_NETDEBUG(KERN_DEBUG
 				       "ICMPv6 checksum failed [%pI6c > %pI6c]\n",
-=======
-			LIMIT_NETDEBUG(KERN_DEBUG "ICMPv6 checksum failed [%pI6 > %pI6]\n",
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				       saddr, daddr);
 			goto discard_it;
 		}
@@ -748,11 +722,7 @@ static int icmpv6_rcv(struct sk_buff *skb)
 		break;
 
 	case ICMPV6_ECHO_REPLY:
-<<<<<<< HEAD
 		ping_rcv(skb);
-=======
-		/* we couldn't care less */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		break;
 
 	case ICMPV6_PKT_TOOBIG:
@@ -885,12 +855,8 @@ static int __net_init icmpv6_sk_init(struct net *net)
 		/* Enough space for 2 64K ICMP packets, including
 		 * sk_buff struct overhead.
 		 */
-<<<<<<< HEAD
 		sk->sk_sndbuf =
 			(2 * ((64 * 1024) + sizeof(struct sk_buff)));
-=======
-		sk->sk_sndbuf = 2 * SKB_TRUESIZE(64 * 1024);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 	return 0;
 

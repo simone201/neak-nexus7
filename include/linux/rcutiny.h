@@ -31,19 +31,6 @@ static inline void rcu_init(void)
 {
 }
 
-<<<<<<< HEAD
-=======
-static inline void rcu_barrier_bh(void)
-{
-	wait_rcu_gp(call_rcu_bh);
-}
-
-static inline void rcu_barrier_sched(void)
-{
-	wait_rcu_gp(call_rcu_sched);
-}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #ifdef CONFIG_TINY_RCU
 
 static inline void synchronize_rcu_expedited(void)
@@ -58,19 +45,9 @@ static inline void rcu_barrier(void)
 
 #else /* #ifdef CONFIG_TINY_RCU */
 
-<<<<<<< HEAD
 void rcu_barrier(void);
 void synchronize_rcu_expedited(void);
 
-=======
-void synchronize_rcu_expedited(void);
-
-static inline void rcu_barrier(void)
-{
-	wait_rcu_gp(call_rcu);
-}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #endif /* #else #ifdef CONFIG_TINY_RCU */
 
 static inline void synchronize_rcu_bh(void)

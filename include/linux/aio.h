@@ -139,10 +139,6 @@ struct kiocb {
 		(x)->ki_dtor = NULL;			\
 		(x)->ki_obj.tsk = tsk;			\
 		(x)->ki_user_data = 0;                  \
-<<<<<<< HEAD
-=======
-		(x)->private = NULL;			\
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	} while (0)
 
 #define AIO_RING_MAGIC			0xa10a10a1

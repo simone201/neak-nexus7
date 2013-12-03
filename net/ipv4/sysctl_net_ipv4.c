@@ -552,16 +552,6 @@ static struct ctl_table ipv4_table[] = {
 		.mode		= 0644,
 		.proc_handler	= proc_dointvec
 	},
-<<<<<<< HEAD
-=======
-	{
-		.procname	= "tcp_challenge_ack_limit",
-		.data		= &sysctl_tcp_challenge_ack_limit,
-		.maxlen		= sizeof(int),
-		.mode		= 0644,
-		.proc_handler	= proc_dointvec
-	},
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #ifdef CONFIG_NET_DMA
 	{
 		.procname	= "tcp_dma_copybreak",

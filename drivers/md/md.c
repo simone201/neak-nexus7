@@ -1585,13 +1585,8 @@ static int super_1_load(mdk_rdev_t *rdev, mdk_rdev_t *refdev, int minor_version)
 					     sector, count, 1) == 0)
 				return -EINVAL;
 		}
-<<<<<<< HEAD
 	} else if (sb->bblog_offset == 0)
 		rdev->badblocks.shift = -1;
-=======
-	} else if (sb->bblog_offset != 0)
-		rdev->badblocks.shift = 0;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (!refdev) {
 		ret = 1;
@@ -3058,11 +3053,7 @@ int md_rdev_init(mdk_rdev_t *rdev)
 	 * be used - I wonder if that matters
 	 */
 	rdev->badblocks.count = 0;
-<<<<<<< HEAD
 	rdev->badblocks.shift = 0;
-=======
-	rdev->badblocks.shift = -1; /* disabled until explicitly enabled */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	rdev->badblocks.page = kmalloc(PAGE_SIZE, GFP_KERNEL);
 	seqlock_init(&rdev->badblocks.lock);
 	if (rdev->badblocks.page == NULL)
@@ -3134,12 +3125,9 @@ static mdk_rdev_t *md_import_device(dev_t newdev, int super_format, int super_mi
 			goto abort_free;
 		}
 	}
-<<<<<<< HEAD
 	if (super_format == -1)
 		/* hot-add for 0.90, or non-persistent: so no badblocks */
 		rdev->badblocks.shift = -1;
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return rdev;
 

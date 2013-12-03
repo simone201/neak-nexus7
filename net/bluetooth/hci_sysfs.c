@@ -5,10 +5,6 @@
 #include <linux/init.h>
 #include <linux/debugfs.h>
 #include <linux/seq_file.h>
-<<<<<<< HEAD
-=======
-#include <linux/module.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #include <net/bluetooth/bluetooth.h>
 #include <net/bluetooth/hci_core.h>

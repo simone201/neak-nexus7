@@ -608,18 +608,9 @@ struct address_space_operations {
 			loff_t offset, unsigned long nr_segs);
 	int (*get_xip_mem)(struct address_space *, pgoff_t, int,
 						void **, unsigned long *);
-<<<<<<< HEAD
 	/* migrate the contents of a page to the specified target */
 	int (*migratepage) (struct address_space *,
 			struct page *, struct page *);
-=======
-	/*
-	 * migrate the contents of a page to the specified target. If sync
-	 * is false, it must not block.
-	 */
-	int (*migratepage) (struct address_space *,
-			struct page *, struct page *, bool);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	int (*launder_page) (struct page *);
 	int (*is_partially_uptodate) (struct page *, read_descriptor_t *,
 					unsigned long);
@@ -2062,10 +2053,6 @@ extern void unregister_blkdev(unsigned int, const char *);
 extern struct block_device *bdget(dev_t);
 extern struct block_device *bdgrab(struct block_device *bdev);
 extern void bd_set_size(struct block_device *, loff_t size);
-<<<<<<< HEAD
-=======
-extern sector_t blkdev_max_block(struct block_device *bdev);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern void bd_forget(struct inode *inode);
 extern void bdput(struct block_device *);
 extern void invalidate_bdev(struct block_device *);
@@ -2090,10 +2077,7 @@ static inline int thaw_bdev(struct block_device *bdev, struct super_block *sb)
 }
 #endif
 extern int sync_filesystem(struct super_block *);
-<<<<<<< HEAD
 extern void sync_filesystems(int wait);
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern const struct file_operations def_blk_fops;
 extern const struct file_operations def_chr_fops;
 extern const struct file_operations bad_sock_fops;
@@ -2561,11 +2545,7 @@ extern int generic_check_addressable(unsigned, u64);
 
 #ifdef CONFIG_MIGRATION
 extern int buffer_migrate_page(struct address_space *,
-<<<<<<< HEAD
 				struct page *, struct page *);
-=======
-				struct page *, struct page *, bool);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #else
 #define buffer_migrate_page NULL
 #endif

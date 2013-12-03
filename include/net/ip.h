@@ -165,10 +165,6 @@ struct ip_reply_arg {
 	int	    csumoffset; /* u16 offset of csum in iov[0].iov_base */
 				/* -1 if not needed */ 
 	int	    bound_dev_if;
-<<<<<<< HEAD
-=======
-	u8  	    tos;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }; 
 
 #define IP_REPLY_ARG_NOSRCCHECK 1
@@ -179,11 +175,7 @@ static inline __u8 ip_reply_arg_flowi_flags(const struct ip_reply_arg *arg)
 }
 
 void ip_send_reply(struct sock *sk, struct sk_buff *skb, __be32 daddr,
-<<<<<<< HEAD
 		   struct ip_reply_arg *arg, unsigned int len);
-=======
-		   const struct ip_reply_arg *arg, unsigned int len);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 struct ipv4_config {
 	int	log_martians;
@@ -414,24 +406,9 @@ enum ip_defrag_users {
 	IP_DEFRAG_VS_OUT,
 	IP_DEFRAG_VS_FWD,
 	IP_DEFRAG_AF_PACKET,
-<<<<<<< HEAD
 };
 
 int ip_defrag(struct sk_buff *skb, u32 user);
-=======
-	IP_DEFRAG_MACVLAN,
-};
-
-int ip_defrag(struct sk_buff *skb, u32 user);
-#ifdef CONFIG_INET
-struct sk_buff *ip_check_defrag(struct sk_buff *skb, u32 user);
-#else
-static inline struct sk_buff *ip_check_defrag(struct sk_buff *skb, u32 user)
-{
-	return skb;
-}
-#endif
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 int ip_frag_mem(struct net *net);
 int ip_frag_nqueues(struct net *net);
 

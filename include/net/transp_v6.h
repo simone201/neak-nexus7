@@ -11,10 +11,7 @@ extern struct proto rawv6_prot;
 extern struct proto udpv6_prot;
 extern struct proto udplitev6_prot;
 extern struct proto tcpv6_prot;
-<<<<<<< HEAD
 extern struct proto pingv6_prot;
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 struct flowi6;
 
@@ -25,11 +22,8 @@ extern int				ipv6_frag_init(void);
 extern void				ipv6_frag_exit(void);
 
 /* transport protocols */
-<<<<<<< HEAD
 extern int				pingv6_init(void);
 extern void				pingv6_exit(void);
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern int				rawv6_init(void);
 extern void				rawv6_exit(void);
 extern int				udpv6_init(void);

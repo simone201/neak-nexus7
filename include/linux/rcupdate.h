@@ -75,7 +75,6 @@ struct rcu_head {
 };
 
 /* Exported common interfaces */
-<<<<<<< HEAD
 extern void call_rcu_sched(struct rcu_head *head,
 			   void (*func)(struct rcu_head *rcu));
 extern void synchronize_sched(void);
@@ -91,75 +90,6 @@ static inline void __rcu_read_unlock_bh(void)
 {
 	local_bh_enable();
 }
-=======
-
-#ifdef CONFIG_PREEMPT_RCU
-
-/**
- * call_rcu() - Queue an RCU callback for invocation after a grace period.
- * @head: structure to be used for queueing the RCU updates.
- * @func: actual callback function to be invoked after the grace period
- *
- * The callback function will be invoked some time after a full grace
- * period elapses, in other words after all pre-existing RCU read-side
- * critical sections have completed.  However, the callback function
- * might well execute concurrently with RCU read-side critical sections
- * that started after call_rcu() was invoked.  RCU read-side critical
- * sections are delimited by rcu_read_lock() and rcu_read_unlock(),
- * and may be nested.
- */
-extern void call_rcu(struct rcu_head *head,
-			      void (*func)(struct rcu_head *head));
-
-#else /* #ifdef CONFIG_PREEMPT_RCU */
-
-/* In classic RCU, call_rcu() is just call_rcu_sched(). */
-#define	call_rcu	call_rcu_sched
-
-#endif /* #else #ifdef CONFIG_PREEMPT_RCU */
-
-/**
- * call_rcu_bh() - Queue an RCU for invocation after a quicker grace period.
- * @head: structure to be used for queueing the RCU updates.
- * @func: actual callback function to be invoked after the grace period
- *
- * The callback function will be invoked some time after a full grace
- * period elapses, in other words after all currently executing RCU
- * read-side critical sections have completed. call_rcu_bh() assumes
- * that the read-side critical sections end on completion of a softirq
- * handler. This means that read-side critical sections in process
- * context must not be interrupted by softirqs. This interface is to be
- * used when most of the read-side critical sections are in softirq context.
- * RCU read-side critical sections are delimited by :
- *  - rcu_read_lock() and  rcu_read_unlock(), if in interrupt context.
- *  OR
- *  - rcu_read_lock_bh() and rcu_read_unlock_bh(), if in process context.
- *  These may be nested.
- */
-extern void call_rcu_bh(struct rcu_head *head,
-			void (*func)(struct rcu_head *head));
-
-/**
- * call_rcu_sched() - Queue an RCU for invocation after sched grace period.
- * @head: structure to be used for queueing the RCU updates.
- * @func: actual callback function to be invoked after the grace period
- *
- * The callback function will be invoked some time after a full grace
- * period elapses, in other words after all currently executing RCU
- * read-side critical sections have completed. call_rcu_sched() assumes
- * that the read-side critical sections end on enabling of preemption
- * or on voluntary preemption.
- * RCU read-side critical sections are delimited by :
- *  - rcu_read_lock_sched() and  rcu_read_unlock_sched(),
- *  OR
- *  anything that disables preemption.
- *  These may be nested.
- */
-extern void call_rcu_sched(struct rcu_head *head,
-			   void (*func)(struct rcu_head *rcu));
-
-extern void synchronize_sched(void);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #ifdef CONFIG_PREEMPT_RCU
 
@@ -222,27 +152,12 @@ static inline void rcu_exit_nohz(void)
 
 #endif /* #else #ifdef CONFIG_NO_HZ */
 
-<<<<<<< HEAD
-=======
-/*
- * Infrastructure to implement the synchronize_() primitives in
- * TREE_RCU and rcu_barrier_() primitives in TINY_RCU.
- */
-
-typedef void call_rcu_func_t(struct rcu_head *head,
-			     void (*func)(struct rcu_head *head));
-void wait_rcu_gp(call_rcu_func_t crf);
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #if defined(CONFIG_TREE_RCU) || defined(CONFIG_TREE_PREEMPT_RCU)
 #include <linux/rcutree.h>
 #elif defined(CONFIG_TINY_RCU) || defined(CONFIG_TINY_PREEMPT_RCU)
 #include <linux/rcutiny.h>
-<<<<<<< HEAD
 #elif defined(CONFIG_JRCU)
 #include <linux/jrcu.h>
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #else
 #error "Unknown RCU implementation specified to kernel configuration"
 #endif
@@ -717,11 +632,7 @@ static inline void rcu_read_unlock(void)
  */
 static inline void rcu_read_lock_bh(void)
 {
-<<<<<<< HEAD
 	__rcu_read_lock_bh();
-=======
-	local_bh_disable();
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	__acquire(RCU_BH);
 	rcu_read_acquire_bh();
 }
@@ -735,11 +646,7 @@ static inline void rcu_read_unlock_bh(void)
 {
 	rcu_read_release_bh();
 	__release(RCU_BH);
-<<<<<<< HEAD
 	__rcu_read_unlock_bh();
-=======
-	local_bh_enable();
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /**
@@ -811,7 +718,6 @@ static inline notrace void rcu_read_unlock_sched_notrace(void)
 #define RCU_INIT_POINTER(p, v) \
 		p = (typeof(*v) __force __rcu *)(v)
 
-<<<<<<< HEAD
 /* Infrastructure to implement the synchronize_() primitives. */
 
 struct rcu_synchronize {
@@ -905,8 +811,6 @@ static inline void debug_rcu_head_unqueue(struct rcu_head *head)
 }
 #endif	/* #else !CONFIG_DEBUG_OBJECTS_RCU_HEAD */
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static __always_inline bool __is_kfree_rcu_offset(unsigned long offset)
 {
 	return offset < 4096;
@@ -925,7 +829,6 @@ void __kfree_rcu(struct rcu_head *head, unsigned long offset)
 	call_rcu(head, (rcu_callback)offset);
 }
 
-<<<<<<< HEAD
 extern void kfree(const void *);
 
 static inline void __rcu_reclaim(struct rcu_head *head)
@@ -938,8 +841,6 @@ static inline void __rcu_reclaim(struct rcu_head *head)
 		head->func(head);
 }
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /**
  * kfree_rcu() - kfree an object after a grace period.
  * @ptr:	pointer to kfree

@@ -231,7 +231,6 @@ is 85.
 timer_rate: Sample rate for reevaluating cpu load when the system is
 not idle.  Default is 30000 uS.
 
-<<<<<<< HEAD
 2.7 SmartassV2
 ---------------
 
@@ -264,8 +263,6 @@ Finally, smartass is a highly customizable governor with almost everything
 tweakable through the sysfs. For a detailed explaination of each tunable,
 please see the inline comments at the begging of the code (smartass2.c).
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 3. The Governor Interface in the CPUfreq Core
 =============================================
 

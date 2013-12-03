@@ -173,12 +173,7 @@ cifs_fattr_to_inode(struct inode *inode, struct cifs_fattr *fattr)
 
 	if (fattr->cf_flags & CIFS_FATTR_DFS_REFERRAL)
 		inode->i_flags |= S_AUTOMOUNT;
-<<<<<<< HEAD
 	cifs_set_ops(inode);
-=======
-	if (inode->i_state & I_NEW)
-		cifs_set_ops(inode);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 void

@@ -13,10 +13,7 @@
 #ifndef _PING_H
 #define _PING_H
 
-<<<<<<< HEAD
 #include <net/icmp.h>
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/netns/hash.h>
 
 /* PING_HTABLE_SIZE must be power of 2 */
@@ -32,7 +29,6 @@
  */
 #define GID_T_MAX (((gid_t)~0U) >> 1)
 
-<<<<<<< HEAD
 /* Compatibility glue so we can support IPv6 when it's compiled as a module */
 struct pingv6_ops {
 	int (*ipv6_recv_error)(struct sock *sk, struct msghdr *msg, int len);
@@ -45,8 +41,6 @@ struct pingv6_ops {
 			     struct net_device *dev, int strict);
 };
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 struct ping_table {
 	struct hlist_nulls_head	hash[PING_HTABLE_SIZE];
 	rwlock_t		lock;
@@ -58,7 +52,6 @@ struct ping_iter_state {
 };
 
 extern struct proto ping_prot;
-<<<<<<< HEAD
 extern struct ping_table ping_table;
 #if defined(CONFIG_IPV6) || defined(CONFIG_IPV6_MODULE)
 extern struct pingv6_ops pingv6_ops;
@@ -93,12 +86,6 @@ int  ping_v6_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *msg,
 		     size_t len);
 int  ping_queue_rcv_skb(struct sock *sk, struct sk_buff *skb);
 void ping_rcv(struct sk_buff *skb);
-=======
-
-
-extern void ping_rcv(struct sk_buff *);
-extern void ping_err(struct sk_buff *, u32 info);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #ifdef CONFIG_PROC_FS
 extern int __init ping_proc_init(void);
@@ -106,11 +93,7 @@ extern void ping_proc_exit(void);
 #endif
 
 void __init ping_init(void);
-<<<<<<< HEAD
 int  __init pingv6_init(void);
 void pingv6_exit(void);
-=======
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #endif /* _PING_H */

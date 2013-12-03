@@ -622,18 +622,9 @@ static int tegra_se_count_sgs(struct scatterlist *sl, u32 total_bytes)
 		return 0;
 
 	do {
-<<<<<<< HEAD
 		total_bytes -= min(sl[i].length, total_bytes);
 		i++;
 	} while (total_bytes);
-=======
-		if (!sl->length)
-			return 0;
-		total_bytes -= min(sl->length, total_bytes);
-		i++;
-		sl = sg_next(sl);
-	} while (total_bytes && sl);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return i;
 }
@@ -855,11 +846,7 @@ static int tegra_se_aes_queue_req(struct ablkcipher_request *req)
 	bool idle = true;
 	int err = 0;
 
-<<<<<<< HEAD
 	if (!req->nbytes)
-=======
-	if (!tegra_se_count_sgs(req->src, req->nbytes))
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		return -EINVAL;
 
 	spin_lock_irqsave(&se_dev->lock, flags);

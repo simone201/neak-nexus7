@@ -13,10 +13,6 @@
 #include <linux/udp.h>
 
 #include <linux/netfilter.h>
-<<<<<<< HEAD
-=======
-#include <linux/module.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/netfilter/nf_nat.h>
 #include <net/netfilter/nf_nat_protocol.h>
 

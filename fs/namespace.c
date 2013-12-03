@@ -1244,14 +1244,8 @@ void umount_tree(struct vfsmount *mnt, int propagate, struct list_head *kill)
 		list_del_init(&p->mnt_expire);
 		list_del_init(&p->mnt_list);
 		__touch_mnt_namespace(p->mnt_ns);
-<<<<<<< HEAD
 		p->mnt_ns = NULL;
 		__mnt_make_shortterm(p);
-=======
-		if (p->mnt_ns)
-			__mnt_make_shortterm(p);
-		p->mnt_ns = NULL;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		list_del_init(&p->mnt_child);
 		if (p->mnt_parent != p) {
 			p->mnt_parent->mnt_ghosts++;

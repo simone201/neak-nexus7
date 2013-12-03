@@ -720,11 +720,6 @@ static int llc_ui_recvmsg(struct kiocb *iocb, struct socket *sock,
 	int target;	/* Read at least this many bytes */
 	long timeo;
 
-<<<<<<< HEAD
-=======
-	msg->msg_namelen = 0;
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	lock_sock(sk);
 	copied = -ENOTCONN;
 	if (unlikely(sk->sk_type == SOCK_STREAM && sk->sk_state == TCP_LISTEN))

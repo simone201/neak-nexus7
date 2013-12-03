@@ -59,10 +59,6 @@
 #include <linux/magic.h>
 #include <linux/pid.h>
 #include <linux/nsproxy.h>
-<<<<<<< HEAD
-=======
-#include <linux/ptrace.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #include <asm/futex.h>
 
@@ -843,12 +839,6 @@ static void wake_futex(struct futex_q *q)
 {
 	struct task_struct *p = q->task;
 
-<<<<<<< HEAD
-=======
-	if (WARN(q->pi_state || q->rt_waiter, "refusing to wake PI futex\n"))
-		return;
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/*
 	 * We set q->lock_ptr = NULL _before_ we wake up the task. If
 	 * a non-futex wake up happens on another CPU then the task
@@ -1084,13 +1074,6 @@ retry_private:
 
 	plist_for_each_entry_safe(this, next, head, list) {
 		if (match_futex (&this->key, &key1)) {
-<<<<<<< HEAD
-=======
-			if (this->pi_state || this->rt_waiter) {
-				ret = -EINVAL;
-				goto out_unlock;
-			}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			wake_futex(this);
 			if (++ret >= nr_wake)
 				break;
@@ -1103,13 +1086,6 @@ retry_private:
 		op_ret = 0;
 		plist_for_each_entry_safe(this, next, head, list) {
 			if (match_futex (&this->key, &key2)) {
-<<<<<<< HEAD
-=======
-				if (this->pi_state || this->rt_waiter) {
-					ret = -EINVAL;
-					goto out_unlock;
-				}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				wake_futex(this);
 				if (++op_ret >= nr_wake2)
 					break;
@@ -1118,10 +1094,6 @@ retry_private:
 		ret += op_ret;
 	}
 
-<<<<<<< HEAD
-=======
-out_unlock:
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	double_unlock_hb(hb1, hb2);
 out_put_keys:
 	put_futex_key(&key2);
@@ -1411,19 +1383,9 @@ retry_private:
 		/*
 		 * FUTEX_WAIT_REQEUE_PI and FUTEX_CMP_REQUEUE_PI should always
 		 * be paired with each other and no other futex ops.
-<<<<<<< HEAD
 		 */
 		if ((requeue_pi && !this->rt_waiter) ||
 		    (!requeue_pi && this->rt_waiter)) {
-=======
-		 *
-		 * We should never be requeueing a futex_q with a pi_state,
-		 * which is awaiting a futex_unlock_pi().
-		 */
-		if ((requeue_pi && !this->rt_waiter) ||
-		    (!requeue_pi && this->rt_waiter) ||
-		    this->pi_state) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			ret = -EINVAL;
 			break;
 		}
@@ -1925,11 +1887,7 @@ static int futex_wait(u32 __user *uaddr, unsigned int flags, u32 val,
 				      HRTIMER_MODE_ABS);
 		hrtimer_init_sleeper(to, current);
 		hrtimer_set_expires_range_ns(&to->timer, *abs_time,
-<<<<<<< HEAD
 				     task_get_effective_timer_slack(current));
-=======
-					     current->timer_slack_ns);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 retry:
@@ -2323,11 +2281,7 @@ static int futex_wait_requeue_pi(u32 __user *uaddr, unsigned int flags,
 				      HRTIMER_MODE_ABS);
 		hrtimer_init_sleeper(to, current);
 		hrtimer_set_expires_range_ns(&to->timer, *abs_time,
-<<<<<<< HEAD
 				     task_get_effective_timer_slack(current));
-=======
-					     current->timer_slack_ns);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 	/*
@@ -2489,16 +2443,11 @@ SYSCALL_DEFINE3(get_robust_list, int, pid,
 {
 	struct robust_list_head __user *head;
 	unsigned long ret;
-<<<<<<< HEAD
 	const struct cred *cred = current_cred(), *pcred;
-=======
-	struct task_struct *p;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (!futex_cmpxchg_enabled)
 		return -ENOSYS;
 
-<<<<<<< HEAD
 	if (!pid)
 		head = current->robust_list;
 	else {
@@ -2528,26 +2477,6 @@ ok:
 		rcu_read_unlock();
 	}
 
-=======
-	rcu_read_lock();
-
-	ret = -ESRCH;
-	if (!pid)
-		p = current;
-	else {
-		p = find_task_by_vpid(pid);
-		if (!p)
-			goto err_unlock;
-	}
-
-	ret = -EPERM;
-	if (!ptrace_may_access(p, PTRACE_MODE_READ))
-		goto err_unlock;
-
-	head = p->robust_list;
-	rcu_read_unlock();
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (put_user(sizeof(*head), len_ptr))
 		return -EFAULT;
 	return put_user(head, head_ptr);

@@ -63,12 +63,7 @@ int ip_route_me_harder(struct sk_buff *skb, unsigned addr_type)
 	/* Change in oif may mean change in hh_len. */
 	hh_len = skb_dst(skb)->dev->hard_header_len;
 	if (skb_headroom(skb) < hh_len &&
-<<<<<<< HEAD
 	    pskb_expand_head(skb, hh_len - skb_headroom(skb), 0, GFP_ATOMIC))
-=======
-	    pskb_expand_head(skb, HH_DATA_ALIGN(hh_len - skb_headroom(skb)),
-				0, GFP_ATOMIC))
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		return -1;
 
 	return 0;

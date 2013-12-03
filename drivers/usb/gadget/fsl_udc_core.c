@@ -136,10 +136,7 @@ static struct delayed_work smb347_hc_mode_work;
 
 extern int smb347_hc_mode_callback(bool enable, int cur);
 extern void fsl_wake_lock_timeout(void);
-<<<<<<< HEAD
 extern void usb_det_cable_callback(unsigned cable_type);
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 /* Export the function "unsigned int get_usb_cable_status(void)" for others to query the USB cable status. */
 unsigned int get_usb_cable_status(void)
@@ -278,10 +275,7 @@ static void cable_detection_work_handler(struct work_struct *w)
 {
 	mutex_lock(&s_cable_info.cable_info_mutex);
 	s_cable_info.cable_status = 0x00; //0000
-<<<<<<< HEAD
 	u32 val;
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	printk(KERN_INFO "%s(): vbus_active = %d and is_active = %d\n", __func__, s_cable_info.udc_vbus_active, s_cable_info.is_active);
 
@@ -293,11 +287,8 @@ static void cable_detection_work_handler(struct work_struct *w)
 
 		s_cable_info.ac_connected = 0;
 
-<<<<<<< HEAD
 		usb_det_cable_callback(s_cable_info.cable_status);
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if ((pcb_id_version <= 0x2) && (project_id == GROUPER_PROJECT_NAKASI)) {
 #if BATTERY_CALLBACK_ENABLED
 			battery_callback(s_cable_info.cable_status);
@@ -307,7 +298,6 @@ static void cable_detection_work_handler(struct work_struct *w)
 		touch_callback(s_cable_info.cable_status);
 #endif
 	} else if (!s_cable_info.udc_vbus_active && s_cable_info.is_active) {
-<<<<<<< HEAD
 		val = fsl_readl(&dr_regs->usbcmd);
 		if (val & USB_CMD_RUN_STOP) {
 			switch (fsl_readl(&dr_regs->portsc1) & PORTSCX_LINE_STATUS_BITS) {
@@ -326,19 +316,6 @@ static void cable_detection_work_handler(struct work_struct *w)
 			printk(KERN_INFO "USB device controller was not ready\n");
 			mutex_unlock(&s_cable_info.cable_info_mutex);
 			return;
-=======
-		switch (fsl_readl(&dr_regs->portsc1) & PORTSCX_LINE_STATUS_BITS) {
-			case PORTSCX_LINE_STATUS_SE0:
-				s_cable_info.ac_connected = 0; break;
-			case PORTSCX_LINE_STATUS_JSTATE:
-				s_cable_info.ac_connected = 0; break;
-			case PORTSCX_LINE_STATUS_KSTATE:
-				s_cable_info.ac_connected = 0; break;
-			case PORTSCX_LINE_STATUS_UNDEF:
-				s_cable_info.ac_connected = 1; break;
-			default:
-				s_cable_info.ac_connected = 0; break;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		}
 
 		if(!s_cable_info.ac_connected) {
@@ -349,11 +326,8 @@ static void cable_detection_work_handler(struct work_struct *w)
 			s_cable_info.cable_status = 0x03; //0011
 		}
 
-<<<<<<< HEAD
 		usb_det_cable_callback(s_cable_info.cable_status);
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if ((pcb_id_version <= 0x2) && (project_id == GROUPER_PROJECT_NAKASI)) {
 			fsl_smb347_hc_mode_callback_work(1,1);
 #if BATTERY_CALLBACK_ENABLED

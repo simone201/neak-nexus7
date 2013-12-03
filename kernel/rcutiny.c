@@ -37,15 +37,6 @@
 #include <linux/cpu.h>
 #include <linux/prefetch.h>
 
-<<<<<<< HEAD
-=======
-#ifdef CONFIG_RCU_TRACE
-#include <trace/events/rcu.h>
-#endif /* #else #ifdef CONFIG_RCU_TRACE */
-
-#include "rcu.h"
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /* Controls for rcu_kthread() kthread, replacing RCU_SOFTIRQ used previously. */
 static struct task_struct *rcu_kthread_task;
 static DECLARE_WAIT_QUEUE_HEAD(rcu_kthread_wq);
@@ -165,32 +156,16 @@ void rcu_check_callbacks(int cpu, int user)
  */
 static void rcu_process_callbacks(struct rcu_ctrlblk *rcp)
 {
-<<<<<<< HEAD
-=======
-	char *rn = NULL;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct rcu_head *next, *list;
 	unsigned long flags;
 	RCU_TRACE(int cb_count = 0);
 
 	/* If no RCU callbacks ready to invoke, just return. */
-<<<<<<< HEAD
 	if (&rcp->rcucblist == rcp->donetail)
 		return;
 
 	/* Move the ready-to-invoke callbacks to a local list. */
 	local_irq_save(flags);
-=======
-	if (&rcp->rcucblist == rcp->donetail) {
-		RCU_TRACE(trace_rcu_batch_start(rcp->name, 0, -1));
-		RCU_TRACE(trace_rcu_batch_end(rcp->name, 0));
-		return;
-	}
-
-	/* Move the ready-to-invoke callbacks to a local list. */
-	local_irq_save(flags);
-	RCU_TRACE(trace_rcu_batch_start(rcp->name, 0, -1));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	list = rcp->rcucblist;
 	rcp->rcucblist = *rcp->donetail;
 	*rcp->donetail = NULL;
@@ -201,29 +176,17 @@ static void rcu_process_callbacks(struct rcu_ctrlblk *rcp)
 	local_irq_restore(flags);
 
 	/* Invoke the callbacks on the local list. */
-<<<<<<< HEAD
-=======
-	RCU_TRACE(rn = rcp->name);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	while (list) {
 		next = list->next;
 		prefetch(next);
 		debug_rcu_head_unqueue(list);
 		local_bh_disable();
-<<<<<<< HEAD
 		__rcu_reclaim(list);
-=======
-		__rcu_reclaim(rn, list);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		local_bh_enable();
 		list = next;
 		RCU_TRACE(cb_count++);
 	}
 	RCU_TRACE(rcu_trace_sub_qlen(rcp, cb_count));
-<<<<<<< HEAD
-=======
-	RCU_TRACE(trace_rcu_batch_end(rcp->name, cb_count));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /*
@@ -318,7 +281,6 @@ void call_rcu_bh(struct rcu_head *head, void (*func)(struct rcu_head *rcu))
 }
 EXPORT_SYMBOL_GPL(call_rcu_bh);
 
-<<<<<<< HEAD
 void rcu_barrier_bh(void)
 {
 	struct rcu_synchronize rcu;
@@ -347,8 +309,6 @@ void rcu_barrier_sched(void)
 }
 EXPORT_SYMBOL_GPL(rcu_barrier_sched);
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * Spawn the kthread that invokes RCU callbacks.
  */

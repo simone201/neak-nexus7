@@ -644,6 +644,7 @@ int tegra_suspended_target(unsigned int target_freq)
 #else
 	new_speed = edp_governor_speed(new_speed);
 #endif
+
 	return tegra_update_cpu_speed(new_speed);
 }
 
@@ -727,7 +728,6 @@ static int tegra_cpu_init(struct cpufreq_policy *policy)
 
 	/* FIXME: what's the actual transition time? */
 	policy->cpuinfo.transition_latency = 40 * 1000;
-
 
 	policy->shared_type = CPUFREQ_SHARED_TYPE_ALL;
 	cpumask_copy(policy->related_cpus, cpu_possible_mask);

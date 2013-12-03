@@ -372,15 +372,9 @@ void raw6_icmp_error(struct sk_buff *skb, int nexthdr,
 	read_unlock(&raw_v6_hashinfo.lock);
 }
 
-<<<<<<< HEAD
 static inline int rawv6_rcv_skb(struct sock * sk, struct sk_buff * skb)
 {
 	if ((raw6_sk(sk)->checksum || rcu_dereference_raw(sk->sk_filter)) &&
-=======
-static inline int rawv6_rcv_skb(struct sock *sk, struct sk_buff *skb)
-{
-	if ((raw6_sk(sk)->checksum || rcu_access_pointer(sk->sk_filter)) &&
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	    skb_checksum_complete(skb)) {
 		atomic_inc(&sk->sk_drops);
 		kfree_skb(skb);

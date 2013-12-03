@@ -132,15 +132,8 @@ static struct module *new_module(char *modname)
 	/* strip trailing .o */
 	s = strrchr(p, '.');
 	if (s != NULL)
-<<<<<<< HEAD
 		if (strcmp(s, ".o") == 0)
 			*s = '\0';
-=======
-		if (strcmp(s, ".o") == 0) {
-			*s = '\0';
-			mod->is_dot_o = 1;
-		}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* add to list */
 	mod->name = p;
@@ -594,12 +587,7 @@ static void handle_modversions(struct module *mod, struct elf_info *info,
 	unsigned int crc;
 	enum export export;
 
-<<<<<<< HEAD
 	if (!is_vmlinux(mod->name) && strncmp(symname, "__ksymtab", 9) == 0)
-=======
-	if ((!is_vmlinux(mod->name) || mod->is_dot_o) &&
-	    strncmp(symname, "__ksymtab", 9) == 0)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		export = export_from_secname(info, get_secindex(info, sym));
 	else
 		export = export_from_sec(info, get_secindex(info, sym));
@@ -861,11 +849,7 @@ static void check_section(const char *modname, struct elf_info *elf,
 
 #define ALL_INIT_DATA_SECTIONS \
 	".init.setup$", ".init.rodata$", \
-<<<<<<< HEAD
 	".devinit.rodata$", ".cpuinit.rodata$", ".meminit.rodata$" \
-=======
-	".devinit.rodata$", ".cpuinit.rodata$", ".meminit.rodata$", \
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	".init.data$", ".devinit.data$", ".cpuinit.data$", ".meminit.data$"
 #define ALL_EXIT_DATA_SECTIONS \
 	".exit.data$", ".devexit.data$", ".cpuexit.data$", ".memexit.data$"

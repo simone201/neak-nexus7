@@ -962,16 +962,8 @@ cbq_dequeue(struct Qdisc *sch)
 		cbq_update(q);
 		if ((incr -= incr2) < 0)
 			incr = 0;
-<<<<<<< HEAD
 	}
 	q->now += incr;
-=======
-		q->now += incr;
-	} else {
-		if (now > q->now)
-			q->now = now;
-	}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	q->now_rt = now;
 
 	for (;;) {

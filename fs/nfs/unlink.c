@@ -366,17 +366,13 @@ static void nfs_async_rename_done(struct rpc_task *task, void *calldata)
 	struct inode *old_dir = data->old_dir;
 	struct inode *new_dir = data->new_dir;
 	struct dentry *old_dentry = data->old_dentry;
-<<<<<<< HEAD
 	struct dentry *new_dentry = data->new_dentry;
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (!NFS_PROTO(old_dir)->rename_done(task, old_dir, new_dir)) {
 		nfs_restart_rpc(task, NFS_SERVER(old_dir)->nfs_client);
 		return;
 	}
 
-<<<<<<< HEAD
 	if (task->tk_status != 0) {
 		nfs_cancel_async_unlink(old_dentry);
 		return;
@@ -384,10 +380,6 @@ static void nfs_async_rename_done(struct rpc_task *task, void *calldata)
 
 	d_drop(old_dentry);
 	d_drop(new_dentry);
-=======
-	if (task->tk_status != 0)
-		nfs_cancel_async_unlink(old_dentry);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /**
@@ -597,21 +589,6 @@ nfs_sillyrename(struct inode *dir, struct dentry *dentry)
 	error = rpc_wait_for_completion_task(task);
 	if (error == 0)
 		error = task->tk_status;
-<<<<<<< HEAD
-=======
-	switch (error) {
-	case 0:
-		/* The rename succeeded */
-		nfs_set_verifier(dentry, nfs_save_change_attribute(dir));
-		d_move(dentry, sdentry);
-		break;
-	case -ERESTARTSYS:
-		/* The result of the rename is unknown. Play it safe by
-		 * forcing a new lookup */
-		d_drop(dentry);
-		d_drop(sdentry);
-	}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	rpc_put_task(task);
 out_dput:
 	dput(sdentry);

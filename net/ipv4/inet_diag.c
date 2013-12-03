@@ -122,25 +122,10 @@ static int inet_csk_diag_fill(struct sock *sk,
 	r->id.idiag_src[0] = inet->inet_rcv_saddr;
 	r->id.idiag_dst[0] = inet->inet_daddr;
 
-<<<<<<< HEAD
-=======
-	/* IPv6 dual-stack sockets use inet->tos for IPv4 connections,
-	 * hence this needs to be included regardless of socket family.
-	 */
-	if (ext & (1 << (INET_DIAG_TOS - 1)))
-		RTA_PUT_U8(skb, INET_DIAG_TOS, inet->tos);
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #if defined(CONFIG_IPV6) || defined (CONFIG_IPV6_MODULE)
 	if (r->idiag_family == AF_INET6) {
 		const struct ipv6_pinfo *np = inet6_sk(sk);
 
-<<<<<<< HEAD
-=======
-		if (ext & (1 << (INET_DIAG_TCLASS - 1)))
-			RTA_PUT_U8(skb, INET_DIAG_TCLASS, np->tclass);
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		ipv6_addr_copy((struct in6_addr *)r->id.idiag_src,
 			       &np->rcv_saddr);
 		ipv6_addr_copy((struct in6_addr *)r->id.idiag_dst,

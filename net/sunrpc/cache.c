@@ -828,11 +828,6 @@ static ssize_t cache_do_downcall(char *kaddr, const char __user *buf,
 {
 	ssize_t ret;
 
-<<<<<<< HEAD
-=======
-	if (count == 0)
-		return -EINVAL;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (copy_from_user(kaddr, buf, count))
 		return -EFAULT;
 	kaddr[count] = '\0';
@@ -1407,19 +1402,11 @@ static ssize_t read_flush(struct file *file, char __user *buf,
 			  size_t count, loff_t *ppos,
 			  struct cache_detail *cd)
 {
-<<<<<<< HEAD
 	char tbuf[20];
 	unsigned long p = *ppos;
 	size_t len;
 
 	sprintf(tbuf, "%lu\n", convert_to_wallclock(cd->flush_time));
-=======
-	char tbuf[22];
-	unsigned long p = *ppos;
-	size_t len;
-
-	snprintf(tbuf, sizeof(tbuf), "%lu\n", convert_to_wallclock(cd->flush_time));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	len = strlen(tbuf);
 	if (p >= len)
 		return 0;

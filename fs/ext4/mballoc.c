@@ -2028,15 +2028,7 @@ repeat:
 		group = ac->ac_g_ex.fe_group;
 
 		for (i = 0; i < ngroups; group++, i++) {
-<<<<<<< HEAD
 			if (group == ngroups)
-=======
-			/*
-			 * Artificially restricted ngroups for non-extent
-			 * files makes group > ngroups possible on first loop.
-			 */
-			if (group >= ngroups)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				group = 0;
 
 			/* This now checks without needing the buddy page */
@@ -2556,12 +2548,6 @@ int ext4_mb_release(struct super_block *sb)
 	struct ext4_sb_info *sbi = EXT4_SB(sb);
 	struct kmem_cache *cachep = get_groupinfo_cache(sb->s_blocksize_bits);
 
-<<<<<<< HEAD
-=======
-	if (sbi->s_proc)
-		remove_proc_entry("mb_groups", sbi->s_proc);
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (sbi->s_group_info) {
 		for (i = 0; i < ngroups; i++) {
 			grinfo = ext4_get_group_info(sb, i);
@@ -2609,11 +2595,8 @@ int ext4_mb_release(struct super_block *sb)
 	}
 
 	free_percpu(sbi->s_locality_groups);
-<<<<<<< HEAD
 	if (sbi->s_proc)
 		remove_proc_entry("mb_groups", sbi->s_proc);
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return 0;
 }
@@ -4159,11 +4142,7 @@ static void ext4_mb_add_n_trim(struct ext4_allocation_context *ac)
 		/* The max size of hash table is PREALLOC_TB_SIZE */
 		order = PREALLOC_TB_SIZE - 1;
 	/* Add the prealloc space to lg */
-<<<<<<< HEAD
 	rcu_read_lock();
-=======
-	spin_lock(&lg->lg_prealloc_lock);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	list_for_each_entry_rcu(tmp_pa, &lg->lg_prealloc_list[order],
 						pa_inode_list) {
 		spin_lock(&tmp_pa->pa_lock);
@@ -4187,20 +4166,12 @@ static void ext4_mb_add_n_trim(struct ext4_allocation_context *ac)
 	if (!added)
 		list_add_tail_rcu(&pa->pa_inode_list,
 					&lg->lg_prealloc_list[order]);
-<<<<<<< HEAD
 	rcu_read_unlock();
-=======
-	spin_unlock(&lg->lg_prealloc_lock);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* Now trim the list to be not more than 8 elements */
 	if (lg_prealloc_count > 8) {
 		ext4_mb_discard_lg_preallocations(sb, lg,
-<<<<<<< HEAD
 						order, lg_prealloc_count);
-=======
-						  order, lg_prealloc_count);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		return;
 	}
 	return ;
@@ -4644,10 +4615,6 @@ do_more:
 		 */
 		new_entry = kmem_cache_alloc(ext4_free_ext_cachep, GFP_NOFS);
 		if (!new_entry) {
-<<<<<<< HEAD
-=======
-			ext4_mb_unload_buddy(&e4b);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			err = -ENOMEM;
 			goto error_return;
 		}

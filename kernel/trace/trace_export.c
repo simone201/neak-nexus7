@@ -150,11 +150,7 @@ ftrace_define_fields_##name(struct ftrace_event_call *event_call)	\
 #define __dynamic_array(type, item)
 
 #undef F_printk
-<<<<<<< HEAD
 #define F_printk(fmt, args...) #fmt ", "  __stringify(args)
-=======
-#define F_printk(fmt, args...) __stringify(fmt) ", "  __stringify(args)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #undef FTRACE_ENTRY
 #define FTRACE_ENTRY(call, struct_name, etype, tstruct, print)		\

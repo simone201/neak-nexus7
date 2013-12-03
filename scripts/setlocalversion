@@ -170,10 +170,7 @@ else
 	# LOCALVERSION= is not specified
 	if test "${LOCALVERSION+set}" != "set"; then
 		scm=$(scm_version --short)
-<<<<<<< HEAD
 		res="$res${scm:++}"
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	fi
 fi
 

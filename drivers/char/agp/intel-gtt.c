@@ -1430,11 +1430,6 @@ static const struct intel_gtt_driver_description {
 	    "Ivybridge", &sandybridge_gtt_driver },
 	{ PCI_DEVICE_ID_INTEL_IVYBRIDGE_S_GT1_IG,
 	    "Ivybridge", &sandybridge_gtt_driver },
-<<<<<<< HEAD
-=======
-	{ PCI_DEVICE_ID_INTEL_IVYBRIDGE_S_GT2_IG,
-	    "Ivybridge", &sandybridge_gtt_driver },
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	{ 0, NULL, NULL }
 };
 

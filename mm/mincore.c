@@ -164,11 +164,7 @@ static void mincore_pmd_range(struct vm_area_struct *vma, pud_t *pud,
 			}
 			/* fall through */
 		}
-<<<<<<< HEAD
 		if (pmd_none_or_clear_bad(pmd))
-=======
-		if (pmd_none_or_trans_huge_or_clear_bad(pmd))
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			mincore_unmapped_range(vma, addr, next, vec);
 		else
 			mincore_pte_range(vma, pmd, addr, next, vec);

@@ -1718,12 +1718,7 @@ static int ip_mc_add_src(struct in_device *in_dev, __be32 *pmca, int sfmode,
 	if (err) {
 		int j;
 
-<<<<<<< HEAD
 		pmc->sfcount[sfmode]--;
-=======
-		if (!delta)
-			pmc->sfcount[sfmode]--;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		for (j=0; j<i; j++)
 			(void) ip_mc_del1_src(pmc, sfmode, &psfsrc[j]);
 	} else if (isexclude != (pmc->sfcount[MCAST_EXCLUDE] != 0)) {

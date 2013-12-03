@@ -594,10 +594,6 @@ extern char *disk_name (struct gendisk *hd, int partno, char *buf);
 
 extern int disk_expand_part_tbl(struct gendisk *disk, int target);
 extern int rescan_partitions(struct gendisk *disk, struct block_device *bdev);
-<<<<<<< HEAD
-=======
-extern int invalidate_partitions(struct gendisk *disk, struct block_device *bdev);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern struct hd_struct * __must_check add_partition(struct gendisk *disk,
 						     int partno, sector_t start,
 						     sector_t len, int flags,

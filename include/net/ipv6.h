@@ -15,10 +15,6 @@
 
 #include <linux/ipv6.h>
 #include <linux/hardirq.h>
-<<<<<<< HEAD
-=======
-#include <linux/jhash.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <net/if_inet6.h>
 #include <net/ndisc.h>
 #include <net/flow.h>
@@ -247,7 +243,6 @@ static inline void fl6_sock_release(struct ip6_flowlabel *fl)
 		atomic_dec(&fl->users);
 }
 
-<<<<<<< HEAD
 extern void icmpv6_notify(struct sk_buff *skb, u8 type, u8 code, __be32 info);
 
 int icmpv6_push_pending_frames(struct sock *sk, struct flowi6 *fl6,
@@ -256,8 +251,6 @@ int icmpv6_push_pending_frames(struct sock *sk, struct flowi6 *fl6,
 struct dst_entry *icmpv6_route_lookup(struct net *net, struct sk_buff *skb,
 				      struct sock *sk, struct flowi6 *fl6);
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern int 			ip6_ra_control(struct sock *sk, int sel);
 
 extern int			ipv6_parse_hopopts(struct sk_buff *skb);
@@ -300,7 +293,6 @@ static inline int ipv6_addr_src_scope(const struct in6_addr *addr)
 	return __ipv6_addr_src_scope(__ipv6_addr_type(addr));
 }
 
-<<<<<<< HEAD
 static inline bool __ipv6_addr_needs_scope_id(int type)
 {
 	return type & IPV6_ADDR_LINKLOCAL ||
@@ -313,8 +305,6 @@ static inline __u32 ipv6_iface_scope_id(const struct in6_addr *addr, int iface)
 	return __ipv6_addr_needs_scope_id(__ipv6_addr_type(addr)) ? iface : 0;
 }
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static inline int ipv6_addr_cmp(const struct in6_addr *a1, const struct in6_addr *a2)
 {
 	return memcmp(a1, a2, sizeof(struct in6_addr));
@@ -416,20 +406,6 @@ struct ip6_create_arg {
 void ip6_frag_init(struct inet_frag_queue *q, void *a);
 int ip6_frag_match(struct inet_frag_queue *q, void *a);
 
-<<<<<<< HEAD
-=======
-/* more secured version of ipv6_addr_hash() */
-static inline u32 ipv6_addr_jhash(const struct in6_addr *a)
-{
-	u32 v = (__force u32)a->s6_addr32[0] ^ (__force u32)a->s6_addr32[1];
-
-	return jhash_3words(v,
-			    (__force u32)a->s6_addr32[2],
-			    (__force u32)a->s6_addr32[3],
-			    ipv6_hash_secret);
-}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static inline int ipv6_addr_any(const struct in6_addr *a)
 {
 	return (a->s6_addr32[0] | a->s6_addr32[1] |

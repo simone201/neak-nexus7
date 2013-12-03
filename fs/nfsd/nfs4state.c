@@ -193,7 +193,6 @@ static void __nfs4_file_put_access(struct nfs4_file *fp, int oflag)
 {
 	if (atomic_dec_and_test(&fp->fi_access[oflag])) {
 		nfs4_file_put_fd(fp, oflag);
-<<<<<<< HEAD
 		/*
 		 * It's also safe to get rid of the RDWR open *if*
 		 * we no longer have need of the other kind of access
@@ -201,9 +200,6 @@ static void __nfs4_file_put_access(struct nfs4_file *fp, int oflag)
 		 */
 		if (fp->fi_fds[1-oflag]
 			|| atomic_read(&fp->fi_access[1 - oflag]) == 0)
-=======
-		if (atomic_read(&fp->fi_access[1 - oflag]) == 0)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			nfs4_file_put_fd(fp, O_RDWR);
 	}
 }
@@ -919,11 +915,6 @@ free_client(struct nfs4_client *clp)
 		put_group_info(clp->cl_cred.cr_group_info);
 	kfree(clp->cl_principal);
 	kfree(clp->cl_name.data);
-<<<<<<< HEAD
-=======
-	idr_remove_all(&clp->cl_stateids);
-	idr_destroy(&clp->cl_stateids);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	kfree(clp);
 }
 

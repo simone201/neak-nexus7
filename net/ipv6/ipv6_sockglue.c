@@ -343,11 +343,7 @@ static int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
 		break;
 
 	case IPV6_TRANSPARENT:
-<<<<<<< HEAD
 		if (!capable(CAP_NET_ADMIN)) {
-=======
-		if (valbool && !capable(CAP_NET_ADMIN) && !capable(CAP_NET_RAW)) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			retv = -EPERM;
 			break;
 		}

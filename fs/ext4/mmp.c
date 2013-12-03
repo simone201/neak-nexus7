@@ -41,11 +41,6 @@ static int read_mmp_block(struct super_block *sb, struct buffer_head **bh,
 	 * is not blocked in the elevator. */
 	if (!*bh)
 		*bh = sb_getblk(sb, mmp_block);
-<<<<<<< HEAD
-=======
-	if (!*bh)
-		return -ENOMEM;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (*bh) {
 		get_bh(*bh);
 		lock_buffer(*bh);

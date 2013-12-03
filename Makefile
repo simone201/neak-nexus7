@@ -1,6 +1,6 @@
 VERSION = 3
 PATCHLEVEL = 2
-SUBLEVEL = 48
+SUBLEVEL = 49
 EXTRAVERSION =
 NAME = oxydo
 
@@ -192,11 +192,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Default value for CROSS_COMPILE is not to prefix executables
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
-<<<<<<< HEAD
 ARCH		?= $(SUBARCH)
-=======
-ARCH    	?= arm
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 CROSS_COMPILE	?= $(CONFIG_CROSS_COMPILE:"%"=%)
 
 # Architecture as present in compile.h
@@ -247,13 +243,8 @@ CONFIG_SHELL := $(shell if [ -x "$$BASH" ]; then echo $$BASH; \
 	  else if [ -x /bin/bash ]; then echo /bin/bash; \
 	  else echo sh; fi ; fi)
 
-<<<<<<< HEAD
 HOSTCC       = gcc
 HOSTCXX      = g++
-=======
-HOSTCC       = ccache gcc
-HOSTCXX      = ccache g++
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 HOSTCFLAGS   = -Wall -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer
 HOSTCXXFLAGS = -O2
 
@@ -339,11 +330,7 @@ include $(srctree)/scripts/Kbuild.include
 
 AS		= $(CROSS_COMPILE)as
 LD		= $(CROSS_COMPILE)ld
-<<<<<<< HEAD
 CC		= $(CROSS_COMPILE)gcc
-=======
-CC		= ccache $(CROSS_COMPILE)gcc
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 CPP		= $(CC) -E
 AR		= $(CROSS_COMPILE)ar
 NM		= $(CROSS_COMPILE)nm
@@ -363,13 +350,8 @@ CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
 CFLAGS_MODULE   =
 AFLAGS_MODULE   =
 LDFLAGS_MODULE  =
-<<<<<<< HEAD
 CFLAGS_KERNEL  =
 AFLAGS_KERNEL  =
-=======
-CFLAGS_KERNEL	=
-AFLAGS_KERNEL	=
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 CFLAGS_GCOV	= -fprofile-arcs -ftest-coverage
 
 
@@ -386,7 +368,6 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
-<<<<<<< HEAD
 		   -fno-delete-null-pointer-checks -mno-unaligned-access \
 		   -mtune=cortex-a9 -march=armv7-a -mfpu=neon \
 		   -fpredictive-commoning -fgcse-after-reload -ftree-vectorize \
@@ -394,9 +375,6 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -funswitch-loops -floop-interchange \
 		   -floop-strip-mine -floop-block
 			
-=======
-		   -fno-delete-null-pointer-checks
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 KBUILD_AFLAGS_KERNEL :=
 KBUILD_CFLAGS_KERNEL :=
 KBUILD_AFLAGS   := -D__ASSEMBLY__

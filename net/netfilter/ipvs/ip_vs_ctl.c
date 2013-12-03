@@ -856,7 +856,6 @@ ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest,
 	}
 
 	dest = kzalloc(sizeof(struct ip_vs_dest), GFP_KERNEL);
-<<<<<<< HEAD
 	if (dest == NULL) {
 		pr_err("%s(): no memory.\n", __func__);
 		return -ENOMEM;
@@ -866,14 +865,6 @@ ip_vs_new_dest(struct ip_vs_service *svc, struct ip_vs_dest_user_kern *udest,
 		pr_err("%s() alloc_percpu failed\n", __func__);
 		goto err_alloc;
 	}
-=======
-	if (dest == NULL)
-		return -ENOMEM;
-
-	dest->stats.cpustats = alloc_percpu(struct ip_vs_cpu_stats);
-	if (!dest->stats.cpustats)
-		goto err_alloc;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	dest->af = svc->af;
 	dest->protocol = svc->protocol;
@@ -1177,15 +1168,10 @@ ip_vs_add_service(struct net *net, struct ip_vs_service_user_kern *u,
 		goto out_err;
 	}
 	svc->stats.cpustats = alloc_percpu(struct ip_vs_cpu_stats);
-<<<<<<< HEAD
 	if (!svc->stats.cpustats) {
 		pr_err("%s() alloc_percpu failed\n", __func__);
 		goto out_err;
 	}
-=======
-	if (!svc->stats.cpustats)
-		goto out_err;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* I'm the first user of the service */
 	atomic_set(&svc->usecnt, 0);
@@ -3734,16 +3720,10 @@ int __net_init ip_vs_control_net_init(struct net *net)
 
 	/* procfs stats */
 	ipvs->tot_stats.cpustats = alloc_percpu(struct ip_vs_cpu_stats);
-<<<<<<< HEAD
 	if (!ipvs->tot_stats.cpustats) {
 		pr_err("%s(): alloc_percpu.\n", __func__);
 		return -ENOMEM;
 	}
-=======
-	if (!ipvs->tot_stats.cpustats)
-		return -ENOMEM;
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	spin_lock_init(&ipvs->tot_stats.lock);
 
 	proc_net_fops_create(net, "ip_vs", 0, &ip_vs_info_fops);

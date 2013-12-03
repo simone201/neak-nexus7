@@ -1531,22 +1531,10 @@ int dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
 		kfree_skb(skb);
 		return NET_RX_DROP;
 	}
-<<<<<<< HEAD
 	skb_set_dev(skb, dev);
 	skb->tstamp.tv64 = 0;
 	skb->pkt_type = PACKET_HOST;
 	skb->protocol = eth_type_trans(skb, dev);
-=======
-	skb->dev = dev;
-	skb_dst_drop(skb);
-	skb->tstamp.tv64 = 0;
-	skb->pkt_type = PACKET_HOST;
-	skb->protocol = eth_type_trans(skb, dev);
-	skb->mark = 0;
-	secpath_reset(skb);
-	nf_reset(skb);
-	nf_reset_trace(skb);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return netif_rx(skb);
 }
 EXPORT_SYMBOL_GPL(dev_forward_skb);
@@ -1801,7 +1789,6 @@ void netif_device_attach(struct net_device *dev)
 }
 EXPORT_SYMBOL(netif_device_attach);
 
-<<<<<<< HEAD
 /**
  * skb_dev_set -- assign a new device to a buffer
  * @skb: buffer for the new device
@@ -1832,8 +1819,6 @@ void skb_set_dev(struct sk_buff *skb, struct net_device *dev)
 EXPORT_SYMBOL(skb_set_dev);
 #endif /* CONFIG_NET_NS */
 
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * Invalidate hardware checksum when packet is to be mangled, and
  * complete checksum manually on outgoing path.
@@ -2696,21 +2681,13 @@ static int get_rps_cpu(struct net_device *dev, struct sk_buff *skb,
 	map = rcu_dereference(rxqueue->rps_map);
 	if (map) {
 		if (map->len == 1 &&
-<<<<<<< HEAD
 		    !rcu_dereference_raw(rxqueue->rps_flow_table)) {
-=======
-		    !rcu_access_pointer(rxqueue->rps_flow_table)) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			tcpu = map->cpus[0];
 			if (cpu_online(tcpu))
 				cpu = tcpu;
 			goto done;
 		}
-<<<<<<< HEAD
 	} else if (!rcu_dereference_raw(rxqueue->rps_flow_table)) {
-=======
-	} else if (!rcu_access_pointer(rxqueue->rps_flow_table)) {
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		goto done;
 	}
 
@@ -3201,10 +3178,6 @@ ncls:
 		}
 		switch (rx_handler(&skb)) {
 		case RX_HANDLER_CONSUMED:
-<<<<<<< HEAD
-=======
-			ret = NET_RX_SUCCESS;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			goto out;
 		case RX_HANDLER_ANOTHER:
 			goto another_round;
@@ -5762,13 +5735,8 @@ void netdev_run_todo(void)
 
 		/* paranoia */
 		BUG_ON(netdev_refcnt_read(dev));
-<<<<<<< HEAD
 		WARN_ON(rcu_dereference_raw(dev->ip_ptr));
 		WARN_ON(rcu_dereference_raw(dev->ip6_ptr));
-=======
-		WARN_ON(rcu_access_pointer(dev->ip_ptr));
-		WARN_ON(rcu_access_pointer(dev->ip6_ptr));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		WARN_ON(dev->dn_ptr);
 
 		if (dev->destructor)
@@ -5972,11 +5940,7 @@ void free_netdev(struct net_device *dev)
 	kfree(dev->_rx);
 #endif
 
-<<<<<<< HEAD
 	kfree(rcu_dereference_raw(dev->ingress_queue));
-=======
-	kfree(rcu_dereference_protected(dev->ingress_queue, 1));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* Flush device addresses */
 	dev_addr_flush(dev);

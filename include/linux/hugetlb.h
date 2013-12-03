@@ -14,18 +14,6 @@ struct user_struct;
 #include <linux/shm.h>
 #include <asm/tlbflush.h>
 
-<<<<<<< HEAD
-=======
-struct hugepage_subpool {
-	spinlock_t lock;
-	long count;
-	long max_hpages, used_hpages;
-};
-
-struct hugepage_subpool *hugepage_new_subpool(long nr_blocks);
-void hugepage_put_subpool(struct hugepage_subpool *spool);
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 int PageHuge(struct page *page);
 
 void reset_vma_resv_huge_pages(struct vm_area_struct *vma);
@@ -44,12 +32,6 @@ int follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
 			unsigned long *, int *, int, unsigned int flags);
 void unmap_hugepage_range(struct vm_area_struct *,
 			unsigned long, unsigned long, struct page *);
-<<<<<<< HEAD
-=======
-void __unmap_hugepage_range_final(struct vm_area_struct *vma,
-			  unsigned long start, unsigned long end,
-			  struct page *ref_page);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 void __unmap_hugepage_range(struct vm_area_struct *,
 			unsigned long, unsigned long, struct page *);
 int hugetlb_prefault(struct address_space *, struct vm_area_struct *);
@@ -108,16 +90,6 @@ static inline unsigned long hugetlb_total_pages(void)
 #define copy_hugetlb_page_range(src, dst, vma)	({ BUG(); 0; })
 #define hugetlb_prefault(mapping, vma)		({ BUG(); 0; })
 #define unmap_hugepage_range(vma, start, end, page)	BUG()
-<<<<<<< HEAD
-=======
-static inline void __unmap_hugepage_range_final(struct vm_area_struct *vma,
-			unsigned long start, unsigned long end,
-			struct page *ref_page)
-{
-	BUG();
-}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static inline void hugetlb_report_meminfo(struct seq_file *m)
 {
 }
@@ -171,19 +143,12 @@ struct hugetlbfs_config {
 };
 
 struct hugetlbfs_sb_info {
-<<<<<<< HEAD
 	long	max_blocks;   /* blocks allowed */
 	long	free_blocks;  /* blocks free */
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	long	max_inodes;   /* inodes allowed */
 	long	free_inodes;  /* inodes free */
 	spinlock_t	stat_lock;
 	struct hstate *hstate;
-<<<<<<< HEAD
-=======
-	struct hugepage_subpool *spool;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 
@@ -206,11 +171,8 @@ extern const struct file_operations hugetlbfs_file_operations;
 extern const struct vm_operations_struct hugetlb_vm_ops;
 struct file *hugetlb_file_setup(const char *name, size_t size, vm_flags_t acct,
 				struct user_struct **user, int creat_flags);
-<<<<<<< HEAD
 int hugetlb_get_quota(struct address_space *mapping, long delta);
 void hugetlb_put_quota(struct address_space *mapping, long delta);
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 static inline int is_file_hugepages(struct file *file)
 {

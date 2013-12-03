@@ -128,10 +128,6 @@ struct worker {
 	};
 
 	struct work_struct	*current_work;	/* L: work being processed */
-<<<<<<< HEAD
-=======
-	work_func_t		current_func;	/* L: current_work's fn */
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct cpu_workqueue_struct *current_cwq; /* L: current_work's cwq */
 	struct list_head	scheduled;	/* L: scheduled works */
 	struct task_struct	*task;		/* I: worker task */
@@ -257,19 +253,11 @@ struct workqueue_struct *system_long_wq __read_mostly;
 struct workqueue_struct *system_nrt_wq __read_mostly;
 struct workqueue_struct *system_unbound_wq __read_mostly;
 struct workqueue_struct *system_freezable_wq __read_mostly;
-<<<<<<< HEAD
-=======
-struct workqueue_struct *system_nrt_freezable_wq __read_mostly;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 EXPORT_SYMBOL_GPL(system_wq);
 EXPORT_SYMBOL_GPL(system_long_wq);
 EXPORT_SYMBOL_GPL(system_nrt_wq);
 EXPORT_SYMBOL_GPL(system_unbound_wq);
 EXPORT_SYMBOL_GPL(system_freezable_wq);
-<<<<<<< HEAD
-=======
-EXPORT_SYMBOL_GPL(system_nrt_freezable_wq);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/workqueue.h>
@@ -853,12 +841,7 @@ static struct worker *__find_worker_executing_work(struct global_cwq *gcwq,
 	struct hlist_node *tmp;
 
 	hlist_for_each_entry(worker, tmp, bwh, hentry)
-<<<<<<< HEAD
 		if (worker->current_work == work)
-=======
-		if (worker->current_work == work &&
-		    worker->current_func == work->func)
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			return worker;
 	return NULL;
 }
@@ -868,33 +851,9 @@ static struct worker *__find_worker_executing_work(struct global_cwq *gcwq,
  * @gcwq: gcwq of interest
  * @work: work to find worker for
  *
-<<<<<<< HEAD
  * Find a worker which is executing @work on @gcwq.  This function is
  * identical to __find_worker_executing_work() except that this
  * function calculates @bwh itself.
-=======
- * Find a worker which is executing @work on @gcwq by searching
- * @gcwq->busy_hash which is keyed by the address of @work.  For a worker
- * to match, its current execution should match the address of @work and
- * its work function.  This is to avoid unwanted dependency between
- * unrelated work executions through a work item being recycled while still
- * being executed.
- *
- * This is a bit tricky.  A work item may be freed once its execution
- * starts and nothing prevents the freed area from being recycled for
- * another work item.  If the same work item address ends up being reused
- * before the original execution finishes, workqueue will identify the
- * recycled work item as currently executing and make it wait until the
- * current execution finishes, introducing an unwanted dependency.
- *
- * This function checks the work item address, work function and workqueue
- * to avoid false positives.  Note that this isn't complete as one may
- * construct a work function which can introduce dependency onto itself
- * through a recycled work item.  Well, if somebody wants to shoot oneself
- * in the foot that badly, there's only so much we can do, and if such
- * deadlock actually occurs, it should be easy to locate the culprit work
- * function.
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  *
  * CONTEXT:
  * spin_lock_irq(gcwq->lock).
@@ -1185,13 +1144,8 @@ int queue_delayed_work_on(int cpu, struct workqueue_struct *wq,
 	if (!test_and_set_bit(WORK_STRUCT_PENDING_BIT, work_data_bits(work))) {
 		unsigned int lcpu;
 
-<<<<<<< HEAD
 		BUG_ON(timer_pending(timer));
 		BUG_ON(!list_empty(&work->entry));
-=======
-		WARN_ON_ONCE(timer_pending(timer));
-		WARN_ON_ONCE(!list_empty(&work->entry));
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		timer_stats_timer_set_start_info(&dwork->timer);
 
@@ -1259,18 +1213,8 @@ static void worker_enter_idle(struct worker *worker)
 	} else
 		wake_up_all(&gcwq->trustee_wait);
 
-<<<<<<< HEAD
 	/* sanity check nr_running */
 	WARN_ON_ONCE(gcwq->nr_workers == gcwq->nr_idle &&
-=======
-	/*
-	 * Sanity check nr_running.  Because trustee releases gcwq->lock
-	 * between setting %WORKER_ROGUE and zapping nr_running, the
-	 * warning may trigger spuriously.  Check iff trustee is idle.
-	 */
-	WARN_ON_ONCE(gcwq->trustee_state == TRUSTEE_DONE &&
-		     gcwq->nr_workers == gcwq->nr_idle &&
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		     atomic_read(get_gcwq_nr_running(gcwq->cpu)));
 }
 
@@ -1775,16 +1719,10 @@ static void move_linked_works(struct work_struct *work, struct list_head *head,
 		*nextp = n;
 }
 
-<<<<<<< HEAD
 static void cwq_activate_first_delayed(struct cpu_workqueue_struct *cwq)
 {
 	struct work_struct *work = list_first_entry(&cwq->delayed_works,
 						    struct work_struct, entry);
-=======
-static void cwq_activate_delayed_work(struct work_struct *work)
-{
-	struct cpu_workqueue_struct *cwq = get_work_cwq(work);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	struct list_head *pos = gcwq_determine_ins_pos(cwq->gcwq, cwq);
 
 	trace_workqueue_activate_work(work);
@@ -1793,17 +1731,6 @@ static void cwq_activate_delayed_work(struct work_struct *work)
 	cwq->nr_active++;
 }
 
-<<<<<<< HEAD
-=======
-static void cwq_activate_first_delayed(struct cpu_workqueue_struct *cwq)
-{
-	struct work_struct *work = list_first_entry(&cwq->delayed_works,
-						    struct work_struct, entry);
-
-	cwq_activate_delayed_work(work);
-}
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /**
  * cwq_dec_nr_in_flight - decrement cwq's nr_in_flight
  * @cwq: cwq of interest
@@ -1875,10 +1802,7 @@ __acquires(&gcwq->lock)
 	struct global_cwq *gcwq = cwq->gcwq;
 	struct hlist_head *bwh = busy_worker_head(gcwq, work);
 	bool cpu_intensive = cwq->wq->flags & WQ_CPU_INTENSIVE;
-<<<<<<< HEAD
 	work_func_t f = work->func;
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	int work_color;
 	struct worker *collision;
 #ifdef CONFIG_LOCKDEP
@@ -1907,10 +1831,6 @@ __acquires(&gcwq->lock)
 	debug_work_deactivate(work);
 	hlist_add_head(&worker->hentry, bwh);
 	worker->current_work = work;
-<<<<<<< HEAD
-=======
-	worker->current_func = work->func;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	worker->current_cwq = cwq;
 	work_color = get_work_color(work);
 
@@ -1942,21 +1862,11 @@ __acquires(&gcwq->lock)
 
 	spin_unlock_irq(&gcwq->lock);
 
-<<<<<<< HEAD
 	work_clear_pending(work);
 	lock_map_acquire_read(&cwq->wq->lockdep_map);
 	lock_map_acquire(&lockdep_map);
 	trace_workqueue_execute_start(work);
 	f(work);
-=======
-	smp_wmb();	/* paired with test_and_set_bit(PENDING) */
-	work_clear_pending(work);
-
-	lock_map_acquire_read(&cwq->wq->lockdep_map);
-	lock_map_acquire(&lockdep_map);
-	trace_workqueue_execute_start(work);
-	worker->current_func(work);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/*
 	 * While we must be careful to not use "work" after this, the trace
 	 * point will only record its address.
@@ -1966,18 +1876,11 @@ __acquires(&gcwq->lock)
 	lock_map_release(&cwq->wq->lockdep_map);
 
 	if (unlikely(in_atomic() || lockdep_depth(current) > 0)) {
-<<<<<<< HEAD
 		printk(KERN_ERR "BUG: workqueue leaked lock or atomic: "
 		       "%s/0x%08x/%d\n",
 		       current->comm, preempt_count(), task_pid_nr(current));
 		printk(KERN_ERR "    last function: ");
 		print_symbol("%s\n", (unsigned long)f);
-=======
-		pr_err("BUG: workqueue leaked lock or atomic: %s/0x%08x/%d\n"
-		       "     last function: %pf\n",
-		       current->comm, preempt_count(), task_pid_nr(current),
-		       worker->current_func);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		debug_show_held_locks(current);
 		dump_stack();
 	}
@@ -1991,10 +1894,6 @@ __acquires(&gcwq->lock)
 	/* we're done with it, release */
 	hlist_del_init(&worker->hentry);
 	worker->current_work = NULL;
-<<<<<<< HEAD
-=======
-	worker->current_func = NULL;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	worker->current_cwq = NULL;
 	cwq_dec_nr_in_flight(cwq, work_color, false);
 }
@@ -2137,15 +2036,8 @@ static int rescuer_thread(void *__wq)
 repeat:
 	set_current_state(TASK_INTERRUPTIBLE);
 
-<<<<<<< HEAD
 	if (kthread_should_stop())
 		return 0;
-=======
-	if (kthread_should_stop()) {
-		__set_current_state(TASK_RUNNING);
-		return 0;
-	}
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/*
 	 * See whether any cpu is asking for help.  Unbounded
@@ -2727,21 +2619,6 @@ static int try_to_grab_pending(struct work_struct *work)
 		smp_rmb();
 		if (gcwq == get_work_gcwq(work)) {
 			debug_work_deactivate(work);
-<<<<<<< HEAD
-=======
-
-			/*
-			 * A delayed work item cannot be grabbed directly
-			 * because it might have linked NO_COLOR work items
-			 * which, if left on the delayed_list, will confuse
-			 * cwq->nr_active management later on and cause
-			 * stall.  Make sure the work item is activated
-			 * before grabbing.
-			 */
-			if (*work_data_bits(work) & WORK_STRUCT_DELAYED)
-				cwq_activate_delayed_work(work);
-
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 			list_del_init(&work->entry);
 			cwq_dec_nr_in_flight(get_work_cwq(work),
 				get_work_color(work),
@@ -3553,27 +3430,14 @@ static int __cpuinit trustee_thread(void *__gcwq)
 
 	for_each_busy_worker(worker, i, pos, gcwq) {
 		struct work_struct *rebind_work = &worker->rebind_work;
-<<<<<<< HEAD
-=======
-		unsigned long worker_flags = worker->flags;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		/*
 		 * Rebind_work may race with future cpu hotplug
 		 * operations.  Use a separate flag to mark that
-<<<<<<< HEAD
 		 * rebinding is scheduled.
 		 */
 		worker->flags |= WORKER_REBIND;
 		worker->flags &= ~WORKER_ROGUE;
-=======
-		 * rebinding is scheduled.  The morphing should
-		 * be atomic.
-		 */
-		worker_flags |= WORKER_REBIND;
-		worker_flags &= ~WORKER_ROGUE;
-		ACCESS_ONCE(worker->flags) = worker_flags;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		/* queue rebind_work, wq doesn't matter, use the default one */
 		if (test_and_set_bit(WORK_STRUCT_PENDING_BIT,
@@ -3715,71 +3579,21 @@ static int __devinit workqueue_cpu_callback(struct notifier_block *nfb,
 	return notifier_from_errno(0);
 }
 
-<<<<<<< HEAD
 #ifdef CONFIG_SMP
 
 struct work_for_cpu {
 	struct completion completion;
-=======
-/*
- * Workqueues should be brought up before normal priority CPU notifiers.
- * This will be registered high priority CPU notifier.
- */
-static int __devinit workqueue_cpu_up_callback(struct notifier_block *nfb,
-					       unsigned long action,
-					       void *hcpu)
-{
-	switch (action & ~CPU_TASKS_FROZEN) {
-	case CPU_UP_PREPARE:
-	case CPU_UP_CANCELED:
-	case CPU_DOWN_FAILED:
-	case CPU_ONLINE:
-		return workqueue_cpu_callback(nfb, action, hcpu);
-	}
-	return NOTIFY_OK;
-}
-
-/*
- * Workqueues should be brought down after normal priority CPU notifiers.
- * This will be registered as low priority CPU notifier.
- */
-static int __devinit workqueue_cpu_down_callback(struct notifier_block *nfb,
-						 unsigned long action,
-						 void *hcpu)
-{
-	switch (action & ~CPU_TASKS_FROZEN) {
-	case CPU_DOWN_PREPARE:
-	case CPU_DYING:
-	case CPU_POST_DEAD:
-		return workqueue_cpu_callback(nfb, action, hcpu);
-	}
-	return NOTIFY_OK;
-}
-
-#ifdef CONFIG_SMP
-
-struct work_for_cpu {
-	struct work_struct work;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	long (*fn)(void *);
 	void *arg;
 	long ret;
 };
 
-<<<<<<< HEAD
 static int do_work_for_cpu(void *_wfc)
 {
 	struct work_for_cpu *wfc = _wfc;
 	wfc->ret = wfc->fn(wfc->arg);
 	complete(&wfc->completion);
 	return 0;
-=======
-static void work_for_cpu_fn(struct work_struct *work)
-{
-	struct work_for_cpu *wfc = container_of(work, struct work_for_cpu, work);
-
-	wfc->ret = wfc->fn(wfc->arg);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /**
@@ -3794,7 +3608,6 @@ static void work_for_cpu_fn(struct work_struct *work)
  */
 long work_on_cpu(unsigned int cpu, long (*fn)(void *), void *arg)
 {
-<<<<<<< HEAD
 	struct task_struct *sub_thread;
 	struct work_for_cpu wfc = {
 		.completion = COMPLETION_INITIALIZER_ONSTACK(wfc.completion),
@@ -3808,13 +3621,6 @@ long work_on_cpu(unsigned int cpu, long (*fn)(void *), void *arg)
 	kthread_bind(sub_thread, cpu);
 	wake_up_process(sub_thread);
 	wait_for_completion(&wfc.completion);
-=======
-	struct work_for_cpu wfc = { .fn = fn, .arg = arg };
-
-	INIT_WORK_ONSTACK(&wfc.work, work_for_cpu_fn);
-	schedule_work_on(cpu, &wfc.work);
-	flush_work(&wfc.work);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return wfc.ret;
 }
 EXPORT_SYMBOL_GPL(work_on_cpu);
@@ -3966,12 +3772,7 @@ static int __init init_workqueues(void)
 	unsigned int cpu;
 	int i;
 
-<<<<<<< HEAD
 	cpu_notifier(workqueue_cpu_callback, CPU_PRI_WORKQUEUE);
-=======
-	cpu_notifier(workqueue_cpu_up_callback, CPU_PRI_WORKQUEUE_UP);
-	cpu_notifier(workqueue_cpu_down_callback, CPU_PRI_WORKQUEUE_DOWN);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* initialize gcwqs */
 	for_each_gcwq_cpu(cpu) {
@@ -4020,16 +3821,8 @@ static int __init init_workqueues(void)
 					    WQ_UNBOUND_MAX_ACTIVE);
 	system_freezable_wq = alloc_workqueue("events_freezable",
 					      WQ_FREEZABLE, 0);
-<<<<<<< HEAD
 	BUG_ON(!system_wq || !system_long_wq || !system_nrt_wq ||
 	       !system_unbound_wq || !system_freezable_wq);
-=======
-	system_nrt_freezable_wq = alloc_workqueue("events_nrt_freezable",
-			WQ_NON_REENTRANT | WQ_FREEZABLE, 0);
-	BUG_ON(!system_wq || !system_long_wq || !system_nrt_wq ||
-	       !system_unbound_wq || !system_freezable_wq ||
-		!system_nrt_freezable_wq);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return 0;
 }
 early_initcall(init_workqueues);

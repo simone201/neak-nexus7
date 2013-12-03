@@ -21,10 +21,6 @@
 
 #include <linux/kernel.h>
 #include <linux/sched.h>
-<<<<<<< HEAD
-=======
-#include <linux/module.h>
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <linux/errno.h>
 #include <linux/fcntl.h>
 #include <linux/net.h>
@@ -1128,15 +1124,9 @@ static int svc_tcp_recvfrom(struct svc_rqst *rqstp)
 	if (len >= 0)
 		svsk->sk_tcplen += len;
 	if (len != want) {
-<<<<<<< HEAD
 		if (len < 0 && len != -EAGAIN)
 			goto err_other;
 		svc_tcp_save_pages(svsk, rqstp);
-=======
-		svc_tcp_save_pages(svsk, rqstp);
-		if (len < 0 && len != -EAGAIN)
-			goto err_other;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		dprintk("svc: incomplete TCP record (%d of %d)\n",
 			svsk->sk_tcplen, svsk->sk_reclen);
 		goto err_noclose;

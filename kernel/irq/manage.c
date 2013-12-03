@@ -698,10 +698,6 @@ static void
 irq_thread_check_affinity(struct irq_desc *desc, struct irqaction *action)
 {
 	cpumask_var_t mask;
-<<<<<<< HEAD
-=======
-	bool valid = true;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (!test_and_clear_bit(IRQTF_AFFINITY, &action->thread_flags))
 		return;
@@ -716,25 +712,10 @@ irq_thread_check_affinity(struct irq_desc *desc, struct irqaction *action)
 	}
 
 	raw_spin_lock_irq(&desc->lock);
-<<<<<<< HEAD
 	cpumask_copy(mask, desc->irq_data.affinity);
 	raw_spin_unlock_irq(&desc->lock);
 
 	set_cpus_allowed_ptr(current, mask);
-=======
-	/*
-	 * This code is triggered unconditionally. Check the affinity
-	 * mask pointer. For CPU_MASK_OFFSTACK=n this is optimized out.
-	 */
-	if (desc->irq_data.affinity)
-		cpumask_copy(mask, desc->irq_data.affinity);
-	else
-		valid = false;
-	raw_spin_unlock_irq(&desc->lock);
-
-	if (valid)
-		set_cpus_allowed_ptr(current, mask);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	free_cpumask_var(mask);
 }
 #else
@@ -966,19 +947,6 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 		 */
 		get_task_struct(t);
 		new->thread = t;
-<<<<<<< HEAD
-=======
-		/*
-		 * Tell the thread to set its affinity. This is
-		 * important for shared interrupt handlers as we do
-		 * not invoke setup_affinity() for the secondary
-		 * handlers as everything is already set up. Even for
-		 * interrupts marked with IRQF_NO_BALANCE this is
-		 * correct as we want the thread to move to the cpu(s)
-		 * on which the requesting code placed the interrupt.
-		 */
-		set_bit(IRQTF_AFFINITY, &new->thread_flags);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 	if (!alloc_cpumask_var(&mask, GFP_KERNEL)) {

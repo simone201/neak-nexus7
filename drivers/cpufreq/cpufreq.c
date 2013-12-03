@@ -30,6 +30,10 @@
 #include <linux/mutex.h>
 #include <linux/syscore_ops.h>
 #include <linux/pm_qos_params.h>
+<<<<<<< HEAD
+=======
+#include <linux/tegra_minmax_cpufreq.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #include <trace/events/power.h>
 
@@ -395,8 +399,61 @@ static ssize_t store_##file_name					\
 	return ret ? ret : count;					\
 }
 
+<<<<<<< HEAD
 store_one(scaling_min_freq, min);
 store_one(scaling_max_freq, max);
+=======
+#ifndef CONFIG_TEGRA_CPU_OVERCLOCK
+store_one(scaling_min_freq, min);
+#else
+static ssize_t store_scaling_min_freq(struct cpufreq_policy *policy,
+                                       const char *buf, size_t count)
+{
+         unsigned int ret = -EINVAL;
+         struct cpufreq_policy new_policy;
+
+         ret = cpufreq_get_policy(&new_policy, policy->cpu);
+         if (ret)
+                 return -EINVAL;
+
+         ret = sscanf(buf, "%u", &new_policy.min);
+         if (ret != 1)
+                 return -EINVAL;
+         per_cpu(tegra_cpu_min_freq, policy->cpu) = new_policy.min;
+
+         ret = __cpufreq_set_policy(policy, &new_policy);
+         policy->user_policy.min = new_policy.min;
+
+         return ret ? ret : count;
+}
+#endif
+
+#ifndef CONFIG_TEGRA_CPU_OVERCLOCK
+store_one(scaling_max_freq, max);
+#else
+static ssize_t store_scaling_max_freq(struct cpufreq_policy *policy,
+                                       const char *buf, size_t count)
+{
+         unsigned int ret = -EINVAL;
+         struct cpufreq_policy new_policy;
+
+         ret = cpufreq_get_policy(&new_policy, policy->cpu);
+         if (ret)
+                 return -EINVAL;
+
+         ret = sscanf(buf, "%u", &new_policy.max);
+         if (ret != 1)
+                 return -EINVAL;
+         per_cpu(tegra_cpu_max_freq, policy->cpu) = new_policy.max;
+
+         ret = __cpufreq_set_policy(policy, &new_policy);
+         policy->user_policy.max = new_policy.max;
+
+         return ret ? ret : count;
+}
+#endif
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
+
 /**
  * show_cpuinfo_cur_freq - current CPU frequency as detected by hardware
  */
@@ -605,7 +662,10 @@ static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
 #include "../../arch/arm/mach-tegra/clock.h"
 
 extern int user_mv_table[MAX_DVFS_FREQS];
+<<<<<<< HEAD
 extern int gpuc_mv_table[MAX_DVFS_FREQS];
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 static ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf)
 {
@@ -614,7 +674,11 @@ static ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf)
 	struct clk *cpu_clk_g = tegra_get_clock_by_name("cpu_g");
 
 	/* find how many actual entries there are */
+<<<<<<< HEAD
 		i = cpu_clk_g->dvfs->num_freqs;
+=======
+	i = cpu_clk_g->dvfs->num_freqs;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	for(i--; i >=0; i--) {
 		out += sprintf(out, "%lumhz: %i mV\n",
@@ -625,7 +689,11 @@ static ssize_t show_UV_mV_table(struct cpufreq_policy *policy, char *buf)
 	return out - buf;
 }
 
+<<<<<<< HEAD
 static ssize_t store_UV_mV_table(struct cpufreq_policy *policy, char *buf, size_t count)
+=======
+static ssize_t store_UV_mV_table(struct cpufreq_policy *policy, const char *buf, size_t count)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	int i = 0;
 	unsigned long volt_cur;
@@ -658,6 +726,7 @@ static ssize_t store_UV_mV_table(struct cpufreq_policy *policy, char *buf, size_
 
 	return count;
 }
+<<<<<<< HEAD
 
 static ssize_t show_gpuc_UV_mV_table(struct cpufreq_policy *policy, char *buf)
 {
@@ -818,6 +887,10 @@ static ssize_t store_gpu_oc(struct cpufreq_policy *policy, const char *buf, size
 	return count;
 }
 #endif
+=======
+#endif
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 cpufreq_freq_attr_ro_perm(cpuinfo_cur_freq, 0400);
 cpufreq_freq_attr_ro(cpuinfo_min_freq);
 cpufreq_freq_attr_ro(cpuinfo_max_freq);
@@ -837,10 +910,13 @@ cpufreq_freq_attr_ro(policy_min_freq);
 cpufreq_freq_attr_ro(policy_max_freq);
 #ifdef CONFIG_VOLTAGE_CONTROL
 cpufreq_freq_attr_rw(UV_mV_table);
+<<<<<<< HEAD
 cpufreq_freq_attr_rw(gpuc_UV_mV_table);
 #endif
 #ifdef CONFIG_GPU_OVERCLOCK
 cpufreq_freq_attr_rw(gpu_oc);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #endif
 
 static struct attribute *default_attrs[] = {
@@ -860,12 +936,16 @@ static struct attribute *default_attrs[] = {
 	&policy_max_freq.attr,
 #ifdef CONFIG_VOLTAGE_CONTROL
 	&UV_mV_table.attr,
+<<<<<<< HEAD
 	&gpuc_UV_mV_table.attr,
 #endif
 #ifdef CONFIG_GPU_OVERCLOCK
 	&gpu_oc.attr,
 #endif
 
+=======
+#endif
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	NULL
 };
 
@@ -1904,9 +1984,15 @@ static int __cpufreq_set_policy(struct cpufreq_policy *data,
 	unsigned int pmax = policy->max;
 
 	qmin = min((unsigned int)pm_qos_request(PM_QOS_CPU_FREQ_MIN),
+<<<<<<< HEAD
 		   data->max);
 	qmax = max((unsigned int)pm_qos_request(PM_QOS_CPU_FREQ_MAX),
 		   data->min);
+=======
+		   data->user_policy.max);
+	qmax = max((unsigned int)pm_qos_request(PM_QOS_CPU_FREQ_MAX),
+		   data->user_policy.min);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	pr_debug("setting new policy for CPU %u: %u - %u (%u - %u) kHz\n",
 		policy->cpu, pmin, pmax, qmin, qmax);
@@ -1918,7 +2004,12 @@ static int __cpufreq_set_policy(struct cpufreq_policy *data,
 	memcpy(&policy->cpuinfo, &data->cpuinfo,
 				sizeof(struct cpufreq_cpuinfo));
 
+<<<<<<< HEAD
 	if (policy->min > data->max || policy->max < data->min) {
+=======
+	if (policy->min > data->user_policy.max ||
+	    policy->max < data->user_policy.min) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		ret = -EINVAL;
 		goto error_out;
 	}
@@ -2236,3 +2327,8 @@ static int __init cpufreq_core_init(void)
 	return 0;
 }
 core_initcall(cpufreq_core_init);
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a

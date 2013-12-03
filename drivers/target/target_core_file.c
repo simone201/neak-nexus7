@@ -290,7 +290,11 @@ static int fd_do_readv(struct se_task *task)
 
 	for_each_sg(task->task_sg, sg, task->task_sg_nents, i) {
 		iov[i].iov_len = sg->length;
+<<<<<<< HEAD
 		iov[i].iov_base = sg_virt(sg);
+=======
+		iov[i].iov_base = kmap(sg_page(sg)) + sg->offset;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 	old_fs = get_fs();
@@ -298,6 +302,11 @@ static int fd_do_readv(struct se_task *task)
 	ret = vfs_readv(fd, &iov[0], task->task_sg_nents, &pos);
 	set_fs(old_fs);
 
+<<<<<<< HEAD
+=======
+	for_each_sg(task->task_sg, sg, task->task_sg_nents, i)
+		kunmap(sg_page(sg));
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	kfree(iov);
 	/*
 	 * Return zeros and GOOD status even if the READ did not return
@@ -342,7 +351,11 @@ static int fd_do_writev(struct se_task *task)
 
 	for_each_sg(task->task_sg, sg, task->task_sg_nents, i) {
 		iov[i].iov_len = sg->length;
+<<<<<<< HEAD
 		iov[i].iov_base = sg_virt(sg);
+=======
+		iov[i].iov_base = kmap(sg_page(sg)) + sg->offset;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 	old_fs = get_fs();
@@ -350,6 +363,12 @@ static int fd_do_writev(struct se_task *task)
 	ret = vfs_writev(fd, &iov[0], task->task_sg_nents, &pos);
 	set_fs(old_fs);
 
+<<<<<<< HEAD
+=======
+	for_each_sg(task->task_sg, sg, task->task_sg_nents, i)
+		kunmap(sg_page(sg));
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	kfree(iov);
 
 	if (ret < 0 || ret != task->task_size) {

@@ -120,7 +120,11 @@ do {									\
 #else				/* !(WL_DBG_LEVEL > 0) */
 #define	WL_DBG(args)
 #endif				/* (WL_DBG_LEVEL > 0) */
+<<<<<<< HEAD
 #define	WL_PNO(args)
+=======
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #define WL_SCAN_RETRY_MAX	3
 #define WL_NUM_PMKIDS_MAX	MAXPMKID
@@ -549,6 +553,7 @@ wl_get_status_all(struct wl_priv *wl, s32 status)
 	return cnt? true: false;
 }
 
+<<<<<<< HEAD
 
 static inline void
 wl_set_status_all(struct wl_priv *wl, s32 status, u32 op)
@@ -572,6 +577,8 @@ wl_set_status_all(struct wl_priv *wl, s32 status, u32 op)
 }
 
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static inline void
 wl_set_status_by_netdev(struct wl_priv *wl, s32 status,
 	struct net_device *ndev, u32 op)
@@ -662,8 +669,11 @@ wl_get_profile_by_netdev(struct wl_priv *wl, struct net_device *ndev)
 	(wl_set_status_by_netdev(wl, WL_STATUS_ ## stat, ndev, 1))
 #define wl_clr_drv_status(wl, stat, ndev)  \
 	(wl_set_status_by_netdev(wl, WL_STATUS_ ## stat, ndev, 2))
+<<<<<<< HEAD
 #define wl_clr_drv_status_all(wl, stat)  \
 	(wl_set_status_all(wl, WL_STATUS_ ## stat, 2))
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #define wl_chg_drv_status(wl, stat, ndev)  \
 	(wl_set_status_by_netdev(wl, WL_STATUS_ ## stat, ndev, 4))
 

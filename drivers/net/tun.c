@@ -417,6 +417,11 @@ static netdev_tx_t tun_net_xmit(struct sk_buff *skb, struct net_device *dev)
 	 * for indefinite time. */
 	skb_orphan(skb);
 
+<<<<<<< HEAD
+=======
+	nf_reset(skb);
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/* Enqueue packet */
 	skb_queue_tail(&tun->socket.sk->sk_receive_queue, skb);
 

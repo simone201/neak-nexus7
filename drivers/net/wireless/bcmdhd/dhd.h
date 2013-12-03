@@ -24,7 +24,11 @@
  * software in any way with any other Broadcom software provided under a license
  * other than the GPL, without Broadcom's express prior written consent.
  *
+<<<<<<< HEAD
  * $Id: dhd.h 357954 2012-09-20 18:22:31Z $
+=======
+ * $Id: dhd.h 344123 2012-07-11 09:33:49Z $
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  */
 
 /****************
@@ -308,8 +312,11 @@ extern int dhd_os_wake_unlock(dhd_pub_t *pub);
 extern int dhd_os_wake_lock_timeout(dhd_pub_t *pub);
 extern int dhd_os_wake_lock_rx_timeout_enable(dhd_pub_t *pub, int val);
 extern int dhd_os_wake_lock_ctrl_timeout_enable(dhd_pub_t *pub, int val);
+<<<<<<< HEAD
 extern int dhd_os_wd_wake_lock(dhd_pub_t *pub);
 extern int dhd_os_wd_wake_unlock(dhd_pub_t *pub);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 inline static void MUTEX_LOCK_SOFTAP_SET_INIT(dhd_pub_t * dhdp)
 {
@@ -332,10 +339,15 @@ inline static void MUTEX_UNLOCK_SOFTAP_SET(dhd_pub_t * dhdp)
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27)) */
 }
 
+<<<<<<< HEAD
 #define DHD_OS_WAKE_LOCK(pub)			dhd_os_wake_lock(pub)
 #define DHD_OS_WAKE_UNLOCK(pub)			dhd_os_wake_unlock(pub)
 #define DHD_OS_WD_WAKE_LOCK(pub)		dhd_os_wd_wake_lock(pub)
 #define DHD_OS_WD_WAKE_UNLOCK(pub)		dhd_os_wd_wake_unlock(pub)
+=======
+#define DHD_OS_WAKE_LOCK(pub) 			dhd_os_wake_lock(pub)
+#define DHD_OS_WAKE_UNLOCK(pub) 		dhd_os_wake_unlock(pub)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #define DHD_OS_WAKE_LOCK_TIMEOUT(pub)		dhd_os_wake_lock_timeout(pub)
 #define DHD_OS_WAKE_LOCK_RX_TIMEOUT_ENABLE(pub, val)	dhd_os_wake_lock_rx_timeout_enable(pub, val)
 #define DHD_OS_WAKE_LOCK_CTRL_TIMEOUT_ENABLE(pub, val)	dhd_os_wake_lock_ctrl_timeout_enable(pub, val)
@@ -618,6 +630,7 @@ extern uint dhd_pktgen_len;
 #define MAX_PKTGEN_LEN 1800
 #endif
 
+<<<<<<< HEAD
 /* hooks for custom glom setting option via Makefile */
 #define DEFAULT_GLOM_VALUE 	-1
 #ifndef CUSTOM_GLOM_SETTING
@@ -626,6 +639,11 @@ extern uint dhd_pktgen_len;
 
 /* hooks for custom Roaming Trigger  setting via Makefile */
 #define DEFAULT_ROAM_TRIGGER_VALUE -65 /* dBm default roam trigger all band */
+=======
+
+/* hooks for custom Roaming Trigger  setting via Makefile */
+#define DEFAULT_ROAM_TRIGGER_VALUE -75 /* dBm default roam trigger all band */
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #define DEFAULT_ROAM_TRIGGER_SETTING 	-1
 #ifndef CUSTOM_ROAM_TRIGGER_SETTING
 #define CUSTOM_ROAM_TRIGGER_SETTING 	DEFAULT_ROAM_TRIGGER_VALUE

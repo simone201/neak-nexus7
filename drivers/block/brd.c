@@ -117,13 +117,21 @@ static struct page *brd_insert_page(struct brd_device *brd, sector_t sector)
 
 	spin_lock(&brd->brd_lock);
 	idx = sector >> PAGE_SECTORS_SHIFT;
+<<<<<<< HEAD
+=======
+	page->index = idx;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (radix_tree_insert(&brd->brd_pages, idx, page)) {
 		__free_page(page);
 		page = radix_tree_lookup(&brd->brd_pages, idx);
 		BUG_ON(!page);
 		BUG_ON(page->index != idx);
+<<<<<<< HEAD
 	} else
 		page->index = idx;
+=======
+	}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	spin_unlock(&brd->brd_lock);
 
 	radix_tree_preload_end();

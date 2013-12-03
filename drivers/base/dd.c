@@ -110,7 +110,11 @@ static int really_probe(struct device *dev, struct device_driver *drv)
 	int ret = 0;
 
 	atomic_inc(&probe_count);
+<<<<<<< HEAD
 	pr_debug("bus: '%s': %s: probing driver %s with device %s\n",
+=======
+	pr_debug("dd.c bus: '%s': %s: probing driver %s with device %s\n",
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		 drv->bus->name, __func__, drv->name, dev_name(dev));
 	WARN_ON(!list_empty(&dev->devres_head));
 
@@ -201,10 +205,18 @@ int driver_probe_device(struct device_driver *drv, struct device *dev)
 {
 	int ret = 0;
 
+<<<<<<< HEAD
 	if (!device_is_registered(dev))
 		return -ENODEV;
 
 	pr_debug("bus: '%s': %s: matched device %s with driver %s\n",
+=======
+    //pr_info("dd.c driver_probe_device\n");
+	if (!device_is_registered(dev))
+		return -ENODEV;
+
+	pr_debug("dd.c bus: '%s': %s: matched device %s with driver %s\n",
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		 drv->bus->name, __func__, dev_name(dev), drv->name);
 
 	pm_runtime_get_noresume(dev);
@@ -305,9 +317,23 @@ static int __driver_attach(struct device *dev, void *data)
  * returns 0 and the @dev->driver is set, we've found a
  * compatible pair.
  */
+<<<<<<< HEAD
 int driver_attach(struct device_driver *drv)
 {
 	return bus_for_each_dev(drv->bus, NULL, drv, __driver_attach);
+=======
+
+// tmtmtm 
+struct device_driver *current_drv = NULL;
+
+int driver_attach(struct device_driver *drv)
+{
+    // called by driver.c store_new_id() + usb_store_new_id()
+    // tmtmtm 
+    current_drv = drv;
+	return bus_for_each_dev(drv->bus, NULL, drv, __driver_attach); 
+	                    // --> probe, real_probe -> snd_usb_audio_probe
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 EXPORT_SYMBOL_GPL(driver_attach);
 

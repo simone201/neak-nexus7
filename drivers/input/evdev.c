@@ -20,7 +20,11 @@
 #include <linux/slab.h>
 #include <linux/module.h>
 #include <linux/init.h>
+<<<<<<< HEAD
 #include <linux/input.h>
+=======
+#include <linux/input/mt.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #include <linux/major.h>
 #include <linux/device.h>
 #include <linux/wakelock.h>
@@ -668,6 +672,33 @@ static int evdev_disable_suspend_block(struct evdev *evdev,
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int evdev_handle_mt_request(struct input_dev *dev,
+				   unsigned int size,
+				   int __user *ip)
+{
+	const struct input_mt *mt = dev->mt;
+	unsigned int code;
+	int max_slots;
+	int i;
+
+	if (get_user(code, &ip[0]))
+		return -EFAULT;
+	if (!mt || !input_is_mt_value(code))
+		return -EINVAL;
+
+	max_slots = (size - sizeof(__u32)) / sizeof(__s32);
+	for (i = 0; i < mt->num_slots && i < max_slots; i++) {
+		int value = input_mt_get_value(&mt->slots[i], code);
+		if (put_user(value, &ip[1 + i]))
+			return -EFAULT;
+	}
+
+	return 0;
+}
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static long evdev_do_ioctl(struct file *file, unsigned int cmd,
 			   void __user *p, int compat_mode)
 {
@@ -762,6 +793,12 @@ static long evdev_do_ioctl(struct file *file, unsigned int cmd,
 		return bits_to_user(dev->propbit, INPUT_PROP_MAX,
 				    size, p, compat_mode);
 
+<<<<<<< HEAD
+=======
+	case EVIOCGMTSLOTS(0):
+		return evdev_handle_mt_request(dev, size, ip);
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	case EVIOCGKEY(0):
 		return bits_to_user(dev->key, KEY_MAX, size, p, compat_mode);
 

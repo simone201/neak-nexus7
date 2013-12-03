@@ -1,4 +1,5 @@
 /*
+<<<<<<< HEAD
 * Copyright (C) 2012 Invensense, Inc.
 *
 * This software is licensed under the terms of the GNU General Public
@@ -21,6 +22,11 @@
  *      @brief   dmp map definition
  *      @details This file is part of invensense mpu driver code
  *
+=======
+ $License:
+    Copyright (C) 2011 InvenSense Corporation, All Rights Reserved.
+ $
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  */
 #ifndef DMPMAP_H
 #define DMPMAP_H

@@ -1925,6 +1925,11 @@ int uart_suspend_port(struct uart_driver *drv, struct uart_port *uport)
 		mutex_unlock(&port->mutex);
 		return 0;
 	}
+<<<<<<< HEAD
+=======
+	put_device(tty_dev);
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (console_suspend_enabled || !uart_console(uport))
 		uport->suspended = 1;
 
@@ -1990,9 +1995,17 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
 			disable_irq_wake(uport->irq);
 			uport->irq_wake = 0;
 		}
+<<<<<<< HEAD
 		mutex_unlock(&port->mutex);
 		return 0;
 	}
+=======
+		put_device(tty_dev);
+		mutex_unlock(&port->mutex);
+		return 0;
+	}
+	put_device(tty_dev);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	uport->suspended = 0;
 
 	/*

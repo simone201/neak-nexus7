@@ -399,6 +399,7 @@ config TREE_PREEMPT_RCU
 	  is also required.  It also scales down nicely to
 	  smaller systems.
 
+<<<<<<< HEAD
 config JRCU
        bool "An RCU suitable for small SMP systems"
        depends on PREEMPT
@@ -417,6 +418,8 @@ config JRCU
 
          Most users should say N here.
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 config TINY_RCU
 	bool "UP-only small-memory-footprint RCU"
 	depends on !SMP
@@ -442,6 +445,7 @@ config PREEMPT_RCU
 	  This option enables preemptible-RCU code that is common between
 	  the TREE_PREEMPT_RCU and TINY_PREEMPT_RCU implementations.
 
+<<<<<<< HEAD
 config JRCU_DAEMON
        bool
        depends on JRCU
@@ -493,6 +497,8 @@ config PREEMPT_COUNT_CPU
          so this option should be selected only if other kernel features
          that use preempt_count_cpu() are also selected.
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 config RCU_TRACE
 	bool "Enable tracing for RCU"
 	help
@@ -672,6 +678,7 @@ config CGROUP_FREEZER
 	  Provides a way to freeze and unfreeze all tasks in a
 	  cgroup.
 
+<<<<<<< HEAD
 config CGROUP_TIMER_SLACK
 	bool "Timer slack cgroup controller"
 	help
@@ -680,6 +687,8 @@ config CGROUP_TIMER_SLACK
 	  It's useful in mobile devices where certain background apps
 	  are attached to a cgroup and combined wakeups are desired.
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 config CGROUP_DEVICE
 	bool "Device controller for cgroups"
 	help
@@ -1001,7 +1010,11 @@ config PANIC_TIMEOUT
 menuconfig EXPERT
 	bool "Configure standard kernel features (expert users)"
 	# Unhide debug options, to make the on-by-default options visible
+<<<<<<< HEAD
+	# We do not select DEBUG_KERNEL
+=======
 	select DEBUG_KERNEL
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	help
 	  This option allows certain base kernel options and settings
           to be disabled or tweaked. This is for specialized

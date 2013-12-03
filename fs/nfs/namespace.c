@@ -37,7 +37,10 @@ static struct vfsmount *nfs_do_submount(struct dentry *dentry,
  * @dentry - pointer to dentry
  * @buffer - result buffer
  * @buflen - length of buffer
+<<<<<<< HEAD
+=======
  * @flags - options (see below)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  *
  * Helper function for constructing the server pathname
  * by arbitrary hashed dentry.
@@ -45,6 +48,10 @@ static struct vfsmount *nfs_do_submount(struct dentry *dentry,
  * This is mainly for use in figuring out the path on the
  * server side when automounting on top of an existing partition
  * and in generating /proc/mounts and friends.
+<<<<<<< HEAD
+ */
+char *nfs_path(char **p, struct dentry *dentry, char *buffer, ssize_t buflen)
+=======
  *
  * Supported flags:
  * NFS_PATH_CANONICAL: ensure there is exactly one slash after
@@ -53,6 +60,7 @@ static struct vfsmount *nfs_do_submount(struct dentry *dentry,
  */
 char *nfs_path(char **p, struct dentry *dentry, char *buffer, ssize_t buflen,
 	       unsigned flags)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	char *end;
 	int namelen;
@@ -85,7 +93,11 @@ rename_retry:
 		rcu_read_unlock();
 		goto rename_retry;
 	}
+<<<<<<< HEAD
+	if (*end != '/') {
+=======
 	if ((flags & NFS_PATH_CANONICAL) && *end != '/') {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (--buflen < 0) {
 			spin_unlock(&dentry->d_lock);
 			rcu_read_unlock();
@@ -102,11 +114,17 @@ rename_retry:
 		return end;
 	}
 	namelen = strlen(base);
+<<<<<<< HEAD
+	/* Strip off excess slashes in base string */
+	while (namelen > 0 && base[namelen - 1] == '/')
+		namelen--;
+=======
 	if (flags & NFS_PATH_CANONICAL) {
 		/* Strip off excess slashes in base string */
 		while (namelen > 0 && base[namelen - 1] == '/')
 			namelen--;
 	}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	buflen -= namelen;
 	if (buflen < 0) {
 		spin_unlock(&dentry->d_lock);
@@ -289,6 +307,13 @@ out_nofree:
 	return mnt;
 }
 
+<<<<<<< HEAD
+const struct inode_operations nfs_mountpoint_inode_operations = {
+	.getattr	= nfs_getattr,
+};
+
+const struct inode_operations nfs_referral_inode_operations = {
+=======
 static int
 nfs_namespace_getattr(struct vfsmount *mnt, struct dentry *dentry, struct kstat *stat)
 {
@@ -314,6 +339,7 @@ const struct inode_operations nfs_mountpoint_inode_operations = {
 const struct inode_operations nfs_referral_inode_operations = {
 	.getattr	= nfs_namespace_getattr,
 	.setattr	= nfs_namespace_setattr,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 static void nfs_expire_automounts(struct work_struct *work)

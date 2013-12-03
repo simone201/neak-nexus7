@@ -578,6 +578,12 @@ cifs_lookup(struct inode *parent_dir_inode, struct dentry *direntry,
 			 * If either that or op not supported returned, follow
 			 * the normal lookup.
 			 */
+<<<<<<< HEAD
+			if ((rc == 0) || (rc == -ENOENT))
+				posix_open = true;
+			else if ((rc == -EINVAL) || (rc != -EOPNOTSUPP))
+				pTcon->broken_posix_open = true;
+=======
 			switch (rc) {
 			case 0:
 				/*
@@ -598,6 +604,7 @@ cifs_lookup(struct inode *parent_dir_inode, struct dentry *direntry,
 			default:
 				pTcon->broken_posix_open = true;
 			}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		}
 		if (!posix_open)
 			rc = cifs_get_inode_info_unix(&newInode, full_path,

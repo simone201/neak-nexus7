@@ -4430,12 +4430,17 @@ parse_DFS_referrals(TRANSACTION2_GET_DFS_REFER_RSP *pSMBr,
 		max_len = data_end - temp;
 		node->node_name = cifs_strndup_from_ucs(temp, max_len,
 						      is_unicode, nls_codepage);
+<<<<<<< HEAD
+		if (!node->node_name)
+			rc = -ENOMEM;
+=======
 		if (!node->node_name) {
 			rc = -ENOMEM;
 			goto parse_DFS_referrals_exit;
 		}
 
 		ref++;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 
 parse_DFS_referrals_exit:

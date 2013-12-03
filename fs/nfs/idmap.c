@@ -318,12 +318,20 @@ struct idmap_hashent {
 	unsigned long		ih_expires;
 	__u32			ih_id;
 	size_t			ih_namelen;
+<<<<<<< HEAD
+	char			ih_name[IDMAP_NAMESZ];
+=======
 	const char		*ih_name;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 struct idmap_hashtable {
 	__u8			h_type;
+<<<<<<< HEAD
+	struct idmap_hashent	h_entries[IDMAP_HASH_SZ];
+=======
 	struct idmap_hashent	*h_entries;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 struct idmap {
@@ -378,6 +386,8 @@ nfs_idmap_new(struct nfs_client *clp)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
 static void
 idmap_alloc_hashtable(struct idmap_hashtable *h)
 {
@@ -400,6 +410,7 @@ idmap_free_hashtable(struct idmap_hashtable *h)
 	kfree(h->h_entries);
 }
 
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 void
 nfs_idmap_delete(struct nfs_client *clp)
 {
@@ -409,8 +420,11 @@ nfs_idmap_delete(struct nfs_client *clp)
 		return;
 	rpc_unlink(idmap->idmap_dentry);
 	clp->cl_idmap = NULL;
+<<<<<<< HEAD
+=======
 	idmap_free_hashtable(&idmap->idmap_user_hash);
 	idmap_free_hashtable(&idmap->idmap_group_hash);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	kfree(idmap);
 }
 
@@ -420,8 +434,11 @@ nfs_idmap_delete(struct nfs_client *clp)
 static inline struct idmap_hashent *
 idmap_name_hash(struct idmap_hashtable* h, const char *name, size_t len)
 {
+<<<<<<< HEAD
+=======
 	if (h->h_entries == NULL)
 		return NULL;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return &h->h_entries[fnvhash32(name, len) % IDMAP_HASH_SZ];
 }
 
@@ -430,8 +447,11 @@ idmap_lookup_name(struct idmap_hashtable *h, const char *name, size_t len)
 {
 	struct idmap_hashent *he = idmap_name_hash(h, name, len);
 
+<<<<<<< HEAD
+=======
 	if (he == NULL)
 		return NULL;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (he->ih_namelen != len || memcmp(he->ih_name, name, len) != 0)
 		return NULL;
 	if (time_after(jiffies, he->ih_expires))
@@ -442,8 +462,11 @@ idmap_lookup_name(struct idmap_hashtable *h, const char *name, size_t len)
 static inline struct idmap_hashent *
 idmap_id_hash(struct idmap_hashtable* h, __u32 id)
 {
+<<<<<<< HEAD
+=======
 	if (h->h_entries == NULL)
 		return NULL;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return &h->h_entries[fnvhash32(&id, sizeof(id)) % IDMAP_HASH_SZ];
 }
 
@@ -451,9 +474,12 @@ static struct idmap_hashent *
 idmap_lookup_id(struct idmap_hashtable *h, __u32 id)
 {
 	struct idmap_hashent *he = idmap_id_hash(h, id);
+<<<<<<< HEAD
+=======
 
 	if (he == NULL)
 		return NULL;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (he->ih_id != id || he->ih_namelen == 0)
 		return NULL;
 	if (time_after(jiffies, he->ih_expires))
@@ -469,14 +495,20 @@ idmap_lookup_id(struct idmap_hashtable *h, __u32 id)
 static inline struct idmap_hashent *
 idmap_alloc_name(struct idmap_hashtable *h, char *name, size_t len)
 {
+<<<<<<< HEAD
+=======
 	idmap_alloc_hashtable(h);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return idmap_name_hash(h, name, len);
 }
 
 static inline struct idmap_hashent *
 idmap_alloc_id(struct idmap_hashtable *h, __u32 id)
 {
+<<<<<<< HEAD
+=======
 	idmap_alloc_hashtable(h);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return idmap_id_hash(h, id);
 }
 
@@ -484,6 +516,11 @@ static void
 idmap_update_entry(struct idmap_hashent *he, const char *name,
 		size_t namelen, __u32 id)
 {
+<<<<<<< HEAD
+	he->ih_id = id;
+	memcpy(he->ih_name, name, namelen);
+	he->ih_name[namelen] = '\0';
+=======
 	char *str = kmalloc(namelen + 1, GFP_KERNEL);
 	if (str == NULL)
 		return;
@@ -492,6 +529,7 @@ idmap_update_entry(struct idmap_hashent *he, const char *name,
 	memcpy(str, name, namelen);
 	str[namelen] = '\0';
 	he->ih_name = str;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	he->ih_namelen = namelen;
 	he->ih_expires = jiffies + nfs_idmap_cache_timeout;
 }

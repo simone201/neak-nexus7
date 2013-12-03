@@ -1075,6 +1075,8 @@ void nfs4_schedule_stateid_recovery(const struct nfs_server *server, struct nfs4
 	nfs4_schedule_state_manager(clp);
 }
 
+<<<<<<< HEAD
+=======
 void nfs_inode_find_state_and_recover(struct inode *inode,
 		const nfs4_stateid *stateid)
 {
@@ -1102,6 +1104,7 @@ void nfs_inode_find_state_and_recover(struct inode *inode,
 }
 
 
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static int nfs4_reclaim_locks(struct nfs4_state *state, const struct nfs4_state_recovery_ops *ops)
 {
 	struct inode *inode = state->inode;
@@ -1185,9 +1188,14 @@ restart:
 			if (status >= 0) {
 				list_for_each_entry(lock, &state->lock_states, ls_locks) {
 					if (!(lock->ls_flags & NFS_LOCK_INITIALIZED))
+<<<<<<< HEAD
+						printk("%s: Lock reclaim failed!\n",
+							__func__);
+=======
 						pr_warn_ratelimited("NFS: "
 							"%s: Lock reclaim "
 							"failed!\n", __func__);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 				}
 				nfs4_put_open_state(state);
 				goto restart;
@@ -1574,6 +1582,10 @@ static int nfs4_reset_session(struct nfs_client *clp)
 
 	nfs4_begin_drain_session(clp);
 	status = nfs4_proc_destroy_session(clp->cl_session);
+<<<<<<< HEAD
+	if (status && status != -NFS4ERR_BADSESSION &&
+	    status != -NFS4ERR_DEADSESSION) {
+=======
 	switch (status) {
 	case 0:
 	case -NFS4ERR_BADSESSION:
@@ -1586,6 +1598,7 @@ static int nfs4_reset_session(struct nfs_client *clp)
 		ssleep(1);
 		goto out;
 	default:
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		status = nfs4_recovery_handle_error(clp, status);
 		goto out;
 	}

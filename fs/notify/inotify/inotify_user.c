@@ -577,6 +577,10 @@ static int inotify_update_existing_watch(struct fsnotify_group *group,
 	int add = (arg & IN_MASK_ADD);
 	int ret;
 
+<<<<<<< HEAD
+	/* don't allow invalid bits: we don't want flags set */
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	mask = inotify_arg_to_mask(arg);
 	if (unlikely(!(mask & IN_ALL_EVENTS)))
 		return -EINVAL;
@@ -629,6 +633,10 @@ static int inotify_new_watch(struct fsnotify_group *group,
 	struct idr *idr = &group->inotify_data.idr;
 	spinlock_t *idr_lock = &group->inotify_data.idr_lock;
 
+<<<<<<< HEAD
+	/* don't allow invalid bits: we don't want flags set */
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	mask = inotify_arg_to_mask(arg);
 	if (unlikely(!(mask & IN_ALL_EVENTS)))
 		return -EINVAL;
@@ -759,10 +767,13 @@ SYSCALL_DEFINE3(inotify_add_watch, int, fd, const char __user *, pathname,
 	int ret, fput_needed;
 	unsigned flags = 0;
 
+<<<<<<< HEAD
+=======
 	/* don't allow invalid bits: we don't want flags set */
 	if (unlikely(!(mask & ALL_INOTIFY_BITS)))
 		return -EINVAL;
 
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	filp = fget_light(fd, &fput_needed);
 	if (unlikely(!filp))
 		return -EBADF;

@@ -1044,6 +1044,12 @@ static int ep_modify(struct eventpoll *ep, struct epitem *epi, struct epoll_even
 	 * otherwise we might miss an event that happens between the
 	 * f_op->poll() call and the new event set registering.
 	 */
+<<<<<<< HEAD
+	epi->event.events = event->events;
+	epi->event.data = event->data; /* protected by mtx */
+
+	/*
+=======
 	epi->event.events = event->events; /* need barrier below */
 	epi->event.data = event->data; /* protected by mtx */
 
@@ -1068,6 +1074,7 @@ static int ep_modify(struct eventpoll *ep, struct epitem *epi, struct epoll_even
 	smp_mb();
 
 	/*
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	 * Get current event bits. We can safely use the file* here because
 	 * its usage count has been increased by the caller of this function.
 	 */

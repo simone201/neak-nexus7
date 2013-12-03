@@ -671,7 +671,12 @@ static int nfs_create_rpc_client(struct nfs_client *clp,
  */
 static void nfs_destroy_server(struct nfs_server *server)
 {
+<<<<<<< HEAD
+	if (!(server->flags & NFS_MOUNT_LOCAL_FLOCK) ||
+			!(server->flags & NFS_MOUNT_LOCAL_FCNTL))
+=======
 	if (server->nlm_host)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		nlmclnt_done(server->nlm_host);
 }
 

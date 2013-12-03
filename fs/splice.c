@@ -31,7 +31,10 @@
 #include <linux/uio.h>
 #include <linux/security.h>
 #include <linux/gfp.h>
+<<<<<<< HEAD
+=======
 #include <linux/socket.h>
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 /*
  * Attempt to steal a page from a pipe buffer. This should perhaps go into
@@ -274,6 +277,15 @@ void spd_release_page(struct splice_pipe_desc *spd, unsigned int i)
  * Check if we need to grow the arrays holding pages and partial page
  * descriptions.
  */
+<<<<<<< HEAD
+int splice_grow_spd(struct pipe_inode_info *pipe, struct splice_pipe_desc *spd)
+{
+	if (pipe->buffers <= PIPE_DEF_BUFFERS)
+		return 0;
+
+	spd->pages = kmalloc(pipe->buffers * sizeof(struct page *), GFP_KERNEL);
+	spd->partial = kmalloc(pipe->buffers * sizeof(struct partial_page), GFP_KERNEL);
+=======
 int splice_grow_spd(const struct pipe_inode_info *pipe, struct splice_pipe_desc *spd)
 {
 	unsigned int buffers = ACCESS_ONCE(pipe->buffers);
@@ -284,6 +296,7 @@ int splice_grow_spd(const struct pipe_inode_info *pipe, struct splice_pipe_desc 
 
 	spd->pages = kmalloc(buffers * sizeof(struct page *), GFP_KERNEL);
 	spd->partial = kmalloc(buffers * sizeof(struct partial_page), GFP_KERNEL);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (spd->pages && spd->partial)
 		return 0;
@@ -293,9 +306,16 @@ int splice_grow_spd(const struct pipe_inode_info *pipe, struct splice_pipe_desc 
 	return -ENOMEM;
 }
 
+<<<<<<< HEAD
+void splice_shrink_spd(struct pipe_inode_info *pipe,
+		       struct splice_pipe_desc *spd)
+{
+	if (pipe->buffers <= PIPE_DEF_BUFFERS)
+=======
 void splice_shrink_spd(struct splice_pipe_desc *spd)
 {
 	if (spd->nr_pages_max <= PIPE_DEF_BUFFERS)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		return;
 
 	kfree(spd->pages);
@@ -318,7 +338,10 @@ __generic_file_splice_read(struct file *in, loff_t *ppos,
 	struct splice_pipe_desc spd = {
 		.pages = pages,
 		.partial = partial,
+<<<<<<< HEAD
+=======
 		.nr_pages_max = PIPE_DEF_BUFFERS,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		.flags = flags,
 		.ops = &page_cache_pipe_buf_ops,
 		.spd_release = spd_release_page,
@@ -330,7 +353,11 @@ __generic_file_splice_read(struct file *in, loff_t *ppos,
 	index = *ppos >> PAGE_CACHE_SHIFT;
 	loff = *ppos & ~PAGE_CACHE_MASK;
 	req_pages = (len + loff + PAGE_CACHE_SIZE - 1) >> PAGE_CACHE_SHIFT;
+<<<<<<< HEAD
+	nr_pages = min(req_pages, pipe->buffers);
+=======
 	nr_pages = min(req_pages, spd.nr_pages_max);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/*
 	 * Lookup the (hopefully) full range of pages we need.
@@ -501,7 +528,11 @@ fill_it:
 	if (spd.nr_pages)
 		error = splice_to_pipe(pipe, &spd);
 
+<<<<<<< HEAD
+	splice_shrink_spd(pipe, &spd);
+=======
 	splice_shrink_spd(&spd);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return error;
 }
 
@@ -602,7 +633,10 @@ ssize_t default_file_splice_read(struct file *in, loff_t *ppos,
 	struct splice_pipe_desc spd = {
 		.pages = pages,
 		.partial = partial,
+<<<<<<< HEAD
+=======
 		.nr_pages_max = PIPE_DEF_BUFFERS,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		.flags = flags,
 		.ops = &default_pipe_buf_ops,
 		.spd_release = spd_release_page,
@@ -613,8 +647,13 @@ ssize_t default_file_splice_read(struct file *in, loff_t *ppos,
 
 	res = -ENOMEM;
 	vec = __vec;
+<<<<<<< HEAD
+	if (pipe->buffers > PIPE_DEF_BUFFERS) {
+		vec = kmalloc(pipe->buffers * sizeof(struct iovec), GFP_KERNEL);
+=======
 	if (spd.nr_pages_max > PIPE_DEF_BUFFERS) {
 		vec = kmalloc(spd.nr_pages_max * sizeof(struct iovec), GFP_KERNEL);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (!vec)
 			goto shrink_ret;
 	}
@@ -622,7 +661,11 @@ ssize_t default_file_splice_read(struct file *in, loff_t *ppos,
 	offset = *ppos & ~PAGE_CACHE_MASK;
 	nr_pages = (len + offset + PAGE_CACHE_SIZE - 1) >> PAGE_CACHE_SHIFT;
 
+<<<<<<< HEAD
+	for (i = 0; i < nr_pages && i < pipe->buffers && len; i++) {
+=======
 	for (i = 0; i < nr_pages && i < spd.nr_pages_max && len; i++) {
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		struct page *page;
 
 		page = alloc_page(GFP_USER);
@@ -670,7 +713,11 @@ ssize_t default_file_splice_read(struct file *in, loff_t *ppos,
 shrink_ret:
 	if (vec != __vec)
 		kfree(vec);
+<<<<<<< HEAD
+	splice_shrink_spd(pipe, &spd);
+=======
 	splice_shrink_spd(&spd);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return res;
 
 err:
@@ -696,9 +743,13 @@ static int pipe_to_sendpage(struct pipe_inode_info *pipe,
 	if (!likely(file->f_op && file->f_op->sendpage))
 		return -EINVAL;
 
+<<<<<<< HEAD
+	more = (sd->flags & SPLICE_F_MORE) || sd->len < sd->total_len;
+=======
 	more = (sd->flags & SPLICE_F_MORE) ? MSG_MORE : 0;
 	if (sd->len < sd->total_len)
 		more |= MSG_SENDPAGE_NOTLAST;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return file->f_op->sendpage(file, buf->page, buf->offset,
 				    sd->len, &pos, more);
 }
@@ -1620,7 +1671,10 @@ static long vmsplice_to_pipe(struct file *file, const struct iovec __user *iov,
 	struct splice_pipe_desc spd = {
 		.pages = pages,
 		.partial = partial,
+<<<<<<< HEAD
+=======
 		.nr_pages_max = PIPE_DEF_BUFFERS,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		.flags = flags,
 		.ops = &user_page_pipe_buf_ops,
 		.spd_release = spd_release_page,
@@ -1636,13 +1690,21 @@ static long vmsplice_to_pipe(struct file *file, const struct iovec __user *iov,
 
 	spd.nr_pages = get_iovec_page_array(iov, nr_segs, spd.pages,
 					    spd.partial, flags & SPLICE_F_GIFT,
+<<<<<<< HEAD
+					    pipe->buffers);
+=======
 					    spd.nr_pages_max);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (spd.nr_pages <= 0)
 		ret = spd.nr_pages;
 	else
 		ret = splice_to_pipe(pipe, &spd);
 
+<<<<<<< HEAD
+	splice_shrink_spd(pipe, &spd);
+=======
 	splice_shrink_spd(&spd);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	return ret;
 }
 

@@ -663,6 +663,8 @@ int jbd2_log_wait_commit(journal_t *journal, tid_t tid)
 }
 
 /*
+<<<<<<< HEAD
+=======
  * When this function returns the transaction corresponding to tid
  * will be completed.  If the transaction has currently running, start
  * committing that transaction before waiting for it to complete.  If
@@ -694,6 +696,7 @@ wait_commit:
 EXPORT_SYMBOL(jbd2_complete_transaction);
 
 /*
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  * Log buffer allocation routines:
  */
 

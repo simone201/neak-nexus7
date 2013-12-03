@@ -609,9 +609,15 @@ void audit_trim_trees(void)
 		}
 		spin_unlock(&hash_lock);
 		trim_marked(tree);
+<<<<<<< HEAD
+		put_tree(tree);
+		drop_collected_mounts(root_mnt);
+skip_it:
+=======
 		drop_collected_mounts(root_mnt);
 skip_it:
 		put_tree(tree);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		mutex_lock(&audit_filter_mutex);
 	}
 	list_del(&cursor);

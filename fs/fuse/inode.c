@@ -91,10 +91,7 @@ static struct inode *fuse_alloc_inode(struct super_block *sb)
 	fi->nlookup = 0;
 	fi->attr_version = 0;
 	fi->writectr = 0;
-<<<<<<< HEAD
-=======
 	fi->orig_ino = 0;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	INIT_LIST_HEAD(&fi->write_files);
 	INIT_LIST_HEAD(&fi->queued_writes);
 	INIT_LIST_HEAD(&fi->writepages);
@@ -144,8 +141,6 @@ static int fuse_remount_fs(struct super_block *sb, int *flags, char *data)
 	return 0;
 }
 
-<<<<<<< HEAD
-=======
 /*
  * ino_t is 32-bits on 32-bit arch. We have to squash the 64-bit value down
  * so that it will fit.
@@ -158,7 +153,6 @@ static ino_t fuse_squash_ino(u64 ino64)
 	return ino;
 }
 
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
 				   u64 attr_valid)
 {
@@ -168,11 +162,7 @@ void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
 	fi->attr_version = ++fc->attr_version;
 	fi->i_time = attr_valid;
 
-<<<<<<< HEAD
-	inode->i_ino     = attr->ino;
-=======
 	inode->i_ino     = fuse_squash_ino(attr->ino);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	inode->i_mode    = (inode->i_mode & S_IFMT) | (attr->mode & 07777);
 	inode->i_nlink   = attr->nlink;
 	inode->i_uid     = attr->uid;
@@ -198,11 +188,8 @@ void fuse_change_attributes_common(struct inode *inode, struct fuse_attr *attr,
 	fi->orig_i_mode = inode->i_mode;
 	if (!(fc->flags & FUSE_DEFAULT_PERMISSIONS))
 		inode->i_mode &= ~S_ISVTX;
-<<<<<<< HEAD
-=======
 
 	fi->orig_ino = attr->ino;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
@@ -1166,33 +1153,12 @@ static int __init fuse_fs_init(void)
 {
 	int err;
 
-<<<<<<< HEAD
-	err = register_filesystem(&fuse_fs_type);
-	if (err)
-		goto out;
-
-	err = register_fuseblk();
-	if (err)
-		goto out_unreg;
-
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	fuse_inode_cachep = kmem_cache_create("fuse_inode",
 					      sizeof(struct fuse_inode),
 					      0, SLAB_HWCACHE_ALIGN,
 					      fuse_inode_init_once);
 	err = -ENOMEM;
 	if (!fuse_inode_cachep)
-<<<<<<< HEAD
-		goto out_unreg2;
-
-	return 0;
-
- out_unreg2:
-	unregister_fuseblk();
- out_unreg:
-	unregister_filesystem(&fuse_fs_type);
-=======
 		goto out;
 
 	err = register_fuseblk();
@@ -1209,7 +1175,6 @@ static int __init fuse_fs_init(void)
 	unregister_fuseblk();
  out2:
 	kmem_cache_destroy(fuse_inode_cachep);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  out:
 	return err;
 }

@@ -1177,21 +1177,14 @@ compat_sys_readv(unsigned long fd, const struct compat_iovec __user *vec,
 	struct file *file;
 	int fput_needed;
 	ssize_t ret;
-<<<<<<< HEAD
-=======
 	loff_t pos;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	file = fget_light(fd, &fput_needed);
 	if (!file)
 		return -EBADF;
-<<<<<<< HEAD
-	ret = compat_readv(file, vec, vlen, &file->f_pos);
-=======
 	pos = file->f_pos;
 	ret = compat_readv(file, vec, vlen, &pos);
 	file->f_pos = pos;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	fput_light(file, fput_needed);
 	return ret;
 }
@@ -1246,21 +1239,14 @@ compat_sys_writev(unsigned long fd, const struct compat_iovec __user *vec,
 	struct file *file;
 	int fput_needed;
 	ssize_t ret;
-<<<<<<< HEAD
-=======
 	loff_t pos;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	file = fget_light(fd, &fput_needed);
 	if (!file)
 		return -EBADF;
-<<<<<<< HEAD
-	ret = compat_writev(file, vec, vlen, &file->f_pos);
-=======
 	pos = file->f_pos;
 	ret = compat_writev(file, vec, vlen, &pos);
 	file->f_pos = pos;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	fput_light(file, fput_needed);
 	return ret;
 }

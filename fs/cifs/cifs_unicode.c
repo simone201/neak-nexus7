@@ -327,10 +327,6 @@ cifsConvertToUCS(__le16 *target, const char *source, int srclen,
 	}
 
 ctoUCS_out:
-<<<<<<< HEAD
-	return i;
-=======
 	return j;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 

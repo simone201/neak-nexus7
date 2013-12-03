@@ -57,12 +57,8 @@ Elong:
 static char *nfs4_path(struct dentry *dentry, char *buffer, ssize_t buflen)
 {
 	char *limit;
-<<<<<<< HEAD
-	char *path = nfs_path(&limit, dentry, buffer, buflen);
-=======
 	char *path = nfs_path(&limit, dentry, buffer, buflen,
 			      NFS_PATH_CANONICAL);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (!IS_ERR(path)) {
 		char *colon = strchr(path, ':');
 		if (colon && colon < limit)

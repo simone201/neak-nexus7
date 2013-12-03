@@ -126,8 +126,5 @@ obj-$(CONFIG_PSTORE)		+= pstore/
 
 # Patched by YAFFS
 obj-$(CONFIG_YAFFS_FS)		+= yaffs2/
-<<<<<<< HEAD
 
 obj-$(CONFIG_DYNAMIC_FSYNC)	+= dyn_sync_cntrl.o
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a

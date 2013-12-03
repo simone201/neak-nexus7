@@ -1528,10 +1528,7 @@ static int fuse_retrieve(struct fuse_conn *fc, struct inode *inode,
 		req->pages[req->num_pages] = page;
 		req->num_pages++;
 
-<<<<<<< HEAD
-=======
 		offset = 0;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		num -= this_num;
 		total_len += this_num;
 		index++;

@@ -763,11 +763,7 @@ static int nfs_show_devname(struct seq_file *m, struct vfsmount *mnt)
 	int err = 0;
 	if (!page)
 		return -ENOMEM;
-<<<<<<< HEAD
-	devname = nfs_path(&dummy, mnt->mnt_root, page, PAGE_SIZE);
-=======
 	devname = nfs_path(&dummy, mnt->mnt_root, page, PAGE_SIZE, 0);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (IS_ERR(devname))
 		err = PTR_ERR(devname);
 	else
@@ -1056,11 +1052,7 @@ static int nfs_get_option_str(substring_t args[], char **option)
 {
 	kfree(*option);
 	*option = match_strdup(args);
-<<<<<<< HEAD
-	return !option;
-=======
 	return !*option;
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static int nfs_get_option_ul(substring_t args[], unsigned long *option)
@@ -1823,10 +1815,7 @@ static int nfs_validate_mount_data(void *options,
 
 		memcpy(sap, &data->addr, sizeof(data->addr));
 		args->nfs_server.addrlen = sizeof(data->addr);
-<<<<<<< HEAD
-=======
 		args->nfs_server.port = ntohs(data->addr.sin_port);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (!nfs_verify_server_address(sap))
 			goto out_no_address;
 
@@ -2545,10 +2534,7 @@ static int nfs4_validate_mount_data(void *options,
 			return -EFAULT;
 		if (!nfs_verify_server_address(sap))
 			goto out_no_address;
-<<<<<<< HEAD
-=======
 		args->nfs_server.port = ntohs(((struct sockaddr_in *)sap)->sin_port);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 		if (data->auth_flavourlen) {
 			if (data->auth_flavourlen > 1)
@@ -2719,13 +2705,6 @@ static struct vfsmount *nfs_do_root_mount(struct file_system_type *fs_type,
 	char *root_devname;
 	size_t len;
 
-<<<<<<< HEAD
-	len = strlen(hostname) + 3;
-	root_devname = kmalloc(len, GFP_KERNEL);
-	if (root_devname == NULL)
-		return ERR_PTR(-ENOMEM);
-	snprintf(root_devname, len, "%s:/", hostname);
-=======
 	len = strlen(hostname) + 5;
 	root_devname = kmalloc(len, GFP_KERNEL);
 	if (root_devname == NULL)
@@ -2735,7 +2714,6 @@ static struct vfsmount *nfs_do_root_mount(struct file_system_type *fs_type,
 		snprintf(root_devname, len, "[%s]:/", hostname);
 	else
 		snprintf(root_devname, len, "%s:/", hostname);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	root_mnt = vfs_kern_mount(fs_type, flags, root_devname, data);
 	kfree(root_devname);
 	return root_mnt;
@@ -3131,9 +3109,6 @@ static struct dentry *nfs4_referral_mount(struct file_system_type *fs_type,
 	return res;
 }
 
-<<<<<<< HEAD
-=======
 MODULE_ALIAS("nfs4");
 
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #endif /* CONFIG_NFS_V4 */

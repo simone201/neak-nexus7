@@ -19,11 +19,7 @@
  * current->executable is only used by the procfs.  This allows a dispatch
  * table to check for several different types  of binary formats.  We keep
  * trying until we recognize the file or we run out of supported binary
-<<<<<<< HEAD
- * formats.
-=======
  * formats. 
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  */
 
 #include <linux/slab.h>
@@ -59,10 +55,7 @@
 #include <linux/pipe_fs_i.h>
 #include <linux/oom.h>
 #include <linux/compat.h>
-<<<<<<< HEAD
 #include <linux/ksm.h>
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #include <asm/uaccess.h>
 #include <asm/mmu_context.h>
@@ -93,11 +86,7 @@ int __register_binfmt(struct linux_binfmt * fmt, int insert)
 	insert ? list_add(&fmt->lh, &formats) :
 		 list_add_tail(&fmt->lh, &formats);
 	write_unlock(&binfmt_lock);
-<<<<<<< HEAD
-	return 0;
-=======
 	return 0;	
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 EXPORT_SYMBOL(__register_binfmt);
@@ -989,12 +978,9 @@ static int de_thread(struct task_struct *tsk)
 	sig->notify_count = 0;
 
 no_thread_group:
-<<<<<<< HEAD
-=======
 	/* we have changed execution domain */
 	tsk->exit_signal = SIGCHLD;
 
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (current->mm)
 		setmax_mm_hiwater_rss(&sig->maxrss, current->mm);
 
@@ -1188,11 +1174,7 @@ void setup_new_exec(struct linux_binprm * bprm)
 	   group */
 
 	current->self_exec_id++;
-<<<<<<< HEAD
-
-=======
 			
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	flush_signal_handlers(current, 0);
 	flush_old_files(current->files);
 }
@@ -1224,11 +1206,6 @@ void free_bprm(struct linux_binprm *bprm)
 		mutex_unlock(&current->signal->cred_guard_mutex);
 		abort_creds(bprm->cred);
 	}
-<<<<<<< HEAD
-	kfree(bprm);
-}
-
-=======
 	/* If a binfmt changed the interp, free it. */
 	if (bprm->interp != bprm->filename)
 		kfree(bprm->interp);
@@ -1247,7 +1224,6 @@ int bprm_change_interp(char *interp, struct linux_binprm *bprm)
 }
 EXPORT_SYMBOL(bprm_change_interp);
 
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /*
  * install the new credentials for this executable
  */
@@ -1308,13 +1284,8 @@ int check_unsafe_exec(struct linux_binprm *bprm)
 	return res;
 }
 
-<<<<<<< HEAD
-/*
- * Fill the binprm structure from the inode.
-=======
 /* 
  * Fill the binprm structure from the inode. 
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  * Check permissions, then read the first 128 (BINPRM_BUF_SIZE) bytes
  *
  * This may be called multiple times for binary chains (scripts for example).

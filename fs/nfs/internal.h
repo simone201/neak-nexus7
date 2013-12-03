@@ -274,14 +274,9 @@ extern void nfs_sb_active(struct super_block *sb);
 extern void nfs_sb_deactive(struct super_block *sb);
 
 /* namespace.c */
-<<<<<<< HEAD
-extern char *nfs_path(char **p, struct dentry *dentry,
-		      char *buffer, ssize_t buflen);
-=======
 #define NFS_PATH_CANONICAL 1
 extern char *nfs_path(char **p, struct dentry *dentry,
 		      char *buffer, ssize_t buflen, unsigned flags);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 extern struct vfsmount *nfs_d_automount(struct path *path);
 #ifdef CONFIG_NFS_V4
 rpc_authflavor_t nfs_find_best_sec(struct nfs4_secinfo_flavors *);
@@ -334,11 +329,7 @@ void nfs_commit_release_pages(struct nfs_write_data *data);
 
 #ifdef CONFIG_MIGRATION
 extern int nfs_migrate_page(struct address_space *,
-<<<<<<< HEAD
-		struct page *, struct page *);
-=======
 		struct page *, struct page *, bool);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 #else
 #define nfs_migrate_page NULL
 #endif
@@ -372,11 +363,7 @@ static inline char *nfs_devname(struct dentry *dentry,
 				char *buffer, ssize_t buflen)
 {
 	char *dummy;
-<<<<<<< HEAD
-	return nfs_path(&dummy, dentry, buffer, buflen);
-=======
 	return nfs_path(&dummy, dentry, buffer, buflen, NFS_PATH_CANONICAL);
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 /*

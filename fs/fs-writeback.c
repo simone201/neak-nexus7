@@ -47,17 +47,6 @@ struct wb_writeback_work {
 };
 
 /*
-<<<<<<< HEAD
- * Include the creation of the trace points after defining the
- * wb_writeback_work structure so that the definition remains local to this
- * file.
- */
-#define CREATE_TRACE_POINTS
-#include <trace/events/writeback.h>
-
-/*
-=======
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  * We don't actually have pdflush, but this one is exported though /proc...
  */
 int nr_pdflush_threads;
@@ -89,8 +78,6 @@ static inline struct inode *wb_inode(struct list_head *head)
 	return list_entry(head, struct inode, i_wb_list);
 }
 
-<<<<<<< HEAD
-=======
 /*
  * Include the creation of the trace points after defining the
  * wb_writeback_work structure and inline functions so that the definition
@@ -99,7 +86,6 @@ static inline struct inode *wb_inode(struct list_head *head)
 #define CREATE_TRACE_POINTS
 #include <trace/events/writeback.h>
 
->>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 /* Wakeup flusher thread or forker thread to fork it. Requires bdi->wb_lock. */
 static void bdi_wakeup_flusher(struct backing_dev_info *bdi)
 {

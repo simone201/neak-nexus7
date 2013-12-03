@@ -113,7 +113,10 @@ struct module {
 	int has_cleanup;
 	struct buffer dev_table_buf;
 	char	     srcversion[25];
+<<<<<<< HEAD
+=======
 	int is_dot_o;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 };
 
 struct elf_info {

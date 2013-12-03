@@ -563,7 +563,11 @@ static void shmem_evict_inode(struct inode *inode)
 		kfree(xattr->name);
 		kfree(xattr);
 	}
+<<<<<<< HEAD
 	BUG_ON(inode->i_blocks);
+=======
+	WARN_ON(inode->i_blocks);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	shmem_free_inode(inode->i_sb);
 	end_writeback(inode);
 }
@@ -766,24 +770,44 @@ static struct mempolicy *shmem_get_sbmpol(struct shmem_sb_info *sbinfo)
 static struct page *shmem_swapin(swp_entry_t swap, gfp_t gfp,
 			struct shmem_inode_info *info, pgoff_t index)
 {
+<<<<<<< HEAD
 	struct mempolicy mpol, *spol;
 	struct vm_area_struct pvma;
 
 	spol = mpol_cond_copy(&mpol,
 			mpol_shared_policy_lookup(&info->policy, index));
+=======
+	struct vm_area_struct pvma;
+	struct page *page;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* Create a pseudo vma that just contains the policy */
 	pvma.vm_start = 0;
 	pvma.vm_pgoff = index;
 	pvma.vm_ops = NULL;
+<<<<<<< HEAD
 	pvma.vm_policy = spol;
 	return swapin_readahead(swap, gfp, &pvma, 0);
+=======
+	pvma.vm_policy = mpol_shared_policy_lookup(&info->policy, index);
+
+	page = swapin_readahead(swap, gfp, &pvma, 0);
+
+	/* Drop reference taken by mpol_shared_policy_lookup() */
+	mpol_cond_put(pvma.vm_policy);
+
+	return page;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static struct page *shmem_alloc_page(gfp_t gfp,
 			struct shmem_inode_info *info, pgoff_t index)
 {
 	struct vm_area_struct pvma;
+<<<<<<< HEAD
+=======
+	struct page *page;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* Create a pseudo vma that just contains the policy */
 	pvma.vm_start = 0;
@@ -791,10 +815,19 @@ static struct page *shmem_alloc_page(gfp_t gfp,
 	pvma.vm_ops = NULL;
 	pvma.vm_policy = mpol_shared_policy_lookup(&info->policy, index);
 
+<<<<<<< HEAD
 	/*
 	 * alloc_page_vma() will drop the shared policy reference
 	 */
 	return alloc_page_vma(gfp, &pvma, 0);
+=======
+	page = alloc_page_vma(gfp, &pvma, 0);
+
+	/* Drop reference taken by mpol_shared_policy_lookup() */
+	mpol_cond_put(pvma.vm_policy);
+
+	return page;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 #else /* !CONFIG_NUMA */
 #ifdef CONFIG_TMPFS
@@ -1328,6 +1361,10 @@ static ssize_t shmem_file_splice_read(struct file *in, loff_t *ppos,
 	struct splice_pipe_desc spd = {
 		.pages = pages,
 		.partial = partial,
+<<<<<<< HEAD
+=======
+		.nr_pages_max = PIPE_DEF_BUFFERS,
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		.flags = flags,
 		.ops = &page_cache_pipe_buf_ops,
 		.spd_release = spd_release_page,
@@ -1416,7 +1453,11 @@ static ssize_t shmem_file_splice_read(struct file *in, loff_t *ppos,
 	if (spd.nr_pages)
 		error = splice_to_pipe(pipe, &spd);
 
+<<<<<<< HEAD
 	splice_shrink_spd(pipe, &spd);
+=======
+	splice_shrink_spd(&spd);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (error > 0) {
 		*ppos += error;
@@ -1930,12 +1971,22 @@ static struct dentry *shmem_fh_to_dentry(struct super_block *sb,
 {
 	struct inode *inode;
 	struct dentry *dentry = NULL;
+<<<<<<< HEAD
 	u64 inum = fid->raw[2];
 	inum = (inum << 32) | fid->raw[1];
+=======
+	u64 inum;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (fh_len < 3)
 		return NULL;
 
+<<<<<<< HEAD
+=======
+	inum = fid->raw[2];
+	inum = (inum << 32) | fid->raw[1];
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	inode = ilookup5(sb, (unsigned long)(inum + fid->raw[0]),
 			shmem_match, fid->raw);
 	if (inode) {

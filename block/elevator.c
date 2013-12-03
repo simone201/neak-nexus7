@@ -522,6 +522,10 @@ static bool elv_attempt_insert_merge(struct request_queue *q,
 				     struct request *rq)
 {
 	struct request *__rq;
+<<<<<<< HEAD
+=======
+	bool ret;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	if (blk_queue_nomerges(q))
 		return false;
@@ -535,6 +539,7 @@ static bool elv_attempt_insert_merge(struct request_queue *q,
 	if (blk_queue_noxmerges(q))
 		return false;
 
+<<<<<<< HEAD
 	/*
 	 * See if our hash lookup can find a potential backmerge.
 	 */
@@ -543,6 +548,23 @@ static bool elv_attempt_insert_merge(struct request_queue *q,
 		return true;
 
 	return false;
+=======
+	ret = false;
+	/*
+	 * See if our hash lookup can find a potential backmerge.
+	 */
+	while (1) {
+		__rq = elv_rqhash_find(q, blk_rq_pos(rq));
+		if (!__rq || !blk_attempt_req_merge(q, __rq, rq))
+			break;
+
+		/* The merged request could be merged with others, try again */
+		ret = true;
+		rq = __rq;
+	}
+
+	return ret;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 void elv_merged_request(struct request_queue *q, struct request *rq, int type)
@@ -617,10 +639,17 @@ int elv_reinsert_request(struct request_queue *q, struct request *rq)
 {
 	int res;
 
+<<<<<<< HEAD
 	if (!q->elevator->elevator_type->ops.elevator_reinsert_req_fn)
 		return -EPERM;
 
 	res = q->elevator->elevator_type->ops.elevator_reinsert_req_fn(q, rq);
+=======
+	if (!q->elevator->ops->elevator_reinsert_req_fn)
+		return -EPERM;
+
+	res = q->elevator->ops->elevator_reinsert_req_fn(q, rq);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (!res) {
 		/*
 		 * it already went through dequeue, we need to decrement the

@@ -2934,7 +2934,10 @@ static void changed_ioprio(struct io_context *ioc, struct cfq_io_context *cic)
 static void cfq_ioc_set_ioprio(struct io_context *ioc)
 {
 	call_for_each_cic(ioc, changed_ioprio);
+<<<<<<< HEAD
 	ioc->ioprio_changed = 0;
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 static void cfq_init_cfqq(struct cfq_data *cfqd, struct cfq_queue *cfqq,
@@ -3226,8 +3229,18 @@ retry:
 		goto err_free;
 
 out:
+<<<<<<< HEAD
 	smp_read_barrier_depends();
 	if (unlikely(ioc->ioprio_changed))
+=======
+	/*
+	 * test_and_clear_bit() implies a memory barrier, paired with
+	 * the wmb() in fs/ioprio.c, so the value seen for ioprio is the
+	 * new one.
+	 */
+	if (unlikely(test_and_clear_bit(IOC_CFQ_IOPRIO_CHANGED,
+					ioc->ioprio_changed)))
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		cfq_ioc_set_ioprio(ioc);
 
 #ifdef CONFIG_CFQ_GROUP_IOSCHED

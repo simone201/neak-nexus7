@@ -353,6 +353,7 @@ static void __init sparse_early_usemaps_alloc_node(unsigned long**usemap_map,
 
 	usemap = sparse_early_usemaps_alloc_pgdat_section(NODE_DATA(nodeid),
 								 usemap_count);
+<<<<<<< HEAD
 	if (usemap) {
 		for (pnum = pnum_begin; pnum < pnum_end; pnum++) {
 			if (!present_section_nr(pnum))
@@ -376,6 +377,23 @@ static void __init sparse_early_usemaps_alloc_node(unsigned long**usemap_map,
 	}
 
 	printk(KERN_WARNING "%s: allocation failed\n", __func__);
+=======
+	if (!usemap) {
+		usemap = alloc_bootmem_node(NODE_DATA(nodeid), size * usemap_count);
+		if (!usemap) {
+			printk(KERN_WARNING "%s: allocation failed\n", __func__);
+			return;
+		}
+	}
+
+	for (pnum = pnum_begin; pnum < pnum_end; pnum++) {
+		if (!present_section_nr(pnum))
+			continue;
+		usemap_map[pnum] = usemap;
+		usemap += size;
+		check_usemap_section_nr(nodeid, usemap_map[pnum]);
+	}
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 
 #ifndef CONFIG_SPARSEMEM_VMEMMAP
@@ -494,6 +512,12 @@ void __init sparse_init(void)
 	struct page **map_map;
 #endif
 
+<<<<<<< HEAD
+=======
+	/* Setup pageblock_order for HUGETLB_PAGE_SIZE_VARIABLE */
+	set_pageblock_order();
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/*
 	 * map is using big page (aka 2M in x86 64 bit)
 	 * usemap is less one page (aka 24 bytes)
@@ -627,7 +651,11 @@ static void __kfree_section_memmap(struct page *memmap, unsigned long nr_pages)
 {
 	return; /* XXX: Not implemented yet */
 }
+<<<<<<< HEAD
 static void free_map_bootmem(struct page *page, unsigned long nr_pages)
+=======
+static void free_map_bootmem(struct page *memmap, unsigned long nr_pages)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 }
 #else
@@ -668,10 +696,18 @@ static void __kfree_section_memmap(struct page *memmap, unsigned long nr_pages)
 			   get_order(sizeof(struct page) * nr_pages));
 }
 
+<<<<<<< HEAD
 static void free_map_bootmem(struct page *page, unsigned long nr_pages)
 {
 	unsigned long maps_section_nr, removing_section_nr, i;
 	unsigned long magic;
+=======
+static void free_map_bootmem(struct page *memmap, unsigned long nr_pages)
+{
+	unsigned long maps_section_nr, removing_section_nr, i;
+	unsigned long magic;
+	struct page *page = virt_to_page(memmap);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	for (i = 0; i < nr_pages; i++, page++) {
 		magic = (unsigned long) page->lru.next;
@@ -720,6 +756,7 @@ static void free_section_usemap(struct page *memmap, unsigned long *usemap)
 	 */
 
 	if (memmap) {
+<<<<<<< HEAD
 		struct page *memmap_page;
 		memmap_page = virt_to_page(memmap);
 
@@ -727,6 +764,12 @@ static void free_section_usemap(struct page *memmap, unsigned long *usemap)
 			>> PAGE_SHIFT;
 
 		free_map_bootmem(memmap_page, nr_pages);
+=======
+		nr_pages = PAGE_ALIGN(PAGES_PER_SECTION * sizeof(struct page))
+			>> PAGE_SHIFT;
+
+		free_map_bootmem(memmap, nr_pages);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 }
 

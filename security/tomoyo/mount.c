@@ -199,6 +199,7 @@ int tomoyo_mount_permission(char *dev_name, struct path *path,
 	if (flags & MS_REMOUNT) {
 		type = tomoyo_mounts[TOMOYO_MOUNT_REMOUNT];
 		flags &= ~MS_REMOUNT;
+<<<<<<< HEAD
 	}
 	if (flags & MS_MOVE) {
 		type = tomoyo_mounts[TOMOYO_MOUNT_MOVE];
@@ -223,6 +224,34 @@ int tomoyo_mount_permission(char *dev_name, struct path *path,
 	if (flags & MS_SHARED) {
 		type = tomoyo_mounts[TOMOYO_MOUNT_MAKE_SHARED];
 		flags &= ~MS_SHARED;
+=======
+	} else if (flags & MS_BIND) {
+		type = tomoyo_mounts[TOMOYO_MOUNT_BIND];
+		flags &= ~MS_BIND;
+	} else if (flags & MS_SHARED) {
+		if (flags & (MS_PRIVATE | MS_SLAVE | MS_UNBINDABLE))
+			return -EINVAL;
+		type = tomoyo_mounts[TOMOYO_MOUNT_MAKE_SHARED];
+		flags &= ~MS_SHARED;
+	} else if (flags & MS_PRIVATE) {
+		if (flags & (MS_SHARED | MS_SLAVE | MS_UNBINDABLE))
+			return -EINVAL;
+		type = tomoyo_mounts[TOMOYO_MOUNT_MAKE_PRIVATE];
+		flags &= ~MS_PRIVATE;
+	} else if (flags & MS_SLAVE) {
+		if (flags & (MS_SHARED | MS_PRIVATE | MS_UNBINDABLE))
+			return -EINVAL;
+		type = tomoyo_mounts[TOMOYO_MOUNT_MAKE_SLAVE];
+		flags &= ~MS_SLAVE;
+	} else if (flags & MS_UNBINDABLE) {
+		if (flags & (MS_SHARED | MS_PRIVATE | MS_SLAVE))
+			return -EINVAL;
+		type = tomoyo_mounts[TOMOYO_MOUNT_MAKE_UNBINDABLE];
+		flags &= ~MS_UNBINDABLE;
+	} else if (flags & MS_MOVE) {
+		type = tomoyo_mounts[TOMOYO_MOUNT_MOVE];
+		flags &= ~MS_MOVE;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 	if (!type)
 		type = "<NULL>";

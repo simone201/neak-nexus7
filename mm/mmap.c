@@ -30,7 +30,10 @@
 #include <linux/perf_event.h>
 #include <linux/audit.h>
 #include <linux/khugepaged.h>
+<<<<<<< HEAD
 #include <linux/ksm.h>
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 #include <asm/uaccess.h>
 #include <asm/cacheflush.h>
@@ -66,7 +69,11 @@ static void unmap_region(struct mm_struct *mm,
  * MAP_SHARED	r: (no) no	r: (yes) yes	r: (no) yes	r: (no) yes
  *		w: (no) no	w: (no) no	w: (yes) yes	w: (no) no
  *		x: (no) no	x: (no) yes	x: (no) yes	x: (yes) yes
+<<<<<<< HEAD
  *
+=======
+ *		
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
  * MAP_PRIVATE	r: (no) no	r: (yes) yes	r: (no) yes	r: (no) yes
  *		w: (no) no	w: (no) no	w: (copy) copy	w: (no) no
  *		x: (no) no	x: (no) yes	x: (no) yes	x: (yes) yes
@@ -237,7 +244,10 @@ static struct vm_area_struct *remove_vma(struct vm_area_struct *vma)
 			removed_exe_file_vma(vma->vm_mm);
 	}
 	mpol_put(vma_policy(vma));
+<<<<<<< HEAD
 	uksm_remove_vma(vma);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	kmem_cache_free(vm_area_cachep, vma);
 	return next;
 }
@@ -502,6 +512,7 @@ int vma_adjust(struct vm_area_struct *vma, unsigned long start,
 	long adjust_next = 0;
 	int remove_next = 0;
 
+<<<<<<< HEAD
 /*
  * to avoid deadlock, ksm_remove_vma must be done before any spin_lock is
  * acquired
@@ -512,6 +523,11 @@ int vma_adjust(struct vm_area_struct *vma, unsigned long start,
 		struct vm_area_struct *exporter = NULL;
 
 		uksm_remove_vma(next);
+=======
+	if (next && !insert) {
+		struct vm_area_struct *exporter = NULL;
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (end >= next->vm_end) {
 			/*
 			 * vma expands, overlapping all the next, and
@@ -587,10 +603,17 @@ again:			remove_next = 1 + (end > next->vm_end);
 		if (adjust_next)
 			vma_prio_tree_remove(next, root);
 	}
+<<<<<<< HEAD
 	vma->vm_start = start;
 	vma->vm_end = end;
 	vma->vm_pgoff = pgoff;
 
+=======
+
+	vma->vm_start = start;
+	vma->vm_end = end;
+	vma->vm_pgoff = pgoff;
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (adjust_next) {
 		next->vm_start += adjust_next << PAGE_SHIFT;
 		next->vm_pgoff += adjust_next;
@@ -643,6 +666,7 @@ again:			remove_next = 1 + (end > next->vm_end);
 		 */
 		if (remove_next == 2) {
 			next = vma->vm_next;
+<<<<<<< HEAD
 			uksm_remove_vma(next);
 			goto again;
 		}
@@ -652,6 +676,12 @@ again:			remove_next = 1 + (end > next->vm_end);
 	}
 
 	uksm_vma_add_new(vma);
+=======
+			goto again;
+		}
+	}
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	validate_mm(mm);
 
 	return 0;
@@ -1006,9 +1036,12 @@ unsigned long do_mmap_pgoff(struct file *file, unsigned long addr,
 	vm_flags = calc_vm_prot_bits(prot) | calc_vm_flag_bits(flags) |
 			mm->def_flags | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC;
 
+<<<<<<< HEAD
 	/* If uksm is enabled, we add VM_MERGABLE to new VMAs. */
 	uksm_vm_flags_mod(&vm_flags);
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (flags & MAP_LOCKED)
 		if (!can_do_mlock())
 			return -EPERM;
@@ -1332,7 +1365,10 @@ munmap_back:
 
 	vma_link(mm, vma, prev, rb_link, rb_parent);
 	file = vma->vm_file;
+<<<<<<< HEAD
 	uksm_vma_add_new(vma);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	/* Once vma denies write, undo our temporary denial count */
 	if (correct_wcount)
@@ -1359,7 +1395,10 @@ unmap_and_free_vma:
 	unmap_region(mm, vma, prev, vma->vm_start, vma->vm_end);
 	charged = 0;
 free_vma:
+<<<<<<< HEAD
 	uksm_remove_vma(vma);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	kmem_cache_free(vm_area_cachep, vma);
 unacct_error:
 	if (charged)
@@ -1435,7 +1474,11 @@ full_search:
 		addr = vma->vm_end;
 	}
 }
+<<<<<<< HEAD
 #endif
+=======
+#endif	
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 void arch_unmap_area(struct mm_struct *mm, unsigned long addr)
 {
@@ -1592,7 +1635,11 @@ struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
 	if (mm) {
 		/* Check the cache first. */
 		/* (Cache hit rate is typically around 35%.) */
+<<<<<<< HEAD
 		vma = mm->mmap_cache;
+=======
+		vma = ACCESS_ONCE(mm->mmap_cache);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		if (!(vma && vma->vm_end > addr && vma->vm_start <= addr)) {
 			struct rb_node * rb_node;
 
@@ -1997,8 +2044,11 @@ static int __split_vma(struct mm_struct * mm, struct vm_area_struct * vma,
 	else
 		err = vma_adjust(vma, vma->vm_start, addr, vma->vm_pgoff, new);
 
+<<<<<<< HEAD
 	uksm_vma_add_new(new);
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/* Success. */
 	if (!err)
 		return 0;
@@ -2168,7 +2218,10 @@ unsigned long do_brk(unsigned long addr, unsigned long len)
 		return error;
 
 	flags = VM_DATA_DEFAULT_FLAGS | VM_ACCOUNT | mm->def_flags;
+<<<<<<< HEAD
 	uksm_vm_flags_mod(&flags);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	error = get_unmapped_area(NULL, addr, len, 0, MAP_FIXED);
 	if (error & ~PAGE_MASK)
@@ -2237,7 +2290,10 @@ unsigned long do_brk(unsigned long addr, unsigned long len)
 	vma->vm_flags = flags;
 	vma->vm_page_prot = vm_get_page_prot(flags);
 	vma_link(mm, vma, prev, rb_link, rb_parent);
+<<<<<<< HEAD
 	uksm_vma_add_new(vma);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 out:
 	perf_event_mmap(vma);
 	mm->total_vm += len >> PAGE_SHIFT;
@@ -2261,12 +2317,15 @@ void exit_mmap(struct mm_struct *mm)
 	/* mm's last user has gone, and its about to be pulled down */
 	mmu_notifier_release(mm);
 
+<<<<<<< HEAD
 	/*
 	 * Taking write lock on mmap_sem does not harm others,
 	 * but it's crucial for uksm to avoid races.
 	 */
 	down_write(&mm->mmap_sem);
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	if (mm->locked_vm) {
 		vma = mm->mmap;
 		while (vma) {
@@ -2300,11 +2359,14 @@ void exit_mmap(struct mm_struct *mm)
 	while (vma)
 		vma = remove_vma(vma);
 
+<<<<<<< HEAD
 	mm->mmap = NULL;
 	mm->mm_rb = RB_ROOT;
 	mm->mmap_cache = NULL;
 	up_write(&mm->mmap_sem);
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	BUG_ON(mm->nr_ptes > (FIRST_USER_ADDRESS+PMD_SIZE-1)>>PMD_SHIFT);
 }
 
@@ -2396,7 +2458,10 @@ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
 			if (new_vma->vm_ops && new_vma->vm_ops->open)
 				new_vma->vm_ops->open(new_vma);
 			vma_link(mm, new_vma, prev, rb_link, rb_parent);
+<<<<<<< HEAD
 			uksm_vma_add_new(new_vma);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 		}
 	}
 	return new_vma;
@@ -2502,10 +2567,17 @@ int install_special_mapping(struct mm_struct *mm,
 	ret = insert_vm_struct(mm, vma);
 	if (ret)
 		goto out;
+<<<<<<< HEAD
 	mm->total_vm += len >> PAGE_SHIFT;
 
 	perf_event_mmap(vma);
 	uksm_vma_add_new(vma);
+=======
+
+	mm->total_vm += len >> PAGE_SHIFT;
+
+	perf_event_mmap(vma);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	return 0;
 

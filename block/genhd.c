@@ -26,7 +26,11 @@ static DEFINE_MUTEX(block_class_lock);
 struct kobject *block_depr;
 
 /* for extended dynamic devt allocation, currently only one major is used */
+<<<<<<< HEAD
 #define MAX_EXT_DEVT		(1 << MINORBITS)
+=======
+#define NR_EXT_DEVT		(1 << MINORBITS)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 /* For extended devt allocation.  ext_devt_mutex prevents look up
  * results from going away underneath its user.
@@ -36,6 +40,10 @@ static DEFINE_IDR(ext_devt_idr);
 
 static struct device_type disk_type;
 
+<<<<<<< HEAD
+=======
+static void disk_alloc_events(struct gendisk *disk);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 static void disk_add_events(struct gendisk *disk);
 static void disk_del_events(struct gendisk *disk);
 static void disk_release_events(struct gendisk *disk);
@@ -420,17 +428,30 @@ int blk_alloc_devt(struct hd_struct *part, dev_t *devt)
 	do {
 		if (!idr_pre_get(&ext_devt_idr, GFP_KERNEL))
 			return -ENOMEM;
+<<<<<<< HEAD
 		rc = idr_get_new(&ext_devt_idr, part, &idx);
+=======
+		mutex_lock(&ext_devt_mutex);
+		rc = idr_get_new(&ext_devt_idr, part, &idx);
+		if (!rc && idx >= NR_EXT_DEVT) {
+			idr_remove(&ext_devt_idr, idx);
+			rc = -EBUSY;
+		}
+		mutex_unlock(&ext_devt_mutex);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	} while (rc == -EAGAIN);
 
 	if (rc)
 		return rc;
 
+<<<<<<< HEAD
 	if (idx > MAX_EXT_DEVT) {
 		idr_remove(&ext_devt_idr, idx);
 		return -EBUSY;
 	}
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	*devt = MKDEV(BLOCK_EXT_MAJOR, blk_mangle_minor(idx));
 	return 0;
 }
@@ -602,6 +623,11 @@ void add_disk(struct gendisk *disk)
 	disk->major = MAJOR(devt);
 	disk->first_minor = MINOR(devt);
 
+<<<<<<< HEAD
+=======
+	disk_alloc_events(disk);
+
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	/* Register BDI before referencing it from bdev */
 	bdi = &disk->queue->backing_dev_info;
 	bdi_register_dev(bdi, disk_devt(disk));
@@ -642,7 +668,10 @@ void del_gendisk(struct gendisk *disk)
 	disk_part_iter_exit(&piter);
 
 	invalidate_partition(disk, 0);
+<<<<<<< HEAD
 	blk_free_devt(disk_to_dev(disk)->devt);
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	set_capacity(disk, 0);
 	disk->flags &= ~GENHD_FL_UP;
 
@@ -660,6 +689,10 @@ void del_gendisk(struct gendisk *disk)
 	if (!sysfs_deprecated)
 		sysfs_remove_link(block_depr, dev_name(disk_to_dev(disk)));
 	device_del(disk_to_dev(disk));
+<<<<<<< HEAD
+=======
+	blk_free_devt(disk_to_dev(disk)->devt);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 }
 EXPORT_SYMBOL(del_gendisk);
 
@@ -1493,9 +1526,15 @@ static void __disk_unblock_events(struct gendisk *disk, bool check_now)
 	intv = disk_events_poll_jiffies(disk);
 	set_timer_slack(&ev->dwork.timer, intv / 4);
 	if (check_now)
+<<<<<<< HEAD
 		queue_delayed_work(system_nrt_wq, &ev->dwork, 0);
 	else if (intv)
 		queue_delayed_work(system_nrt_wq, &ev->dwork, intv);
+=======
+		queue_delayed_work(system_nrt_freezable_wq, &ev->dwork, 0);
+	else if (intv)
+		queue_delayed_work(system_nrt_freezable_wq, &ev->dwork, intv);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 out_unlock:
 	spin_unlock_irqrestore(&ev->lock, flags);
 }
@@ -1539,7 +1578,11 @@ void disk_flush_events(struct gendisk *disk, unsigned int mask)
 	ev->clearing |= mask;
 	if (!ev->block) {
 		cancel_delayed_work(&ev->dwork);
+<<<<<<< HEAD
 		queue_delayed_work(system_nrt_wq, &ev->dwork, 0);
+=======
+		queue_delayed_work(system_nrt_freezable_wq, &ev->dwork, 0);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	}
 	spin_unlock_irq(&ev->lock);
 }
@@ -1576,7 +1619,11 @@ unsigned int disk_clear_events(struct gendisk *disk, unsigned int mask)
 
 	/* uncondtionally schedule event check and wait for it to finish */
 	disk_block_events(disk);
+<<<<<<< HEAD
 	queue_delayed_work(system_nrt_wq, &ev->dwork, 0);
+=======
+	queue_delayed_work(system_nrt_freezable_wq, &ev->dwork, 0);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	flush_delayed_work(&ev->dwork);
 	__disk_unblock_events(disk, false);
 
@@ -1613,7 +1660,11 @@ static void disk_events_workfn(struct work_struct *work)
 
 	intv = disk_events_poll_jiffies(disk);
 	if (!ev->block && intv)
+<<<<<<< HEAD
 		queue_delayed_work(system_nrt_wq, &ev->dwork, intv);
+=======
+		queue_delayed_work(system_nrt_freezable_wq, &ev->dwork, intv);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 
 	spin_unlock_irq(&ev->lock);
 
@@ -1751,9 +1802,15 @@ module_param_cb(events_dfl_poll_msecs, &disk_events_dfl_poll_msecs_param_ops,
 		&disk_events_dfl_poll_msecs, 0644);
 
 /*
+<<<<<<< HEAD
  * disk_{add|del|release}_events - initialize and destroy disk_events.
  */
 static void disk_add_events(struct gendisk *disk)
+=======
+ * disk_{alloc|add|del|release}_events - initialize and destroy disk_events.
+ */
+static void disk_alloc_events(struct gendisk *disk)
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 {
 	struct disk_events *ev;
 
@@ -1766,6 +1823,7 @@ static void disk_add_events(struct gendisk *disk)
 		return;
 	}
 
+<<<<<<< HEAD
 	if (sysfs_create_files(&disk_to_dev(disk)->kobj,
 			       disk_events_attrs) < 0) {
 		pr_warn("%s: failed to create sysfs files for events\n",
@@ -1776,6 +1834,8 @@ static void disk_add_events(struct gendisk *disk)
 
 	disk->ev = ev;
 
+=======
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	INIT_LIST_HEAD(&ev->node);
 	ev->disk = disk;
 	spin_lock_init(&ev->lock);
@@ -1784,8 +1844,26 @@ static void disk_add_events(struct gendisk *disk)
 	ev->poll_msecs = -1;
 	INIT_DELAYED_WORK(&ev->dwork, disk_events_workfn);
 
+<<<<<<< HEAD
 	mutex_lock(&disk_events_mutex);
 	list_add_tail(&ev->node, &disk_events);
+=======
+	disk->ev = ev;
+}
+
+static void disk_add_events(struct gendisk *disk)
+{
+	if (!disk->ev)
+		return;
+
+	/* FIXME: error handling */
+	if (sysfs_create_files(&disk_to_dev(disk)->kobj, disk_events_attrs) < 0)
+		pr_warn("%s: failed to create sysfs files for events\n",
+			disk->disk_name);
+
+	mutex_lock(&disk_events_mutex);
+	list_add_tail(&disk->ev->node, &disk_events);
+>>>>>>> 990270e2da9e7ed84fad1e9e95c3b83ed206249a
 	mutex_unlock(&disk_events_mutex);
 
 	/*

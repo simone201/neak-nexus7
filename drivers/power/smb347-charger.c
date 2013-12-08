@@ -1412,7 +1412,6 @@ static void smb347_default_setback(void)
 	}
 }
 
-<<<<<<< HEAD
 static int smb347_temp_limit_setting(void)
 {
 	struct i2c_client *client = charger->client;
@@ -1497,7 +1496,7 @@ error:
 	return ret;
 }
 EXPORT_SYMBOL(smb347_config_thermal_charging);
-=======
+
 int smb347_event_fi(void) {
     // called by usbhost.c sysfs change from user space
 	struct i2c_client *client = charger->client;
@@ -1583,7 +1582,6 @@ int smb347_event_fastcharge(void) {
     }
 }
 
->>>>>>> 18a53f0... fast charge switch
 
 static int __devinit smb347_probe(struct i2c_client *client,
 			const struct i2c_device_id *id)

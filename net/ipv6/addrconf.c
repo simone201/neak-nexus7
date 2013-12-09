@@ -2374,8 +2374,6 @@ static void init_loopback(struct net_device *dev)
 	}
 
 	add_addr(idev, &in6addr_loopback, 128, IFA_HOST);
-<<<<<<< HEAD
-=======
 
 	/* Add routes to other interface's IPv6 addresses */
 	for_each_netdev(dev_net(dev), sp_dev) {
@@ -2405,7 +2403,6 @@ static void init_loopback(struct net_device *dev)
 		}
 		read_unlock_bh(&idev->lock);
 	}
->>>>>>> fac43e2... ipv6: don't call addrconf_dst_alloc again when enable lo
 }
 
 static void addrconf_add_linklocal(struct inet6_dev *idev, const struct in6_addr *addr)

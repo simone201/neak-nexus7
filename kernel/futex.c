@@ -59,11 +59,8 @@
 #include <linux/magic.h>
 #include <linux/pid.h>
 #include <linux/nsproxy.h>
-<<<<<<< HEAD
-=======
 #include <linux/ptrace.h>
 #include <linux/hugetlb.h>
->>>>>>> a8d1aa5... futex: Take hugepages into account when generating futex_key
 
 #include <asm/futex.h>
 

@@ -91,11 +91,8 @@ static struct inode *fuse_alloc_inode(struct super_block *sb)
 	fi->nlookup = 0;
 	fi->attr_version = 0;
 	fi->writectr = 0;
-<<<<<<< HEAD
-=======
 	fi->orig_ino = 0;
 	fi->state = 0;
->>>>>>> 9417815... fuse: hotfix truncate_pagecache() issue
 	INIT_LIST_HEAD(&fi->write_files);
 	INIT_LIST_HEAD(&fi->queued_writes);
 	INIT_LIST_HEAD(&fi->writepages);

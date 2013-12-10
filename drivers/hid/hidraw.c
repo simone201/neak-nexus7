@@ -259,10 +259,6 @@ static int hidraw_open(struct inode *inode, struct file *file)
 
 	mutex_lock(&minors_lock);
 	if (!hidraw_table[minor]) {
-<<<<<<< HEAD
-		kfree(list);
-=======
->>>>>>> c3ffb34... HID: hidraw: put old deallocation mechanism in place
 		err = -ENODEV;
 		goto out_unlock;
 	}

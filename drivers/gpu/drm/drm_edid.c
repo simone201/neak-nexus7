@@ -119,6 +119,15 @@ static struct edid_quirk {
 	/* Samsung SyncMaster 22[5-6]BW */
 	{ "SAM", 596, EDID_QUIRK_PREFER_LARGE_60 },
 	{ "SAM", 638, EDID_QUIRK_PREFER_LARGE_60 },
+<<<<<<< HEAD
+=======
+
+	/* ViewSonic VA2026w */
+	{ "VSC", 5020, EDID_QUIRK_FORCE_REDUCED_BLANKING },
+
+	/* Medion MD 30217 PG */
+	{ "MED", 0x7b8, EDID_QUIRK_PREFER_LARGE_75 },
+>>>>>>> e3ee677... drm/edid: add quirk for Medion MD30217PG
 };
 
 /*** DDC fetch and block validation ***/

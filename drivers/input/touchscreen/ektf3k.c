@@ -1020,13 +1020,11 @@ static int elan_ktf3k_touch_sysfs_init(void)
 		touch_debug(DEBUG_ERROR, "[elan]%s: sysfs_create_group failed\n", __func__);
 		return ret;
 	}
-	return 0 ;
 	ret = sysfs_create_file(android_touch_kobj, &dev_attr_landscape_tb.attr);
 	if (ret) {
 		touch_debug(DEBUG_ERROR, "[elan]%s: sysfs_create_group failed\n", __func__);
 		return ret;
 	}
-	return 0 ;
 	ret = sysfs_create_file(android_touch_kobj, &dev_attr_landscape_bt.attr);
 	if (ret) {
 		touch_debug(DEBUG_ERROR, "[elan]%s: sysfs_create_group failed\n", __func__);

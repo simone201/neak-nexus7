@@ -602,6 +602,8 @@ static const struct usb_device_id	products [] = {
  * because of bugs/quirks in a given product (like Zaurus, above).
  */
 {
+<<<<<<< HEAD
+=======
 	/* Novatel USB551L */
 	/* This match must come *before* the generic CDC-ETHER match so that
 	 * we get FLAG_WWAN set on the device, since it's descriptors are
@@ -622,6 +624,7 @@ static const struct usb_device_id	products [] = {
 			USB_CDC_SUBCLASS_ETHERNET, USB_CDC_PROTO_NONE),
 	.driver_info = (kernel_ulong_t) &wwan_info,
 }, {
+>>>>>>> 6510909... net: usb: cdc_ether: Use wwan interface for Telit modules
 	USB_INTERFACE_INFO(USB_CLASS_COMM, USB_CDC_SUBCLASS_ETHERNET,
 			USB_CDC_PROTO_NONE),
 	.driver_info = (unsigned long) &cdc_info,

@@ -92,10 +92,18 @@ int lg4ff_init(struct hid_device *hid)
 {
 	struct hid_input *hidinput = list_entry(hid->inputs.next, struct hid_input, list);
 	struct input_dev *dev = hidinput->input;
+<<<<<<< HEAD
+	struct hid_report *report;
+	struct hid_field *field;
+	const signed short *ff_bits = ff4_wheel_ac;
+	int error;
+	int i;
+=======
 	struct lg4ff_device_entry *entry;
 	struct usb_device_descriptor *udesc;
 	int error, i, j;
 	__u16 bcdDevice, rev_maj, rev_min;
+>>>>>>> 3da8b77... HID: LG: validate HID output report details
 
 	/* Check that the report looks ok */
 	if (!hid_validate_values(hid, HID_OUTPUT_REPORT, 0, 0, 7))

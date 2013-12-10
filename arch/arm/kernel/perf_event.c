@@ -352,6 +352,13 @@ validate_event(struct cpu_hw_events *cpuc,
 	       struct perf_event *event)
 {
 	struct hw_perf_event fake_event = event->hw;
+	struct pmu *leader_pmu = event->group_leader->pmu;
+
+	if (is_software_event(event))
+		return 1;
+
+	if (event->pmu != leader_pmu || event->state < PERF_EVENT_STATE_OFF)
+		return 1;
 
 	if (event->pmu != &pmu || event->state <= PERF_EVENT_STATE_OFF)
 		return 1;
@@ -747,6 +754,7 @@ perf_callchain_user(struct perf_callchain_entry *entry, struct pt_regs *regs)
 	struct frame_tail __user *tail;
 
 
+	perf_callchain_store(entry, regs->ARM_pc);
 	tail = (struct frame_tail __user *)regs->ARM_fp - 1;
 
 	while ((entry->nr < PERF_MAX_STACK_DEPTH) &&

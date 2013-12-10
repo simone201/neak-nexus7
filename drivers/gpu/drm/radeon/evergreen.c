@@ -3012,6 +3012,8 @@ static int evergreen_startup(struct radeon_device *rdev)
 	if (!ASIC_IS_DCE5(rdev))
 		evergreen_pcie_gen2_enable(rdev);
 
+	evergreen_mc_program(rdev);
+
 	if (ASIC_IS_DCE5(rdev)) {
 		if (!rdev->me_fw || !rdev->pfp_fw || !rdev->rlc_fw || !rdev->mc_fw) {
 			r = ni_init_microcode(rdev);
@@ -3035,7 +3037,14 @@ static int evergreen_startup(struct radeon_device *rdev)
 		}
 	}
 
+<<<<<<< HEAD
 	evergreen_mc_program(rdev);
+=======
+	r = r600_vram_scratch_init(rdev);
+	if (r)
+		return r;
+
+>>>>>>> d03160d... drm/radeon: always program the MC on startup
 	if (rdev->flags & RADEON_IS_AGP) {
 		evergreen_agp_enable(rdev);
 	} else {

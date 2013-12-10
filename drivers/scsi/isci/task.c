@@ -1013,7 +1013,8 @@ int isci_task_abort_task(struct sas_task *task)
 	struct isci_tmf           tmf;
 	int                       ret = TMF_RESP_FUNC_FAILED;
 	unsigned long             flags;
-	bool                      any_dev_reset = false;
+	int                       perform_termination = 0;
+	int                       target_done_already = 0;
 
 	/* Get the isci_request reference from the task.  Note that
 	 * this check does not depend on the pending request list
@@ -1028,9 +1029,11 @@ int isci_task_abort_task(struct sas_task *task)
 	/* If task is already done, the request isn't valid */
 	if (!(task->task_state_flags & SAS_TASK_STATE_DONE) &&
 	    (task->task_state_flags & SAS_TASK_AT_INITIATOR) &&
-	    old_request)
+	    old_request) {
 		isci_device = isci_lookup_device(task->dev);
-
+		target_done_already = test_bit(IREQ_COMPLETE_IN_TARGET,
+					       &old_request->flags);
+	}
 	spin_unlock(&task->task_state_lock);
 	spin_unlock_irqrestore(&isci_host->scic_lock, flags);
 
@@ -1146,7 +1149,8 @@ int isci_task_abort_task(struct sas_task *task)
 		goto out;
 	}
 	if (task->task_proto == SAS_PROTOCOL_SMP ||
-	    test_bit(IREQ_COMPLETE_IN_TARGET, &old_request->flags)) {
+	    sas_protocol_ata(task->task_proto) ||
+	    target_done_already) {
 
 		spin_unlock_irqrestore(&isci_host->scic_lock, flags);
 

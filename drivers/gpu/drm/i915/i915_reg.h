@@ -333,6 +333,7 @@
 #define IPEIR_I965	0x02064
 #define IPEHR_I965	0x02068
 #define INSTDONE_I965	0x0206c
+#define RING_INSTPM(base)      ((base)+0xc0)
 #define INSTPS		0x02070 /* 965+ only */
 #define INSTDONE1	0x0207c /* 965+ only */
 #define ACTHD_I965	0x02074
@@ -423,6 +424,12 @@
 #define   INSTPM_AGPBUSY_DIS (1<<11) /* gen3: when disabled, pending interrupts
 					will not assert AGPBUSY# and will only
 					be delivered when out of C3. */
+<<<<<<< HEAD
+=======
+#define   INSTPM_FORCE_ORDERING				(1<<7) /* GEN6+ */
+#define   INSTPM_TLB_INVALIDATE	(1<<9)
+#define   INSTPM_SYNC_FLUSH	(1<<5)
+>>>>>>> 132823e... drm/i915: Invalidate TLBs for the rings after a reset
 #define ACTHD	        0x020c8
 #define FW_BLC		0x020d8
 #define FW_BLC2		0x020dc
@@ -3395,6 +3402,27 @@
 #define  EDP_LINK_TRAIN_800_1200MV_0DB_SNB_B	(0x38<<22)
 #define  EDP_LINK_TRAIN_VOL_EMP_MASK_SNB	(0x3f<<22)
 
+<<<<<<< HEAD
+=======
+/* IVB */
+#define EDP_LINK_TRAIN_400MV_0DB_IVB		(0x24 <<22)
+#define EDP_LINK_TRAIN_400MV_3_5DB_IVB		(0x2a <<22)
+#define EDP_LINK_TRAIN_400MV_6DB_IVB		(0x2f <<22)
+#define EDP_LINK_TRAIN_600MV_0DB_IVB		(0x30 <<22)
+#define EDP_LINK_TRAIN_600MV_3_5DB_IVB		(0x36 <<22)
+#define EDP_LINK_TRAIN_800MV_0DB_IVB		(0x38 <<22)
+#define EDP_LINK_TRAIN_800MV_3_5DB_IVB		(0x3e <<22)
+
+/* legacy values */
+#define EDP_LINK_TRAIN_500MV_0DB_IVB		(0x00 <<22)
+#define EDP_LINK_TRAIN_1000MV_0DB_IVB		(0x20 <<22)
+#define EDP_LINK_TRAIN_500MV_3_5DB_IVB		(0x02 <<22)
+#define EDP_LINK_TRAIN_1000MV_3_5DB_IVB		(0x22 <<22)
+#define EDP_LINK_TRAIN_1000MV_6DB_IVB		(0x23 <<22)
+
+#define  EDP_LINK_TRAIN_VOL_EMP_MASK_IVB	(0x3f<<22)
+
+>>>>>>> 95b59c0... drm/i915: ivb: fix edp voltage swing reg val
 #define  FORCEWAKE				0xA18C
 #define  FORCEWAKE_ACK				0x130090
 

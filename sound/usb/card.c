@@ -47,6 +47,7 @@
 #include <linux/mutex.h>
 #include <linux/usb/audio.h>
 #include <linux/usb/audio-v2.h>
+#include <linux/time.h>
 
 #include <sound/control.h>
 #include <sound/core.h>
@@ -54,6 +55,8 @@
 #include <sound/pcm.h>
 #include <sound/pcm_params.h>
 #include <sound/initval.h>
+#include <linux/time.h>  // tmtmtm
+#include <linux/timer.h>  // tmtmtm
 
 #include "usbaudio.h"
 #include "card.h"
@@ -74,6 +77,12 @@ MODULE_DESCRIPTION("USB Audio");
 MODULE_LICENSE("GPL");
 MODULE_SUPPORTED_DEVICE("{{Generic,USB Audio}}");
 
+// tmtmtm
+extern int usbhost_hotplug_on_boot;
+extern struct device_driver *current_drv; // from base/dd.c
+//struct timer_list my_timer;
+struct usb_device *postpone_usb_snd_dev = NULL;
+struct device_driver *postpone_usb_snd_drv = NULL;
 
 static int index[SNDRV_CARDS] = SNDRV_DEFAULT_IDX;	/* Index 0-MAX */
 static char *id[SNDRV_CARDS] = SNDRV_DEFAULT_STR;	/* ID for this card */
@@ -423,6 +432,26 @@ static int snd_usb_audio_create(struct usb_device *dev, int idx,
 	return 0;
 }
 
+//tmtmtm
+void snd_usb_audio_exec_delayed(void *unused)
+{
+	if(postpone_usb_snd_drv!=NULL) {
+    	driver_attach(postpone_usb_snd_drv); // drivers/base/dd.c
+    	postpone_usb_snd_drv = NULL;
+   	}
+}
+/*
+static void delayed_func(unsigned long unused)
+{
+	printk("##### sound/usb/card.c delayed_func driver_attach\n");
+
+    // Must offload to another thread, in order to prevent "BUG: scheduling while atomic"
+    // "calling block IO api(generic_make_request) from a soft irq thread (read callback) is a bad idea"
+    int ret = kernel_thread(snd_usb_audio_exec_delayed, NULL, CLONE_FS | CLONE_FILES | CLONE_SIGHAND | SIGCHLD);
+	printk("##### sound/usb/card.c delayed_func ret=%d\n",ret);
+}
+*/
+
 /*
  * probe the active usb device
  *
@@ -451,6 +480,32 @@ snd_usb_audio_probe(struct usb_device *dev,
 		    le16_to_cpu(dev->descriptor.idProduct));
 	if (quirk && quirk->ifnum >= 0 && ifnum != quirk->ifnum)
 		goto __err_val;
+
+	// tmtmtm
+	// we may not want the USB DAC, connected at boot time, to become 
+	// the primary sound card, rather for it to become available as 
+	// an *overlay* primary sound card, so we postpone device probe
+	if(usbhost_hotplug_on_boot) {
+		struct timespec tp; ktime_get_ts(&tp);
+	   	if (tp.tv_sec<8 && postpone_usb_snd_dev==NULL) {
+			printk("##### sound/usb/card.c DON'T REGISTER EARLY tv_sec=%d ++++++++++++++++++++\n",tp.tv_sec);
+		    postpone_usb_snd_dev = dev;
+		    postpone_usb_snd_drv = current_drv;       
+			printk("##### sound/usb/card.c delayed call to driver_attach prepared\n");
+			/*
+		    init_timer(&my_timer);
+		    my_timer.expires = jiffies + 18*HZ; // n*HZ = delay in number of seconds
+		    my_timer.function = delayed_func;
+		    add_timer(&my_timer);
+			printk("##### sound/usb/card.c delayed call to driver_attach initiated\n");
+			*/
+			goto __err_val;
+		}
+	   	printk("##### sound/usb/card.c REGISTER tv_sec=%d ++++++++++++++++++++++++\n",tp.tv_sec);
+	} else {
+	   	printk("##### sound/usb/card.c REGISTER !hotplug_on_boot\n");
+	}
+
 
 	if (snd_usb_apply_boot_quirk(dev, intf, quirk) < 0)
 		goto __err_val;
@@ -726,3 +781,4 @@ static void __exit snd_usb_audio_cleanup(void)
 
 module_init(snd_usb_audio_init);
 module_exit(snd_usb_audio_cleanup);
+

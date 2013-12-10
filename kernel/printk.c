@@ -853,7 +853,7 @@ static int console_trylock_for_printk(unsigned int cpu)
 		}
 	}
 	printk_cpu = UINT_MAX;
-	spin_unlock(&logbuf_lock);
+	raw_spin_unlock(&logbuf_lock);
 	if (wake)
 		up(&console_sem);
 	return retval;

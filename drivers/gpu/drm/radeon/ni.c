@@ -1341,6 +1341,14 @@ static int cayman_startup(struct radeon_device *rdev)
 {
 	int r;
 
+<<<<<<< HEAD
+=======
+	/* enable pcie gen2 link */
+	evergreen_pcie_gen2_enable(rdev);
+
+	evergreen_mc_program(rdev);
+
+>>>>>>> d03160d... drm/radeon: always program the MC on startup
 	if (!rdev->me_fw || !rdev->pfp_fw || !rdev->rlc_fw || !rdev->mc_fw) {
 		r = ni_init_microcode(rdev);
 		if (r) {
@@ -1354,7 +1362,14 @@ static int cayman_startup(struct radeon_device *rdev)
 		return r;
 	}
 
+<<<<<<< HEAD
 	evergreen_mc_program(rdev);
+=======
+	r = r600_vram_scratch_init(rdev);
+	if (r)
+		return r;
+
+>>>>>>> d03160d... drm/radeon: always program the MC on startup
 	r = cayman_pcie_gart_enable(rdev);
 	if (r)
 		return r;

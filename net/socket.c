@@ -1876,11 +1876,6 @@ struct used_address {
 	unsigned int name_len;
 };
 
-<<<<<<< HEAD
-static int __sys_sendmsg(struct socket *sock, struct msghdr __user *msg,
-			 struct msghdr *msg_sys, unsigned flags,
-			 struct used_address *used_address)
-=======
 static int copy_msghdr_from_user(struct msghdr *kmsg,
 				 struct msghdr __user *umsg)
 {
@@ -1894,7 +1889,6 @@ static int copy_msghdr_from_user(struct msghdr *kmsg,
 static int ___sys_sendmsg(struct socket *sock, struct msghdr __user *msg,
 			  struct msghdr *msg_sys, unsigned flags,
 			  struct used_address *used_address)
->>>>>>> f1d515c... net: heap overflow in __audit_sockaddr()
 {
 	struct compat_msghdr __user *msg_compat =
 	    (struct compat_msghdr __user *)msg;

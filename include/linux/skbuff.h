@@ -1137,26 +1137,8 @@ static inline int skb_pagelen(const struct sk_buff *skb)
 	return len + skb_headlen(skb);
 }
 
-static inline bool skb_has_frags(const struct sk_buff *skb)
-{
-	return skb_shinfo(skb)->nr_frags;
-}
-
-/**
- * __skb_fill_page_desc - initialise a paged fragment in an skb
- * @skb: buffer containing fragment to be initialised
- * @i: paged fragment index to initialise
- * @page: the page to use for this fragment
- * @off: the offset to the data with @page
- * @size: the length of the data
- *
- * Initialises the @i'th fragment of @skb to point to &size bytes at
- * offset @off within @page.
- *
- * Does not take any additional reference on the fragment.
- */
-static inline void __skb_fill_page_desc(struct sk_buff *skb, int i,
-					struct page *page, int off, int size)
+static inline void skb_fill_page_desc(struct sk_buff *skb, int i,
+				      struct page *page, int off, int size)
 {
 	skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
 

@@ -1137,10 +1137,6 @@ static inline int skb_pagelen(const struct sk_buff *skb)
 	return len + skb_headlen(skb);
 }
 
-<<<<<<< HEAD
-static inline void skb_fill_page_desc(struct sk_buff *skb, int i,
-				      struct page *page, int off, int size)
-=======
 static inline bool skb_has_frags(const struct sk_buff *skb)
 {
 	return skb_shinfo(skb)->nr_frags;
@@ -1161,7 +1157,6 @@ static inline bool skb_has_frags(const struct sk_buff *skb)
  */
 static inline void __skb_fill_page_desc(struct sk_buff *skb, int i,
 					struct page *page, int off, int size)
->>>>>>> 5124ae9... inet: fix possible memory corruption with UDP_CORK and UFO
 {
 	skb_frag_t *frag = &skb_shinfo(skb)->frags[i];
 

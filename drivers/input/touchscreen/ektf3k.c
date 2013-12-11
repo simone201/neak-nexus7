@@ -2350,13 +2350,15 @@ static int elan_ktf3k_ts_suspend(struct i2c_client *client, pm_message_t mesg)
 	    rc = elan_ktf3k_ts_set_power_state(client, PWR_STATE_DEEP_SLEEP);
 /*s2w*/
 	scr_suspended = true;
-	wake_lock_timeout(&s2w_wakelock, 1500);
-	if (wake_timeout == 0) {
-		wake_lock(&dt2w_wakelock);
-	} else {
-		wake_lock_timeout(&dt2w_wakelock, 100 * wake_timeout);
+	if ((s2w_switch == 1) || (dt2w_switch == 1)) {
+		wake_lock_timeout(&s2w_wakelock, 1500);
+		if (wake_timeout == 0) {
+			wake_lock(&dt2w_wakelock);
+		} else {
+			wake_lock_timeout(&dt2w_wakelock, 100 * wake_timeout);
+		}
+		return 0;
 	}
-	return 0;
 }
 
 static int elan_ktf3k_ts_resume(struct i2c_client *client)

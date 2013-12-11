@@ -95,7 +95,7 @@ static struct dbs_tuners {
 	.freq_step = 5,
 };
 
-static inline cputime64_t get_cpu_idle_time_jiffy(unsigned int cpu,
+/*static inline cputime64_t get_cpu_idle_time_jiffy(unsigned int cpu,
 							cputime64_t *wall)
 {
 	cputime64_t idle_time;
@@ -126,7 +126,7 @@ static inline cputime64_t get_cpu_idle_time(unsigned int cpu, cputime64_t *wall)
 		return get_cpu_idle_time_jiffy(cpu, wall);
 
 	return idle_time;
-}
+}*/
 
 /* keep track of frequency transitions */
 static int

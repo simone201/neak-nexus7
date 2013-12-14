@@ -31,6 +31,7 @@
 #include <linux/jiffies.h>
 #include <linux/miscdevice.h>
 #include <linux/debugfs.h>
+#include <linux/syscalls.h>
 
 #include <linux/sweep2wake.h>
 
@@ -1536,6 +1537,45 @@ static void elan_ktf3k_ts_report_data(struct i2c_client *client, uint8_t *buf)
 	return;
 }
 
+#define BOOSTPULSE "/sys/devices/system/cpu/cpufreq/interactive/boostpulse"
+
+static struct boost_flo {
+	int boostpulse_fd;
+} boost = {
+	.boostpulse_fd = -1,
+};
+
+static inline int boostpulse_open(void)
+{
+	if (boost.boostpulse_fd < 0)
+	{
+		boost.boostpulse_fd = sys_open(BOOSTPULSE, O_WRONLY, 0);
+                
+		if (boost.boostpulse_fd < 0)
+		{
+			pr_info("Error opening %s\n", BOOSTPULSE);
+			return -1;                
+		}
+	}
+
+	return boost.boostpulse_fd;
+}
+
+inline void touchboost(void)
+{
+	int len;
+
+	if (boostpulse_open() >= 0)
+	{
+		len = sys_write(boost.boostpulse_fd, "1", sizeof(BOOSTPULSE));
+                        
+		if (len < 0)
+		{
+			pr_info("Error writing to %s\n", BOOSTPULSE);                        
+		}
+	}
+}
+
 static void elan_ktf3k_ts_report_data2(struct i2c_client *client, uint8_t *buf)
 {
 	struct elan_ktf3k_ts_data *ts = i2c_get_clientdata(client);
@@ -1647,6 +1687,8 @@ static void elan_ktf3k_ts_work_func(struct work_struct *work)
 	uint8_t buf[NEW_PACKET_SIZE + 4] = { 0 };
 	uint8_t buf1[NEW_PACKET_SIZE] = { 0 };
 	uint8_t buf2[NEW_PACKET_SIZE] = { 0 };
+
+	touchboost();
 
 	if(work_lock!=0) {
 		touch_debug(DEBUG_INFO, "Firmware update during touch event handling");
@@ -2311,15 +2353,16 @@ static int elan_ktf3k_ts_suspend(struct i2c_client *client, pm_message_t mesg)
 	    rc = elan_ktf3k_ts_set_power_state(client, PWR_STATE_DEEP_SLEEP);
 /*s2w*/
 	scr_suspended = true;
-	wake_lock_timeout(&s2w_wakelock, 1500);
-	if (wake_timeout == 0) {
-		wake_lock(&dt2w_wakelock);
-	} else {
-		wake_lock_timeout(&dt2w_wakelock, 100 * wake_timeout);
+	if (s2w_switch == 1 || dt2w_switch == 1) {
+		wake_lock_timeout(&s2w_wakelock, 1500);
+		if (wake_timeout == 0) {
+			wake_lock(&dt2w_wakelock);
+		} else {
+			wake_lock_timeout(&dt2w_wakelock, 100 * wake_timeout);
+		}
+		return 0;
 	}
-	return 0;
 }
-
 static int elan_ktf3k_ts_resume(struct i2c_client *client)
 {
 
